@@ -1,0 +1,72 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">Company Management</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+        {% if perms.superadmin.add_testimonial %} 
+        <div "nk-block-head-content" style="text-align: right;padding:1rem 2rem"> 
+            <a  href="{% url 'add_company' %}" class="btn btn-info" ><i class="fa-solid fa-plus"></i></a>
+        </div>
+         {% endif %} 
+        <div class="card-inner">
+            <table class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th> Company Name</th>
+                        <th>Company Email</th>
+                        <th>Company Contact</th>
+
+                        <th>Company address</th>
+                        <th>Company Zip Code</th>
+                        <th>Action</th>
+                   
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in company_data %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{i.companyname|safe|truncatechars:30}}</td>
+                       
+                        <td>{{i.companyemail}}</td>
+                       
+                        <td>{{i.companycontact|safe|truncatechars:30}}</td>
+                        <td>{{i.companyaddress|safe|truncatechars:30}}</td>
+                       
+                        <td>{{i.companyzip_code}}</td>
+
+                       
+                      
+                       
+                        <td>
+                            
+                            <a href="{% url 'company_view' i.slug %}" class="btn btn-lg btn-primary"><i class="fa-solid fa-info"></i></a> 
+                         
+                            
+                            <a href="{% url 'company_edit' i.slug %}" class="btn btn-lg btn-success"><i class="fas fa-edit"></i></a>
+                            
+                             
+                            <a href="{% url 'company_delete' i.id %}"  onclick="return confirm('Are you sure you want to delete this item')" class="btn btn-lg btn-danger"><i class="fa-solid fa-trash-can"></i></a> 
+                          
+                        </td>         
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><!-- .card-preview -->
+</div> 
+{% endblock content %}

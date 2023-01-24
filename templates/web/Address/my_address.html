@@ -1,0 +1,284 @@
+<html>
+    {% extends 'web/basic/base.html' %}
+    {% load static %}
+    {% block title %}My Address{% endblock %}
+   
+    {% block content %}
+    <body>
+
+        <div class="wraper-main">
+            <!-- ----Header---- -->
+            {% include 'web/basic/inner-header.html' %}
+            <!-- ---End Header--- -->
+                <div class="wraper pt85 wtvh100">
+
+                    <section class="breadcrumb-bg-sec">
+                        <div class="container">
+                            <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item"><a href="/my/profile/{{request.user.slug}}">My Profile</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">My Address</li>
+                            </ol>
+                            </nav>
+                        </div>
+                    </section>
+
+                    <section class="in-sp5 dashboard-us-sec">
+
+                            <div class="container">
+                                <div class="row inner-dash-bord">
+                                    <div class="col-md-3 dash_left">
+                                        <!-- -------left-menu-------- -->
+                                        {% include 'web/profile-setup/my-profile-sidebar.html' %}
+                                        <!-- -------left-menu-------- -->
+                                    </div>
+                                    <div class="col-md-9 dash_right">
+                                        <div class="dashboard-right-body">
+                                            <!-- -------dashboard Heading-------- -->
+                                            <div class="head-dash-board">
+                                                <div class="row">
+                                                    <div class="col-md-6 head-dash-title">
+                                                        <h2>My Address</h2>
+                                                    </div>
+                                                    <div class="col-md-6 d-flex justify-content-end">
+                                                        <button class="btn" data-bs-toggle="modal" data-bs-target="#staticselectnadd">Add New Address</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- -------dashboard Heading-------- -->
+
+                                            <!-- -------dashboard body-------- -->
+                                            <div class="dashboard-body">
+                                                <div class="equal-spacing30">
+                                                    <div class="cover_my_address">
+                                                        <div class="row">
+                                                            {% for i in user_address %}
+                                                                <div class="col-md-6">
+                                                                    <div class="card-address">
+                                                                        <h3>{{i.user.first_name}} {{i.user.last_name}}</h3>
+                                                                        <p>{{i.address|safe}}</p>
+                                                                        <p>{{i.city|safe}}</p>
+                                                                        <h5>{{i.user.mobile_number}}</h5>
+                                                                        <h5>{{i.zip_code}}</h5>
+                                                                        <ul class="edit_delete_btn">
+                                                                            <li><button onclick="update_address({{i.id}})"class="btn" data-bs-toggle="modal" data-bs-target="#staticselectnadd1"><i class="ri-edit-2-line"></i> Edit</button></li>
+                                                                            <li><a href="{% url 'Delete_Address' i.id %}"><i class="ri-delete-bin-4-line"></i> Delete</a></li>
+                                                                            <li><a href="{% url 'apply_address' i.id %}"><i class="ri-delete-bin-4-line"></i> Apply</a></li>
+                                                                        </ul>
+                                                                        {% if i.address_defaults == 1 %}
+                                                                            <span class="tx-default">Default</span>
+                                                                        {% else %}
+                                                                        <a href="{% url 'change_default_address' i.id %}">
+                                                                            <span class="tx-default">Make a Default
+                                                                            </span>
+                                                                        </a>
+                                                                            
+                                                                        {% endif %}
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                            {% comment %} <input type="text" id ="autocom"  class="form-control" placeholder="Enter address"> {% endcomment %}
+                                                            
+                                                                
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- -------dashboard body-------- -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </section>
+                    
+                </div>
+            <!-- ----------footer section----- ------ -->
+            {% include 'web/basic/footer.html' %}
+            <!-- ----------footer section----------- -->
+        </div>
+    <!-- -----modal----- -->
+    <div class="modal fade top_modal" id="staticselectnadd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticselectLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header border-0">
+                <h5 class="modal-title" id="staticselectLabel">Add New Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-line"></i></button>
+              </div>
+              <hr class="liner-line">
+              <div class="modal-body">
+                 <form class="add_new_address" method ="POST" action="{% url 'AddNewAddress' %}" id="add-address" >
+                     {% csrf_token %}
+                        {% comment %} <div class="form-group">
+                            <div class="type_search_bx">
+                                <input type="search" data-rule-required="true" name="search" id="autocom" class="form-control" placeholder="Select location">
+                                <i class="ri-map-pin-2-line"></i>
+                                <input type="hidden"  id="lat" name="lat" class="form-control">
+                                <input type="hidden"  id="long" name="long" class="form-control">
+                            </div>
+                        </div> {% endcomment %}
+                        {% comment %} <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47959.746024776025!2d-73.00085407412696!3d41.298330606035314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e7d8443a8070e5%3A0xf6a354c659b264ed!2sNew%20Haven%2C%20CT%2C%20USA!5e0!3m2!1sen!2sin!4v1663766022047!5m2!1sen!2sin" width="100%" height="160" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> {% endcomment %}
+                        <div class="form-group">
+                            <label class="form-label">Title</label>
+                            <select class="form-select form-select-sm" name="location" id="titles" aria-label=".form-select-sm example" data-rule-required="true" >
+                                <option disabled selected>Select Title</option>
+                                <option value="Work">Work</option>
+                                <option value="Home">Home</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Zipcode</label>
+                            <input type="text" data-rule-required="true" name="zip_code" class="form-control" placeholder="Enter zip code" data-rule-noSpace="true" min="0" maxlength="5" onpaste="return false" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-rule-maxlength="Please enter valid pincode " data-msg-min="Please enter valid pincode " data-msg-integer="Please enter valid pincode " data-rule-noZeroAtStart="true"data-rule-integer="true">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <input type="text" data-rule-required="true" data-rule-noSpace="true" name="city" class="form-control" placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Address</label>
+                            <input type="text" data-rule-required="true" data-rule-noSpace="true" name="address"  class="form-control" placeholder="Enter address">
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" onclick="AddressSubmit()" class="btn">Submit</button>
+                        </div>
+                 </form>
+              </div>
+            </div>
+        </div>
+    </div>
+        <!-- Modal 1-->
+        <div class="modal fade top_modal" id="staticselectnadd1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticselectLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header border-0">
+                    <h5 class="modal-title" id="staticselectLabel">Update Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-line"></i></button>
+                  </div>
+                  <hr class="liner-line">
+                  <div class="modal-body">
+                     <form class="add_new_address" method ="POST"  action="{% url 'Edit_address' %}" id="update-address" >
+                        {% csrf_token %} 
+                        <input type="hidden"  id="slug" name="slug">
+                            {% comment %} <div class="form-group">
+                                <div class="type_search_bx">
+                                    <input type="search"  data-rule-required="true" name="searchs" id="searchs" class="form-control" placeholder="Select location">
+                                    <i class="ri-map-pin-2-line"></i>
+                                    <input type="hidden"  id="latitude" name="latitude" class="form-control">
+                                    <input type="hidden"  id="longitude" name="longitude" class="form-control">
+                                </div>
+                            </div> {% endcomment %}
+                            {% comment %} <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47959.746024776025!2d-73.00085407412696!3d41.298330606035314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e7d8443a8070e5%3A0xf6a354c659b264ed!2sNew%20Haven%2C%20CT%2C%20USA!5e0!3m2!1sen!2sin!4v1663766022047!5m2!1sen!2sin" width="100%" height="160" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> {% endcomment %}
+                            <div class="form-group">
+                                <label class="form-label">Title</label>
+                                <select class="form-select form-select-sm" data-rule-required="true"  name="location" id="title" aria-label=".form-select-sm example">
+                                    <option disabled selected>Select Title</option>
+                                    <option value="Work">Work</option>
+                                    <option value="Home">Home</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Zipcode</label>
+                                <input type="text" id="zip_code" data-rule-required="true" name="zip_code" class="form-control" placeholder="Enter zip code" data-rule-noSpace="true" min="0" maxlength="5" onpaste="return false" onkeypress="return event.charCode >= 48 && event.charCode <= 57" data-rule-maxlength="Please enter valid pincode " data-msg-min="Please enter valid pincode " data-rule-noZeroAtStart="true" data-msg-integer="Please enter valid pincode " data-rule-integer="true">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">City</label>
+                                <input type="text" id="city" data-rule-required="true" data-rule-noSpace="true" name="city" class="form-control" placeholder="Enter city">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Address</label>
+                                <input type="text"  id="address" data-rule-required="true" data-rule-noSpace="true" name="address"  class="form-control" placeholder="Enter address">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" onclick="UpdtaeSubmit()" class="btn">Submit</button>
+                            </div>
+                     </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+     
+    <!-- -----modal----- -->
+
+    <!-- -----java script------ -->
+
+    {% include 'web/js/helper.html' %}
+<script>
+       function AddressSubmit(){
+        jQuery.validator.addMethod("noSpace", function(value, element) { 
+            if(value.indexOf(" ")==0){
+                return false;
+            }
+            return true;
+            }, "No space please and don't leave it empty");
+            $.validator.addMethod("noZeroAtStart", function(value, element) {
+                return value.charAt(0) != '0'
+            }, "price can't be zero");
+    
+            $('#add-address').valid()
+    } 
+    function UpdtaeSubmit(){
+        jQuery.validator.addMethod("noSpace", function(value, element) { 
+            if(value.indexOf(" ")==0){
+                return false;
+            }
+            return true;
+            }, "No space please and don't leave it empty");
+            $.validator.addMethod("noZeroAtStart", function(value, element) {
+                return value.charAt(0) != '0'
+            }, "price can't be zero");
+    
+            $('#update-address').valid()
+
+    }
+         
+     
+    </script>
+
+    
+    </body>
+
+    {% endblock content %}
+    {% block javascript %}
+<script>
+
+    function update_address(id){
+   
+    let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+   
+    
+    $.ajax({
+        type: "POST",
+        url: "{% url 'fetch_address' %}",
+        headers: { 'X-CSRFToken': csrftoken },
+        data:
+        {
+        user_id:id,
+        
+    },
+    success:function(res){
+        console.log(res.location)
+        $('#address').val(res.address)
+        
+        $('#title').val(res.location) 
+        $('#latitude').val(res.latitude) 
+        $('#longitude').val(res.longitude) 
+        $('#city').val(res.city)
+        $('#zip_code').val(res.zip_code)
+        $('#slug').val(res.slug)
+        
+
+    }
+}); 
+    
+
+}
+        
+</script>
+
+{% endblock javascript%}
+</html>

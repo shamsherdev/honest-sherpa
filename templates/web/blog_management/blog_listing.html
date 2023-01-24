@@ -1,0 +1,150 @@
+<html>
+    {% extends 'web/basic/base.html' %}
+    {% load static %}
+    {% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+        {% if request.user.is_authenticated   and request.user.is_superuser == 0 %}
+        {% include 'web/basic/inner-header.html' %}
+        {% else %}
+        {% include 'web/basic/header.html' %}
+        {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper wtvh100">
+                <section class="blog-bg-banner">
+                     <div class="container">
+                        <div class="inner-title-ab">
+                            <h4>Blogs</h4>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                        </div>
+                     </div>
+                </section>
+
+                 <section class="blogs-list-card">
+                    <div class="container">
+                        <div class="row">
+                            {% for i in data %}
+                                <div class="col-md-4">
+                                    <div class="blog-card">
+                                        <div class="video-img-inner">
+                                            <a class="btn play-btn" href="{% url 'blog_detail' i.slug %}"><i class="ri-play-fill"></i></a>
+                                            <figure><img src="{{i.blog_image.url}}" alt="blog-img-1"></figure>
+                                            <span class="blg-date">{{i.created_at|date:'Y-m-d'}}</span>
+                                        </div>
+                                        <h4>{{i.blog_title}}</h4>
+                                        <p>{{i.meta_description|safe|truncatechars:50}}</p>
+                                        <a class="read-mr-btn" href="{% url 'blog_detail' i.slug %}">Read More <i class="ri-arrow-right-line"></i></a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% comment %} <div class="col-md-4">
+                                <div class="blog-card">
+                                    <div class="video-img-inner">
+                                        <a class="btn play-btn" href="javascript:;"><i class="ri-play-fill"></i></a>
+                                        <figure><img src="images/blog-img-2.png" alt="blog-img-2"></figure>
+                                        <span class="blg-date">Aug 20, 2022</span>
+                                    </div>
+                                    <h4>When an unknown printer took a galley</h4>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                    <a class="read-mr-btn" href="javascript:;">Read More <i class="ri-arrow-right-line"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="blog-card">
+                                    <div class="video-img-inner">
+                                        <figure><img src="images/blog-img-3.png" alt="blog-img-3"></figure>
+                                        <span class="blg-date">Aug 20, 2022</span>
+                                    </div>
+                                    <h4>When an unknown printer took a galley</h4>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                    <a class="read-mr-btn" href="javascript:;">Read More <i class="ri-arrow-right-line"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="blog-card">
+                                    <div class="video-img-inner">
+                                        <figure><img src="images/blog-img-4.png" alt="blog-img-4"></figure>
+                                        <span class="blg-date">Aug 20, 2022</span>
+                                    </div>
+                                    <h4>When an unknown printer took a galley</h4>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                    <a class="read-mr-btn" href="javascript:;">Read More <i class="ri-arrow-right-line"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="blog-card">
+                                    <div class="video-img-inner">
+                                        <a class="btn play-btn" href="javascript:;"><i class="ri-play-fill"></i></a>
+                                        <figure><img src="images/blog-img-5.png" alt="blog-img-5"></figure>
+                                        <span class="blg-date">Aug 20, 2022</span>
+                                    </div>
+                                    <h4>When an unknown printer took a galley</h4>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                    <a class="read-mr-btn" href="javascript:;">Read More <i class="ri-arrow-right-line"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="blog-card">
+                                    <div class="video-img-inner">
+                                        <a class="btn play-btn" href="javascript:;"><i class="ri-play-fill"></i></a>
+                                        <figure><img src="images/blog-img-6.png" alt="blog-img-6"></figure>
+                                        <span class="blg-date">Aug 20, 2022</span>
+                                    </div>
+                                    <h4>When an unknown printer took a galley</h4>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                    <a class="read-mr-btn" href="javascript:;">Read More <i class="ri-arrow-right-line"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="blog-card">
+                                    <div class="video-img-inner">
+                                        <a class="btn play-btn" href="javascript:;"><i class="ri-play-fill"></i></a>
+                                        <figure><img src="images/blog-img-7.png" alt="blog-img-7"></figure>
+                                        <span class="blg-date">Aug 20, 2022</span>
+                                    </div>
+                                    <h4>When an unknown printer took a galley</h4>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                    <a class="read-mr-btn" href="javascript:;">Read More <i class="ri-arrow-right-line"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="blog-card">
+                                    <div class="video-img-inner">
+                                        <figure><img src="images/blog-img-8.png" alt="blog-img-8"></figure>
+                                        <span class="blg-date">Aug 20, 2022</span>
+                                    </div>
+                                    <h4>When an unknown printer took a galley</h4>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                    <a class="read-mr-btn" href="javascript:;">Read More <i class="ri-arrow-right-line"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="blog-card">
+                                    <div class="video-img-inner">                                        <figure><img src="images/blog-img-9.png" alt="blog-img-9"></figure>
+                                        <span class="blg-date">Aug 20, 2022</span>
+                                    </div>
+                                    <h4>When an unknown printer took a galley</h4>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                                    <a class="read-mr-btn" href="javascript:;">Read More <i class="ri-arrow-right-line"></i></a>
+                                </div>
+                            </div> {% endcomment %}
+                        </div>
+                    </div>
+                 </section>
+                 
+            </div>
+        <!-- ----------footer section----- ------ -->
+        <footer>
+            {% include "web/basic/footer.html" %}
+        </footer>
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+   {% include "web/js/helper.html" %}
+    <!-- -----side menu------ -->
+    </body>
+    {% endblock %}
+</html>

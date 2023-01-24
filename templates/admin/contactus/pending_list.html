@@ -1,0 +1,72 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title"> Pending List Management</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+        {% if perms.superadmin.can_add_contactus %}
+
+        <div "nk-block-head-content" style="text-align: right;padding:1rem 2rem"> 
+            {% comment %} <a  href="{% url 'pending_list_add' %}" class="btn btn-info" ><i class="fa-solid fa-plus"></i></a> {% endcomment %}
+            <input type ="hidden">
+        </div>
+        {% endif %} 
+        <div class="card-inner">
+            <table class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Email</th>
+                        <th>Question</th>
+                      
+                        <th>Status</th>
+                        <th>Action</th>
+                        
+                        {% comment %} <th>Start date</th>
+                        <th>Salary</th> {% endcomment %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in list_data %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{i.email|safe}}</td>
+                     
+                  
+                       
+                       
+                        <td>{{i.subject|truncatechars:30}}</td>
+                
+                        {% if i.is_pending  %}
+                            <td style="color:red">Pending</td>
+
+                        {% else %}
+                            <td style="color:green">Resolve</td>
+                        {% endif %}
+                        
+                        <td>
+                            {% if i.is_pending  %}
+                            <a href="{% url 'pending_list_reply' i.slug %}" class="btn btn-lg btn-success"><i class="fas fa-reply" ></i></a>
+                            {% else %}
+                            <a  class="btn btn-lg btn-success"><i class="fas fa-reply" ></i></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><!-- .card-preview -->
+</div> 
+{% endblock content %}

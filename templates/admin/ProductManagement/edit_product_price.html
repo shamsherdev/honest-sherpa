@@ -1,0 +1,273 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+<section class="section">
+    <div class="nk-block nk-block-lg">
+        <div class="nk-block-head">
+            <div class="nk-block-head-content d-flex">
+                <h4 class="nk-block-title"> Edit Product Price</h4>
+            </div>
+        </div>
+        <div class="ml-auto">
+            <label class="form-label mb-0">Select Pin Code</label>
+            <div class="form-control-wrap">
+                <input type="hidden" name="product_id" value={{product.id}} id="product_id"  ></input>
+                <select name="pincode[]" data-rule-required="true"  onchange="pin_code_data()" id="example-getting-started" multiple="multiple" class="form-control w-100"  multiselect-search="true" multiselect-select-all="true" >
+                    {% for pin in product_price %}
+                    {% if pin.product_id == product.id %}
+                        {% ifchanged pin.pin_code %}
+                        <option value="{{pin.pin_code}}" {% if pin.pin_code in selected_pin_code %}selected{% endif %}>{{pin.pin_code}} </option>
+                    {% endifchanged %}
+                    {% endif %}
+                    {% endfor%}
+                </select>
+            </div>
+        </div>
+       
+        <div class="card card-preview ">
+            <div class="card-inner">
+                <form class="" method="POST" enctype="multipart/form-data" id="register">
+                    <input type="hidden" name="count"  id="count">
+                    {% csrf_token %} 
+                 
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr> 
+                                    <th class="sr_th">Franchise Name</th>  
+                                    <th class="sr_th">User_type </th>
+                                    <th class="name_th">Pin Code  </th>
+                                    {% if product.is_return == 1 %} 
+                                    <th width="200px" class="email_th">0-7 days</th>
+                                    <th width="200px" class="roll_th">>7 days</th>
+                                    <th width="200px" class="roll_th">0-7 days Wholesale</th>
+                                    <th width="200px" class="action_th">>7 days Wholesale</th>
+                                    {% else %}
+                                    <th width="200px" class="action_th">Sale Price</th>
+                                    {% endif %} 
+
+                                </tr>    
+                            </thead>
+                         
+                            
+                            <tbody id='zip-code-price'>
+
+                                {% if is_edit %}
+                                {% for i in pincode_price %}
+                                <tr class="counts">
+                                    <td>{{i.user_id}}</td> 
+                                    <td>{{i.user_type}}</td>
+                                    <td>{{i.pin_code}} </td>
+                                    {% if product.is_return == 1 %} 
+                                   
+                                        <td >
+                                            <div class="form-control-wrap">
+                                                <input type="hidden" name="user_type{{forloop.counter0}}" value={{i.user_type}}  ></input>
+                                                <input type="hidden" name="pin_code{{forloop.counter0}}" value={{i.pin_code}}  ></input>
+                                                <input type="hidden" name="user_id{{forloop.counter0}}" value={{i.user_id}}  ></input>
+
+                                                {% if i.user_type == "propertymanager" %}
+                                            
+                                                {% else %}
+                                                <input type="text"  maxlength="6" step="0.01" data-msg-step="after decimal only two number allowed" oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" oninput="testing(event, this)" data-rule-required="true"  data-rule-noSpace="true" data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true" name="day_price{{forloop.counter0}}" 
+                                                value="{{i.zero_seven_days}}" class="form-control" >
+                                                {% endif  %}
+                                            </div>
+                                        
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                            
+                                                {% if i.user_type == "propertymanager" %}
+                                            
+                                                {% else %}
+                                                <input type="text"  maxlength="6" step="0.01" data-msg-step="after decimal only two number allowed" oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  name="days_price{{forloop.counter0}}" value="{{i.greaterthan_seven}}" class="form-control" >
+                                                {% endif %}
+                                            </div>
+                                        
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                            
+                                                {% if i.user_type == "propertymanager" %}
+                                                <input type="text"  maxlength="6" step="0.01" data-msg-step="after decimal only two number allowed" oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  name="wholesale{{forloop.counter0}}" value="{{i.zero_seven_days_wholesale}}" class="form-control " >
+                                                {% else %}
+                                            
+                                                {% endif %}
+                                            </div>
+                                        
+                                        </td>
+                                        <td>
+                                            <div class="form-control-wrap">
+                                            
+                                                    {% if i.user_type == "propertymanager" %}
+                                                <input type="text"  maxlength="6" step="0.01" data-msg-step="after decimal only two number allowed" oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  name="wholesale_greaterthan{{forloop.counter0}}" value="{{i.greaterthan_seven_wholesale}}" class="form-control " >
+                                                {% else %}
+                                        
+                                                
+                                                {% endif %}
+                                            </div>
+                                        
+                                        </td>
+                                    {% else %}
+                                        <td>
+                                            
+                                            <div class="form-control-wrap">
+                                                <input type="hidden" name="user_type{{forloop.counter0}}" value={{i.user_type}}  ></input>
+                                                <input type="hidden" name="pin_code{{forloop.counter0}}" value={{i.pin_code}}  ></input>
+                                                <input type="hidden" name="user_id{{forloop.counter0}}" value={{i.user_id}}  ></input>
+                                            
+                                                    
+                                                <input type="text"  maxlength="6" step="0.01" data-msg-step="after decimal only two number allowed" oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  name="sale_price{{forloop.counter0}}" value="{{i.sale_price}}" class="form-control " >
+                                                
+                                            </div>
+                                        
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                                
+                                {% endif %}
+                            </tbody>
+                           
+                        </table>
+                    </div>
+                
+                    <div class="text-right w-100">
+                        <button class="btn btn-lg btn-primary mb-3" id="send"  onclick="Sub()"type="submit" style="
+                        margin-top: 26px;">Submit</button>
+                    </div>
+                    
+                   
+                </form>
+            </div>
+        </div><!-- .card-preview -->
+    </div> 
+</section>
+{% endblock content %}
+{% block js_content %}
+
+<script>
+    function myFunc(id){
+        alert(id);
+        let value  = $('#id').val(val)
+        }
+</script>
+<script>
+
+    {% comment %} function testing(evt, obj) {
+        const charCode = (evt.which) ? evt.which : event.keyCode
+        console.log(obj.value,'pppppppppppppppppp')
+        if (charCode == 46 && value.charAt(0) == '.') {
+            obj.value = ''
+            console.log(obj.value,'ppppppppppppp333333')
+        } 
+       
+    } {% endcomment %}
+    function isNumberKey(evt, obj) {
+        
+        const charCode = (evt.which) ? evt.which : event.keyCode
+      
+        
+        const value = obj.value;
+       
+
+        const dotcontains = value.indexOf(".") != -1;
+     
+        if (dotcontains)
+            if (charCode == 46) return false;
+        if (charCode == 46) return true;
+            
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) return false;
+        return true;
+    }
+
+
+</script>
+<script>
+    function Sub(){
+    $.validator.addMethod("noZeroAtStart", function(value, element) {
+        return value.charAt(0) != '0'
+    }, "price can't be zero");
+    $.validator.addMethod('afterdecimalZero', function(value, element) {
+        let decimalExp = new RegExp(/^\d+(?:\.\d{1,2})?$/i);
+        return decimalExp.test(value);
+        }, 'Not start with point.'); 
+    jQuery.validator.addMethod("noSpace", function(value, element) { 
+        if(value.indexOf(" ")==0){
+            return false;
+        }
+        return true;
+    }, "No space please and don't leave it empty");
+    $('#register').valid()
+    }
+</script>
+<link rel="stylesheet" type="text/css" href="https://davidstutz.github.io/bootstrap-multiselect/dist/css/bootstrap-multiselect.css">
+<script type="text/javascript" src="https://davidstutz.github.io/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#example-getting-started').multiselect({
+            enableFiltering: true,
+            templates: {
+                filter: '<div class="multiselect-filter"><div class="input-group input-group-sm p-1"><div class="input-group-prepend"><i class="input-group-text fas fa-search"></i></div><input class="form-control multiselect-search" type="text" /><div class="input-group-append"><button class="multiselect-clear-filter input-group-text" type="button"><i class="fas fa-times"></i></button></div></div></div>'
+            }
+        });
+    });
+</script>
+<script>
+    let  info = $("#example-getting-started :selected").map(function(i, el) {
+            return $(el).val();
+        }).get(); 
+</script>
+
+<script>
+    function isPincodeSelected() {
+        const isSelected = $('#example-getting-started option:selected').length
+        if(isSelected) {
+            $('#send').show();
+        } else {
+            $('#send').hide();
+        }
+    }
+    isPincodeSelected()
+    function pin_code_data(){
+
+        isPincodeSelected()
+        let pin_id =$('#example-getting-started').val()
+        let product =$('#product_id').val()
+       
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
+       
+        $.ajax({
+            type: "POST",
+            url: "{% url 'pin_code_ajax' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+            {
+                pincode:pin_id ,product:product
+                
+            },
+            success:function(res){
+                $('#zip-code-price').html(res)
+                const price_input_count = $(document).find('.counts').length;
+                $('#count').val(price_input_count)
+                toastr.error(res.responseJSON.message);
+            },
+            error:function(res){
+                toastr.error(res.responseJSON.message);
+            } 
+           
+        });
+        
+            
+
+        
+    }
+</script>
+
+
+
+{% endblock js_content %}
+

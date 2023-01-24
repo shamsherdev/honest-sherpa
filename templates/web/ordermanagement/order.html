@@ -1,0 +1,80 @@
+<html>{% extends 'web/basic/base.html' %}
+    {% load static %}
+     {% block title %}cart{% endblock %}
+   
+    {% block content %}
+   <head>
+      <meta charset="utf-8">
+      <title>:: Honest Sherpa ::</title>
+      <!--responsive-meta-here-->
+      <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1.0,width=device-width, user-scalable=no">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+      <!--responsive-meta-end-->
+      <link href="css/bootstrap.min.css" rel="stylesheet" />
+      <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+      <link href="css/fontawesome-all.min.css" rel="stylesheet"/>
+      <link rel="stylesheet" href="css/owl.carousel.min.css" rel="stylesheet"/>
+      <link rel="stylesheet" href="fonts/remixicon.css" rel="stylesheet"/>
+      <link rel="stylesheet" href="css/fontawesome-all.css" rel="stylesheet"/>
+      <link rel="stylesheet" href="css/fontawesome.css" rel="stylesheet"/>
+      <link rel="stylesheet" href="css/style.css" rel="stylesheet"/>
+      <link rel="stylesheet" href="css/responsive.css" rel="stylesheet"/>
+   </head>
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+        {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper pt85 wtvh100">
+
+                 <section class="in-sp5 inner-cart-sec">
+                    <div class="container">
+                       <div class="no_bells">
+                             <img src="{% static 'web/images/thankyou-check.svg' %}">
+                             <h4>Thankyou!</h4>
+                             <p>Your order has been confirmed.</p>
+                             <a type="button" href="/" class="btn">Back to Home</a>
+                       </div>
+                    </div>
+                 </section>
+                 
+            </div>
+        <!-- ----------footer section----- ------ -->
+        {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/owl.carousel.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="https://malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script>
+       $(window).scroll(function(){var body=$('body'),scroll=$(window).scrollTop();if(scroll>=5){body.addClass('fixed');}else{body.removeClass('fixed');}});
+    </script>
+
+    <!-- -----side menu------ -->
+        <script>
+           $('#menu-button').click(function(e) {
+               e.stopPropagation();
+               $('#hide-menu').toggleClass('show-menu');
+           });
+           $('#hide-menu').click(function(e) {
+               e.stopPropagation();
+           });
+           $('body,html,.closebtn').click(function(e) {
+               $('#hide-menu').removeClass('show-menu');
+           });
+        </script>
+    <!-- -----side menu------ -->
+    </body>
+</html>
+{% endblock content %}

@@ -1,0 +1,163 @@
+<html>
+    {% extends 'web/basic/base.html' %}
+    {% load static %}
+     {% block title %}cart{% endblock %}
+   
+    {% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+        {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper pt85 wtvh100">
+
+                <section class="breadcrumb-bg-sec">
+                    <div class="container">
+                        <nav aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">My Profile</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">My orders</li>
+                          </ol>
+                        </nav>
+                    </div>
+                </section>
+
+                 <section class="in-sp5 dashboard-us-sec">
+
+                        <div class="container">
+                            <div class="row inner-dash-bord">
+                                <div class="col-md-3 dash_left">
+                                    <!-- -------left-menu-------- -->
+                                    {% include 'web/profile-setup/my-profile-sidebar.html' %}
+                                    <!-- -------left-menu-------- -->
+                                </div>
+                                <div class="col-md-9 dash_right">
+                                    <div class="dashboard-right-body">
+                                        <!-- -------dashboard Heading-------- -->
+                                        <div class="head-dash-board">
+                                            <div class="row">
+                                                <div class="col-md-6 head-dash-title">
+                                                    <h2>My Orders</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- -------dashboard Heading-------- -->
+
+                                        <!-- -------dashboard body-------- -->
+                                        <div class="dashboard-body">
+                                            <div class="equal-spacing30">
+                                                <div class="cover_trans_history">
+                                                    <ul class="history_summry_in order_deliver_sec">
+                                                        {% for i in my_order %}
+                                                        <li>
+                                                          <div class="deliver_to">
+                                                              {% if i.order_status == "cancel" %}
+                                                              hgfjh
+                                                             <a href="{% url 'order_cancel' i.slug %}" ><h4>#{{i.order_id}}</h4>></a>
+                                                             {% else %}
+                                                             <a href="{% url 'order_details' i.slug %}" ><h4>#{{i.order_id}}</h4>></a>
+                                                             {% endif %}
+                                                              {% for j in i.product_details %}
+                                                              {% if j.id == i.product_id %}
+                                                              <p>No Of Items : {{j.product_quantity}}</p>
+                                                              {% endif %}
+                                                              {% endfor %} 
+                                                              <p>{{i.order_created}}</p>
+
+                                                              <div class="order_deliver_to">
+                                                                <p>Deliver to:</p>
+                                                                <h5>{{i.Address}}</h5>
+                                                              </div>
+                                                          </div>
+                                                          <div class="amt_order_rt">
+                                                              {% if i.order_status == "cancel" %}
+                                                              <h5 class="activer-link" style="color:red;" href="javascript:;">{{i.order_status}}</h5>
+                                                              {% else %}
+                                                              <h5 class="activer-link" href="javascript:;">{{i.order_status}}</h5>
+                                                              {% endif %}
+                                                              <h3>${{i.discount_price}}</h3>
+                                                          </div>
+                                                        </li>
+                                                        {% comment %} <li>
+                                                          <div class="deliver_to">
+                                                              <h4>#123456647</h4>
+                                                              <p>No Of Items : 1</p>
+                                                              <p>Aug 25,2022 at 7:30 AM</p>
+
+                                                              <div class="order_deliver_to">
+                                                                <p>Deliver to:</p>
+                                                                <h5>Washington - United States</h5>
+                                                              </div>
+                                                          </div>
+                                                          <div class="amt_order_rt">
+                                                              <h5 class="activer-link" href="javascript:;">Received</h5>
+                                                              <h3>$100.00</h3>
+                                                          </div>
+                                                        </li>
+                                                        <li>
+                                                          <div class="deliver_to">
+                                                              <h4>#123456647</h4>
+                                                              <p>No Of Items : 1</p>
+                                                              <p>Aug 25,2022 at 7:30 AM</p>
+
+                                                              <div class="order_deliver_to">
+                                                                <p>Deliver to:</p>
+                                                                <h5>Washington - United States</h5>
+                                                              </div>
+                                                          </div>
+                                                          <div class="amt_order_rt">
+                                                              <h5 class="delivered-link" href="javascript:;">Delivered</h5>
+                                                              <div class="d-flex-order">
+                                                                 <h3>$100.00</h3>
+                                                                 <span class="invoice-link"><i class="ri-download-line"></i> Invoice</span>
+                                                                 <button type="button" class="btn">Rate & Review</button>
+                                                              </div>
+                                                          </div>
+                                                        </li>
+                                                        <li>
+                                                          <div class="deliver_to">
+                                                              <h4>#123456647</h4>
+                                                              <p>No Of Items : 1</p>
+                                                              <p>Aug 25,2022 at 7:30 AM</p>
+
+                                                              <div class="order_deliver_to">
+                                                                <p>Deliver to:</p>
+                                                                <h5>Washington - United States</h5>
+                                                              </div>
+                                                          </div>
+                                                          <div class="amt_order_rt">
+                                                              <h5 class="pick-link" href="javascript:;">Pick Up</h5>
+                                                              <h3>$100.00</h3>
+                                                          </div>
+                                                        </li> {% endcomment %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- -------dashboard body-------- -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                 </section>
+                 
+            </div>
+        <!-- ----------footer section----- ------ -->
+        {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+    {% include 'web/js/helper.html' %}
+    </body>
+</html>
+{% endblock content %}
+

@@ -1,0 +1,126 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">View Offer Details</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-9" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="column" >
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Category</label>
+                            <div class="form-control-wrap">
+                                <select disabled class="form-select" id="category" name="category" required>
+                                    {% for i in category %}
+                                    <option  {% if offer.category.id == i.id %} selected {% endif %} value="{{i.id}}">{{i.name}}</option>  
+                                    {% endfor %}
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > Offer Name</label>
+                            <div class="form-control-wrap">
+                                <input disabled type="text" value="{{offer.offer_name}}" class="form-control" id="name" name="name" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Discount</label>
+                            <div class="form-control-wrap">
+                                <input disabled type="text" value="{{offer.offer_discount}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" id="discount" name="discount" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >validity</label>
+                            <div class="form-control-wrap">
+                                <input disabled type="text" value="{{offer.offer_validity|safe}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" id="validity" name="validity" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Image</label>
+                            <div class="form-control-wrap">
+                                <input disabled type="file" class="form-control" id="image" name="image"  accept="image/png, image/gif, image/jpeg" >
+                                {% if offer.offer_image %}
+                                <img width="50%" height="50%" src="{{offer.offer_image.url}}">
+                                {% else %}
+                                <img src="">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Terms & Condition</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="url" class="form-control" id="url" name="url" data-rule-required="true">
+                                 {% endcomment %}
+                                <textarea value="" name="term" readonly>{{offer.offer_terms_condition|safe}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                  
+             
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Status*</label>
+                            <div class="form-control-wrap">
+                                <select disabled class="form-select" id="basicSelect" name="status" required>
+                                    <option {% if offer.is_active == True %} selected {% endif %} value="True"> Active
+                                    </option>
+                                    <option {% if offer.is_active == False %} selected {% endif %} value="False" >
+                                    {% comment %} {% if not is_active %} selected {% endif %}> {% if is_active %} selected {% endif %} {% endcomment %}
+                                        Deactive
+                                    </option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                  
+                    
+            </div>
+                    {% comment %} <input type="hidden" class="form-control" id="email-address-1" name="customer" value="customer" data-rule-required="true"> {% endcomment %}
+
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+    function Register(){
+    $('#register').valid()
+    }
+</script>
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('term');
+</script>
+{% endblock js_content %}  

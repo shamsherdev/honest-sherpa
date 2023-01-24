@@ -1,0 +1,128 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">Franchise Management</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+        {% comment %} {% if perms.superadmin.add_franchise %}
+        <div "nk-block-head-content" style="text-align: right;padding:1rem 2rem"> 
+            <a  href="{% url 'add_franchise' %}" class="btn btn-info" ><i class="fa-solid fa-plus"></i></a>
+        </div>
+        {% endif %} {% endcomment %}
+        <div class="card-inner">
+                 {% include 'admin/UserManagement/table-header.html'%} 
+
+            <table class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="custom-control custom-control-sm custom-checkbox">
+                                <input type="checkbox" class="custom-control-input parent_div" id="com-email">
+                                <label class="custom-control-label" for="com-email"></label>
+                            </div>
+                        </th>
+                        <th>Sr No</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>Country</th>
+                        <th>State</th>
+                        <th>City</th>
+                        <th>Pin Code</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        {% comment %} <th>Start date</th>
+                        <th>Salary</th> {% endcomment %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in franchise %}
+                    <tr>
+                         <td>
+                                <div class="custom-control custom-control-sm custom-checkbox">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input type="checkbox" name="child_div" value="{{i.id}}" class="custom-control-input child_div" id="com-email_{{i.id}}">
+                                        <label class="custom-control-label" for="com-email_{{i.id}}"></label>
+                                    <form>
+                                </div>
+                            </td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{i.first_name|truncatechars:30}}</td>
+                        <td>{{i.email}}</td>
+                        <td>{{i.mobile_number}}</td>
+                        <td>{{i.country|truncatechars:30}}</td>
+                        <td>{{i.state|truncatechars:30}}</td>
+                        <td>{{i.city|truncatechars:30}}</td>
+                        <td>{{i.zip_code}}</td>
+                        <td>
+                             
+                        <div class="form-group">
+                            <div class="form-control-wrap">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <select onchange="Submit_status({{i.id}})" class="form-control"  data-rule-required="true"   id="is_approve_{{i.id}}" name="is_approve" required>
+                                <option  selected >Select Status</option>  
+                                <option {% if i.is_verified == True %} selected {% endif %} value="True">Approved</option>  
+                                <option {% if i.is_verified == False %} selected {% endif %}  value="False">Rejected </option>  
+                              
+                            </select> 
+                        </form>   
+                            </div>
+                        </div>
+                    
+                        </td>
+                        <td>
+                            {% if perms.superadmin.view_franchise %}
+                            <a href="{% url 'franchise_view_detail' i.slug %}" class="btn btn-lg btn-primary"><i class="fa-solid fa-info"></i></a>
+                           {% endif %}
+                            {% if perms.superadmin.change_franchise %}
+                            <a href="{% url 'edit_franchise' i.slug %}" class="btn btn-lg btn-success"><i class="fas fa-edit"></i></a>
+                            {% endif %}
+                            {% if perms.superadmin.delete_franchise %}
+                            <a href="{% url 'franchise_delete' i.id %}"  onclick="return confirm('Are you sure you want to delete this item')" class="btn btn-lg btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+
+                            {% endif %}
+                        </td>        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><!-- .card-preview -->
+</div> 
+<script>
+    function Submit_status(user_id){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        let is_approve = $('#is_approve_'+user_id).val()
+        $.ajax({
+            type: "POST",
+            url: "{% url 'franchise_verificatoin_admin' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+          {
+            user_id:user_id,
+            is_approve:is_approve
+       },
+        success:function(res){
+            console.log(res.data)
+            toastr.success(res.message);
+
+        }
+    });
+     
+    }
+</script>
+{% endblock content %}

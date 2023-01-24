@@ -1,0 +1,156 @@
+
+ {% extends 'web/basic/base.html' %}
+ {% load static %}
+ {% block title %}Profile Setup{% endblock %}
+
+ {% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+      {% include 'web/basic/header.html' %}
+        <!-- ---End Header--- -->
+            <div class="wraper pt85 wtvh100">
+                 <div class="container account_my_out">
+
+                     <h4 class="titleh4">Company Setup</h4>
+                     <form class="row" method="POST" id="profile_setup_form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                     <div class="cover_my_account">
+
+                            {% comment %} <div class="user_photo_in">
+                                <figure><img src="{% static 'web/images/profile-default.png'%}"></figure>
+                                <div class="btn edit-btn">
+                                    <input data-rule-required="true" accept="image/*" data-rule-accept="image/*,image/gif"  data-msg-accept="Please Select valid image"  type="file" name="image" id="file">
+                                    <label for="file"><i class="ri-upload-fill"></i></label>
+                                </div>
+                            </div> {% endcomment %}
+                        
+                            <div class="cover_form_in">
+                                
+                        
+
+                                <div class="col-md-12 title-ved-info mt-2"><h6>Select Company Name</h6></div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <select name="propertmanagercompany" required id='propertmanagercompany' 
+                                        onchange="selectOther()" class="form-select" aria-label="Default select example">
+                                            <option disabled selected="" >Select Property Manager Company </option>
+                                            {% for i in propertmanager %}
+                                          
+                                            
+                                           
+                                            <option value="{{i.id}}">{{i.companyname}}({{i.companyzip_code}})</option>
+                                           
+                                            {% endfor %}
+                                           
+                                            <option value="others">Others </option>
+                                           
+                                           
+                                        </select>
+                                    </div>
+                                   
+                                        
+                                    <div id="other_div" style="display:none">
+                                        <div class="col-md-12 title-ved-info mt-2"><h6> Company Name</h6></div>
+ 
+                                        <input type="text" class="form-control"  data-rule-required='true' data-rule-noSpace='true' name="company_name">
+
+
+                                        <div class="col-md-12 title-ved-info mt-2"><h6>Company Email</h6></div>
+ 
+                                        <input type="email" class="form-control" data-rule-required='true' data-rule-noSpace='true' name="company_email">
+
+                                        <div class="col-md-12 title-ved-info mt-2"><h6>Company Contact Number</h6></div>
+ 
+                                        <input type="text" class="form-control" data-rule-required='true' data-rule-noSpace='true' 
+                                        onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="12"name="company_contact"  >
+                                        <div class="col-md-12 title-ved-info mt-2"><h6>Company Address</h6></div>
+ 
+                                       
+ 
+                                        <input type="text" class="form-control" data-rule-required='true' data-rule-noSpace='true' name="company_address" >
+                                        <div class="col-md-12 title-ved-info mt-2"><h6>Company Zip  Code</h6></div>
+ 
+                                        <input type="text" class="form-control" data-rule-required='true' data-rule-noSpace='true' name="company_zip"
+                                        onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="6" >
+                                    </div>
+                                  
+                                    
+                                </div>
+                                
+                                
+                                <div class="col-md-12 pt-2 text-center">
+                                    <button onclick="profile_setup()" class="btn btn-secondary" type="submit">Submit</button>
+                                </div>
+                         
+                                
+                            </div>
+                       
+                     </div>
+                      </form>
+                 </div>
+            </div>
+        <!-- ----------footer section----- ------ -->
+       {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+    {% include 'web/js/helper.html' %}
+    <!-- -----side menu------ -->
+    </body>
+    
+<script>
+    function profile_setup(){
+        $('#profile_setup_form').valid()
+        
+         $.validator.addMethod('emailRegex', function(value, element) {
+        let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+        return emailExp.test(value);
+    }, 'Email format is not valid');
+      jQuery.validator.addMethod("noSpace", function(value, element) { 
+            if(value.indexOf(" ")==0){
+                return false;
+            }
+            return true;
+            }, "No space please and don't leave it empty");
+    
+    
+    } 
+    
+    </script>
+<script>
+  function image_change(){
+    $('#profile_setup_form').valid()
+    let image = $('#file').val()
+    if (image != ''){
+       console.log("ddddd")
+    }
+  }
+</script>
+<script>
+    function selectOther(){
+    let propertytype =  $('#propertmanagercompany').val()
+   
+    if (propertytype == "others"){
+        $('#other_div').css("display", "block")
+    }else{
+        $('#other_div').css("display", "none")
+    }
+    }
+</script>
+
+
+
+{% endblock content %}
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        $('#propertmanagercompany').select2();
+       
+    })
+</script>
+{% endblock javascript %}
+

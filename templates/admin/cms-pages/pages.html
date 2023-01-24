@@ -1,0 +1,57 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">Cms Pages</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+        <div class="card-inner">
+            <table class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Title</th>
+                        <th>Image</th>
+                        <th>slug</th>
+                         <th>action</th>
+                        
+                   
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{i.title|safe|truncatechars:30}}</td>
+                        {% if i.image%}
+                        <td>
+                            <img src ="{{i.image.url}}" alt="{{i.name}}" style="width: 40px; height: 50px; border-radius: 50%;">
+                        </td>
+                        {% endif %}
+                        <td>
+                            {{i.slug}}
+                        </td>
+                        {% if perms.superadmin.can_change_cms %}
+
+                        <td>
+                            <a href="{% url 'add_pages' i.slug %}" class="btn btn-lg btn-success"><i class="fas fa-edit"></i></a>
+                        </td>   
+                        {% endif %}      
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><!-- .card-preview -->
+</div> 
+{% endblock content %}

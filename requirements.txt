@@ -1,0 +1,16 @@
+django-cors-headers
+Django==3.2
+djangorestframework
+djangorestframework-simplejwt
+html5lib
+Pillow
+PyJWT
+PyPDF3
+python-decouple
+uWSGI==2.0.20
+svglib
+xhtml2pdf
+xlwt
+openpyxl
+xlrd
+django-json-field

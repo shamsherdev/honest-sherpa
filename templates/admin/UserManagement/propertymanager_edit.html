@@ -1,0 +1,233 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Update Property Manager</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                {% comment %} <h5 class="card-title">User Create</h5> {% endcomment %}
+            </div>
+            <form method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">First Name</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" class="form-control" id="full-name-1" name="firstname" data-rule-required="true" value="{{edit_data.first_name}}"
+                                 maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Last Name</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" class="form-control" id="full-name-2" name="lastname" data-rule-required="true" value="{{edit_data.last_name}}"
+                                  maxlength="50">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Email address</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" class="form-control" id="email-address-1" name="email" data-rule-required="true" value="{{edit_data.email}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1">Contact No</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" class="form-control" id="phone-no-1" name="contactnumber" data-rule-required="true" 
+                                value="{{edit_data.mobile_number}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-msg-minlength="Please enter valid mobile number" minlength="7" maxlength="15">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Profile Picture*</label>
+                            <div class="form-control-wrap">
+                                <input type="file" class="form-control"  accept="image/png, image/gif, image/jpeg"  id="image" name="image" >
+                                {% if edit_data.profile_pic %}
+                                <img src="{{edit_data.profile_pic.url}}">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >FAX*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true"  value="{{edit_data.fax}}" type="text" class="form-control" id="fax" name="fax" data-rule-required="true"
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="15" >
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Role*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true"  readonly data-rule-noSpace="true"  value="{{edit_data.roll}}" type="text" class="form-control" id="fax" name="fax" data-rule-required="true"
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="15" >
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Time Zone*</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="timezone" name="timezone">
+                                    {% for i in timeZone %}
+                                    <option  {% if edit_data.time_zone == i %} selected {% endif %} value="{{i}}"> {{i}}</option>
+                                    {% endfor%}
+\                                </select> 
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Identification Number*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="9" value="{{edit_data.identification_number}}"class="form-control" id="identification_number" name="identification_number" data-rule-required="true" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">  
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Manager*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" maxlength="10" value="{{edit_data.manager}}" type="text" class="form-control" id="manager" name="manager" data-rule-required="true" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Department*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" value="{{edit_data.department}}" type="text" class="form-control" id="department" name="department" data-rule-required="true" value="{{request.user.email}}" readonly >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Address*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="address" name="address" data-rule-required="true"
+                                {% for i in edit_address%} value="{{i.address}}" {% endfor %}>
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Country*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="country" name="country" data-rule-required="true"
+                                maxlength="50"  {% for cou in edit_address%} value="{{cou.country}}" {% endfor %}>
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >State*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="state" name="state" data-rule-required="true"
+                                 maxlength="50"  {% for sta in edit_address%} value="{{sta.state}}" {% endfor %}>
+                                 
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >City*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="city" name="city" data-rule-required="true" 
+                                 maxlength="50"  {% for citys in edit_address%} value="{{citys.city}}" {% endfor %}>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Zip-Code*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="zipcode" name="zipcode" data-rule-required="true"
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="5"
+                                {% for zip in edit_address%} value="{{zip.zip_code}}" {% endfor %}>
+                                
+                            </div>
+                        </div>
+                    </div>  
+                    
+                
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Status*</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="basicSelect" name="status" required>
+                                    <option {% if edit_data.is_active == True %} selected {% endif %} value="True"> Active
+                                    </option>
+                                    <option {% if edit_data.is_active == False %} selected {% endif %}  value="False" >
+                                    {% comment %} {% if not is_active %} selected {% endif %}> {% if is_active %} selected {% endif %} {% endcomment %}
+                                        Deactive
+                                    </option>
+                                </select>
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Description*</label>
+                            <div class="form-control-wrap">
+                                <textarea data-rule-required="true" data-rule-noSpace="true" type="text" class="summernote-basic" id="description" name="description" data-rule-required="true" >{{edit_data.description}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button onclick="Register()" type="submit" class="btn btn-lg btn-primary"> Submit </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+}
+</script>
+{% endblock js_content %}  

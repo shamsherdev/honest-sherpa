@@ -1,0 +1,44 @@
+{% extends 'web/basic/base.html' %}
+{% load static %}
+{% block content %}
+<div class="modal fade select-type-modal" id="exampleselectuser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content"> 
+         <!--     <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> -->
+                    <div class="modal-body">
+                        <div class="select-type-row">
+                            <a class="navbar-brand" href="index.php">
+                            <img src="{% static 'web/images/logo.svg'%}">
+                            </a>
+                            <h3>Select User Type</h3>
+                            <form>
+                            <ul class="select-type-check">
+                                <li class="user_type">
+                                    <a href="/login/" >
+                                        <figure><img src="{% static 'web/images/vacationer.svg'%}"></figure>
+                                        <span>Vacationer</span>
+                                    </a>
+                                </li>
+                                <li class="user_type">
+                                    <a href="/login/">
+                                        <figure><img src="{% static 'web/images/homeowner.svg'%}"></figure>
+                                        <span>Homeowner</span>
+                                    </a>
+                                </li>
+                                <li class="user_type">
+                                    <a href="/login/">
+                                        <figure><img src="{% static 'web/images/property-manager.svg'%}"></figure>
+                                        <span>Property Manager</span>
+                                    </a>
+                                </li>
+                            </ul>
+                             <a href="/login/" class="btn">Next</a>
+                        </form>
+                        </div>
+                    </div>
+                 {% comment %} </div>
+            </div>
+        </div>  {% endcomment %}
+{% endblock content %}

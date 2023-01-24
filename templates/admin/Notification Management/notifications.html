@@ -1,0 +1,277 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">Notifications Management</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+        <div class="d-flex justify-content-end g-2" style="text-align: right;padding:1rem 2em ">
+            <label class="form-control d-none d-sm-inline-block" for="status">Select User Role</label>
+            <div class="form-control-wrap d-flex">
+                <select class="form-select" onchange="usernotification()" id="basicSelect" name="user" required>
+                    <option disabled selected value="">Select User</option> 
+                    <option value="subadmin">Subadmin</option>
+                    <option value="franchise">Franchise</option>
+                    <option value="customer">Customer</option>
+                    <option value="homeowner">Homeowner</option>
+                    <option value="propertymanager">Propert Manager</option>
+       
+                </select>
+                                
+            </div>
+            <div>
+                <button onclick="send()"  id="send_notification_box" style="display:none" type="button" class="btn btn-primary showBtn"> Send Notification</button> 
+        </div>
+          
+        </div>
+        <div class="card-inner"> 
+            <div id="select_all" style="display:none">
+            <input type="checkbox" name="select" id="ckbCheck"  class="selectall">Select All
+            </div> 
+            <table class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                     
+                        <th>Check</th>
+                 
+                        <th>Sr No</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>User Role</th>
+                        {% comment %} <th>Action</th> {% endcomment %}
+                   
+                   
+                    </tr>
+                </thead>
+                <tbody id ="userdata">
+                    {% for i in not_data %}
+                    <tr>
+                       <td  class="slds-cell-shrink" ><input type="checkbox" value="{{i.id}}"  class="checkBoxClass"></td> 
+                       <td>{{forloop.counter}}</td>  
+                        <td>{{i.first_name|safe}}</td>  
+                        <td>{{i.last_name|safe}}</td>
+                        <td>{{i.email}}</td>
+                        <td>{{i.mobile_number}}</td>
+                        <td>{{i.roll}}</td>
+                        {% comment %} <td>
+                            <a  href="{% url 'delete_notification' i.slug %}" class="btn btn-lg btn-danger"><i class="fa-solid fa-trash-can"></i></a> 
+                        </td>          {% endcomment %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>    
+    </div>  
+    <!-- Modal -->
+    <form method="POST">
+        {% csrf_token %}
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 style="text-align:center;" class="modal-title">Select Notification Type</h4>
+            </div>
+            <div class="modal-body d-flex">
+            <div class="form-check">
+                
+                     <input type="checkbox" id="push" onchange="send_notification()" name="push" value="1">
+                <label class="form-check" for="flexRadio">
+                           Push Notification
+                </label>
+                </div>
+            <div class="form-check">
+                <input type="checkbox" id="email" onchange="send_notification()" name="email" value="2">
+                <label class="form-check" for="flexRadioDefault1">
+                            Email Notification
+                  </label>
+                </div>
+            </div>
+            <div class="form-check" id="message_box" style="display:none;">
+               Message <textarea class="form-control" type="text" name="emailmessage" id="emailmessage">  </textarea>   
+            </div>
+           
+            <div class="modal-footer">
+                <button type="button" onclick="send_email()" class="btn btn-default" data-dismiss="modal">Send Mail</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+</form>
+
+{% endblock content %}
+{% block js_content %}
+
+<script>
+    function usernotification(){
+        let notification_id= $('#basicSelect').val()
+        {% comment %} alert(notification_id) {% endcomment %}
+
+        $.ajax({
+            type:"GET",
+
+            url:"{% url 'notification' %}",
+            data:{
+                notification_id:notification_id
+            },
+            success:function(res){
+       
+                const user_data=res.data
+                let user_htmsl=''
+                let count=1
+                $.each(JSON.parse(user_data), function(index, value) {
+                   console.log(value.fields) 
+                   
+                    user_htmsl+= `<div class="card-inner"> <table class="datatable-init nowrap table"> <tr>
+                    <td id="count"><input value="${value.fields.email}" id="check_alone_in_td" onchange="check_alone()"  class="checkBoxClass showBtn" type="checkbox"></td>
+                    <td>${count}</td>
+                    <td >${value.fields.first_name}</td>
+                   <td id="dd">${value.fields.last_name}</td>
+                   <td>${value.fields.email}</td>
+                  
+                   <td>${value.fields.mobile_number}</td>
+                   <td>${value.fields.roll}</td>
+                   
+              
+                 
+                       
+                    {% comment %} <a href="/admin/delete-notification/${value.fields.slug}/"  class="btn btn-lg btn-danger"><i class="fa-solid fa-trash-can"></i></a> {% endcomment %}
+            
+                    {% comment %} <a href="/admin/user_data_pdf/${value.fields.slug}/" id="pdf"  class="btn btn-lg btn-primary"><i class="fas fa-download"></i></a>   {% endcomment %}
+               
+    
+                    </td>  
+         
+                   
+                    </tr>
+                </table>
+            </div>`
+                    count++
+                   
+                  
+                   
+                  });
+                  $('#userdata').html(user_htmsl)
+                  if(user_htmsl){
+                    $('#select_all').css("display","block")
+                  }else if(!user_htmsl){
+                    $('#select_all').css("display","none")
+                  }
+                  
+                 
+                  
+                    
+                 },
+              error:function(res){
+                toastr.error(res.responseJSON.message);
+              }
+        });
+    }
+</script>
+<script>
+    $("#ckbCheck").click(function() {
+        $(".showBtn").prop("checked", true);
+        $('#send_notification_box').css("display","block")
+
+    });
+    $("#check_alone_in_td").click(function() {
+        if (!$(this).prop("checked")) {
+            $('#send_notification_box').css("display","none")
+            $("#ckbCheck").prop("checked", false);
+        }
+         
+    }); 
+</script>
+<script>
+    function check_alone(){
+        var checkedValue = $('.showBtn:checked').val();
+        if (checkedValue){
+            $('#send_notification_box').css("display","block")
+        }else if (!$(this).prop("checked")){
+            $('#send_notification_box').css("display","none")   
+        }
+    
+    }
+   
+
+
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+    function send(){
+        $('#myModal').modal('show')
+    }
+
+</script>
+<script>
+    function send_notification(){
+        var push = $('#push:checked').val();
+        var email = $('#email:checked').val();
+
+        
+        if(push==1){
+            $('#message_box').css("display","block")
+        }else if(email==2){
+            $('#message_box').css("display","block")
+
+        }else{
+             $('#message_box').css("display","none")
+        }
+    }
+</script>
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('emailmessage');
+</script>
+<script>
+    function send_email(){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        let emailArray = []
+        let emails = $('.checkBoxClass:checked');
+        emails.each(function(key, element) {
+            emailArray.push(element.value)
+        })
+        let messagess = CKEDITOR.instances["emailmessage"].getData() 
+        
+       
+        $.ajax({
+            type:"POST",
+            url:"{% url 'email_notification' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:{
+                'emails[]':emailArray,
+                messagess:messagess
+            },
+            success:function(res){
+                toastr.success(res.message);
+            },
+            error:function(res){
+                toastr.error(res.responseJSON.message);
+              }
+        });
+       
+
+        
+    }
+</script>
+{% endblock js_content %}

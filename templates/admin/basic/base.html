@@ -1,0 +1,532 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <base href="../">
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static 'web/images/logo.svg' %}">
+    <title> Honest Sherpa  Dashboard </title>
+    <!-- StyleSheets  -->
+
+    <link rel="stylesheet" href="{% static 'admin/assets/css/dashlite.css' %}">
+<!-- CSS only -->
+
+    <link rel="stylesheet" href="{% static 'admin/css/developer.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/css/select.dataTables.min.css' %}">
+    
+    <link id="skin-default" rel="stylesheet" href="{% static 'admin/assets/css/theme.css' %}" >
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet" /> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+    <style>
+        #basicSelect-error{
+            color:#ea6363;
+        }
+        #table_id_filter{
+          display:None;
+        }
+    </style>
+
+<style>
+    .error{
+        color:#e85347;
+    }
+</style>
+
+
+    {% block cs_content %}{% endblock cs_content %}
+</head>
+
+<body class="nk-body bg-lighter npc-general has-sidebar ">
+    <div class="nk-app-root">
+        <!-- main @s  -->
+        <div class="nk-main ">
+
+
+            <!-- sidebar @s complete **********************************************-->
+            {% include 'admin/basic/sidebar.html' %}
+            <!-- sidebar end complete ********************************************** @e -->
+            <!-- wrap @s -->
+
+
+            <div class="nk-wrap ">
+
+
+                <!-- main header @s -->
+             {% include 'admin/basic/header.html' %}
+                <!-- main header @e -->
+
+
+                <!-- content @s ************************************************ -->
+                 <div class="nk-content ">
+                    <div class="container-fluid">
+                        <div class="nk-content-inner">
+                            <div class="nk-content-body">
+
+                       
+                                 <div class="nk-block-head nk-block-head-sm">
+                                    <div class="nk-block-between">
+                              
+                                    </div><!-- .nk-block-between -->
+                                </div><!-- .nk-block-head -->
+                                <div class="nk-block">
+
+                                    {% block content %}
+
+                                    {% endblock content %}
+                                    {% comment %} <div class="row g-gs">
+                                        
+                                     
+                                        
+                                        
+                                        
+                                    </div><!-- .row --> {% endcomment %}
+                                    
+                                </div>
+                                
+                                <!-- .nk-block -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content @s ************************************************* -->
+
+
+                <!-- footer @s**************************************** -->
+                <div class="nk-footer">
+                    <div class="container-fluid">
+                       
+                        </div>
+                    </div>
+                </div>
+                <!-- footer *****************************************e -->
+
+
+
+            </div>
+            <!-- wrap @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+  
+
+    <!-- app-root @e -->
+    
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="{% static 'admin/assets/js/bundle.js' %}"></script>
+        <script src="{% static 'admin/assets/js/libs/editors/summernote.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'admin/assets/css/editors/summernote.css' %}">
+
+    <script src="{% static 'admin/assets/js/editors.js' %}"></script>
+    <script src="{% static 'admin/assets/js/scripts.js' %}"></script>
+    <script src="{% static 'admin/assets/js/charts/gd-default.js' %}"></script>
+    <script src="{% static 'admin/assets/js/example-chart.js' %}"></script>
+    <script src="{% static 'admin/js/select2.js' %}"></script>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/fontawesome.min.js" integrity="sha512-5qbIAL4qJ/FSsWfIq5Pd0qbqoZpk5NcUVeAAREV2Li4EKzyJDEGlADHhHOSSCw0tHP7z3Q4hNHJXa81P92borQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script>
+  toastr.options = {
+            positionClass:"toast-top-center",
+            timeOut: 2000
+          }
+</script>
+    
+    
+                    {% if messages %}
+                      {% for message in messages %}
+                          {% if message.tags == 'success'%}
+                              <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                          {% elif message.tags == 'info' %}
+                              <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                          {% elif message.tags == 'warning' %}
+                              <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                          {% elif message.tags == 'error' %}
+                              <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                          {% endif %}
+                      {% endfor %}
+                  {% endif %}
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.js"></script>
+
+{% block js_content %}{% endblock js_content %}               
+                  
+                  
+</body>
+<script>
+  $("#com-email").click(function(e){
+      $(document).find('[name=child_div]').not(this).prop('checked', this.checked);
+  });
+  
+  </script>
+<script>
+ var listenType = (navigator.userAgent.toLowerCase().indexOf('edge') == -1) ? 'mouseup' : 'click';
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      getZipFromLatLng(position.coords.latitude, position.coords.longitude);
+      
+    }, (err) => {
+      if (err.code === err.PERMISSION_DENIED) {
+        const locationDisabledcontent = `          
+        <div class="text-center zip-alert-heading"><b>Location sharing is disabled on your
+        browser.</b></div>
+      <p class="text-center zip-alert-subheading">Please enable location sharing in your browser settings. <br /> or
+      type in a zip code
+      to continue.</p>`;
+        if ($('.custom-alert')) {
+          $('.custom-alert .modal-body').empty();
+          $('.custom-alert .modal-body').html(locationDisabledcontent);
+          $('.custom-alert').addClass('show');
+        }
+        $('.custom-alert-close').on('click', function () {
+          $('.custom-alert').removeClass('show');
+        })
+      }
+    }, {timeout:5000});
+  }
+}
+
+
+$('.zipEntry-text').on(listenType, function (e) {
+  console.log('in zipentrytext, get current location');
+  e.stopPropagation();
+  e.preventDefault();
+  getLocation();
+})
+
+$(document).ready(function() {
+  const zipExists = getCookie('zip');
+  if (!zipExists) {
+    getLocation();
+    const zipExists = getCookie('zip');
+    if (!zipExists) {
+      getAddressFromZip(defaultZip);
+    }
+  }
+})
+</script>
+
+<script>
+  let array = []
+  
+  let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  
+  let DropdownId
+  {% comment %} let Subject {% endcomment %}
+  {% comment %} alert(Subject) {% endcomment %}
+  {% comment %} let Message {% endcomment %}
+  function userActionAjax() {
+    if(DropdownId && array.length > 0){
+      $.ajax({
+        type: "POST",
+        url: "/admin/UserActionAjax/",
+        headers: { 'X-CSRFToken': csrftoken ?? null }, 
+        data: 
+        {
+            DropdownId:DropdownId,
+            'userId[]':array,
+            {% comment %} subject:Subject,
+            message:Message, {% endcomment %}
+        },
+        success: function(res) {
+          toastr.success(res.message);
+         window.location.reload("")  
+        },error:function(res){
+          toastr.success(res.message);
+        } 
+        
+
+      });
+    }
+   
+  }
+  function userAction(id){
+    DropdownId = id
+    $('input[name="child_div"]:checked').each(function() {
+      array.push(this.value)
+    });
+    if(DropdownId==3){
+      if($('input[name="child_div"]:checked').length==0){
+        $("#modalDefault").addClass('show')
+        $("#modalDefault").show()
+      }else{
+        
+        $('#modalDelete').show()
+       
+
+        
+      } 
+    } 
+
+    else if (DropdownId==4){
+      if($('input[name="child_div"]:checked').length==0){
+        $("#modalDefault").addClass('show')
+        $("#modalDefault").show()
+      }else{
+        $('#modalEmail').show()
+        $('#dropdownid').val(DropdownId)
+       
+        $('#user_id').val(array)
+
+        
+      } 
+    }
+    else {
+      userActionAjax()
+    }
+    if($('input[name="child_div"]:checked').length==0){
+      $("#modalDefault").addClass('show')
+      $("#modalDefault").show()
+    }
+  }
+  
+  $('#delete-user-btn').click(function() {
+    userActionAjax()
+    $('#modalDelete').hide()
+
+   setTimeout(() => {
+     window.location.replace('/admin/customer-view/')
+   }, 1000)
+  })
+    
+</script>
+
+
+
+<script>
+  function userFilter(userType){
+      let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
+      $.ajax({
+            type: "POST",
+            url: "/admin/UserFilterAjax/",
+            headers: { 'X-CSRFToken': csrftoken }, 
+            data: 
+            {
+              user_type:userType
+            },
+            
+            success: function(res) {
+             $('#table_id').html(res)
+             
+            },error:function(res){
+                toastr.success(res.message);
+
+            } 
+        
+          });
+    
+        }
+</script>
+
+<script>
+  function useradd(){
+  
+      $("#myModal").addClass('show')
+      $("#myModal").show()
+  }
+</script>
+<script>
+  function addressadd(){
+
+    $("#myModaledit").addClass('show')
+    $("#myModaledit").show()
+    
+
+  }
+</script>
+<script>
+  
+  function ShowHide(){
+    let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  
+    let arr = []
+    let unCheckedArray =[]
+    
+
+    // if($('input[name="name_input"]:checked').length==0){
+    //   window.location.href="/admin/customer-view/"
+    // }
+    
+    
+  $('input[name="name_input"]:checked').each(function() {
+       arr.push( {name:this.value, checked:true})
+      });
+    
+  arr.map((item, index)=>{
+  
+   if(item.name == "sr"){
+        $('.sr_th').css('display','none')
+        $('.sr_td').css('display','none')
+          
+    }else if(item.name == "name"){
+   $('.name_th').css('display','none')
+    $('.name_td').css('display','none')
+    }
+    else if(item.name == "email"){
+    $('.email_th').css('display','none')
+    $('.email_td').css('display','none')
+    }
+    else if(item.name == "roll"){
+      $('.roll_th').css('display','none')
+      $('.roll_td').css('display','none')
+    }
+    else if(item.name == "action"){
+      $('.action_th').css('display','none')
+      $('.action_td').css('display','none')
+      console.log(item.name)
+    }  
+  })
+  
+  
+ $("input[name='name_input']:not(:checked)").each(function() {
+       unCheckedArray.push( {name:this.value, checked:false})
+      });
+       unCheckedArray.map((item, index)=>{
+    if(item.name == "sr"){
+      console.log(item.name)
+          $('.sr_th').css('display','table-cell')
+          $('.sr_td').css('display','table-cell')   
+    }
+    else if(item.name == "name"){
+      console.log(item.name)
+  
+   $('.name_th').css('display','table-cell')
+      $('.name_td').css('display','table-cell')
+    }
+    else if(item.name == "email"){
+      console.log(item.name)
+
+    $('.email_th').css('display','table-cell')
+    $('.email_td').css('display','table-cell')
+    }
+    else if(item.name == "roll"){
+      console.log(item.name)
+
+          $('.roll_th').css('display','table-cell')
+           $('.roll_td').css('display','table-cell')
+    }
+    else if(item.name == "action"){
+          console.log(item.name)
+
+          $('.action_th').css('display','table-cell')
+          $('.action_td').css('display','table-cell')
+    }
+   
+  }); 
+  
+  
+  $.ajax({
+          type: "POST",
+          url: "/admin/UserShowHideAjax/",
+          headers: { 'X-CSRFToken': csrftoken ?? null }, 
+          data: 
+          {
+              
+              'arr': JSON.stringify(arr)
+              
+          },
+          success: function(res) {
+            {% comment %} console.log(res.message) {% endcomment %}
+          },error:function(res){
+            toastr.success(res.message);
+          } 
+          
+  
+        });
+  
+ $.ajax({
+          type: "POST",
+          url: "/admin/UserShowHideAjax/",
+          headers: { 'X-CSRFToken': csrftoken ?? null }, 
+          data: 
+          {   
+              'arr': JSON.stringify(unCheckedArray)
+          },
+          success: function(res) {
+            
+           {% comment %} console.log(res.checkboxDictonary,"ddddddddddddddd") {% endcomment %}
+           {% comment %} console.log(res.value,"ddddddddddddddd") {% endcomment %}
+          },error:function(res){
+            toastr.success(res.message);
+          } 
+          
+  
+        }); 
+      
+    }
+</script>
+<script>
+  array = []
+  $('input[name="child_div"]:checked').each(function() {
+      array.push(this.value)
+    });
+  function send_mail(){
+    let DropDownId =  $('#dropdownid').val()
+    console.log(DropDownId)
+    {% comment %} let array = $('#user_id').val()
+    console.log(array) {% endcomment %}
+
+  let subject = $('#subject').val()
+  console.log(subject)
+  let message = $('#message').val() 
+  console.log(message)
+    $.ajax({
+        type: "POST",
+        url: "/admin/UserActionAjax/",
+        headers: { 'X-CSRFToken': csrftoken ?? null }, 
+        data: 
+        {
+            DropdownId:DropdownId,
+            'userId[]':array,
+            subject:subject,
+            message:message, 
+        },
+        success: function(res) {
+          toastr.success(res.message);
+          $('#modalEmail').hide()
+
+        },error:function(res){
+          toastr.success(res.message);
+        } 
+        
+
+      });
+
+  
+
+  }
+</script>
+<script>
+      var validate = function(e) {     
+         var t = e.value;
+         t.charCode >= 48 && t.charCode <= 57
+         e.value = (t.indexOf(".") >= 0) ? (t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)) : t;
+          
+      }
+</script>
+
+
+<script>
+  $(document).ready(function() {
+  
+    let price_input_count = $('.counts').length;
+    console.log(price_input_count,"aaaaaaaaaaaaaaaaaa")
+    $('#count').val(price_input_count)
+  })
+</script>
+
+</html>

@@ -1,0 +1,150 @@
+<html>
+{% extends 'web/basic/base.html' %}
+{% load static %}
+{% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+         {% if request.user.is_authenticated   and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper wtvh100 top_gradient">
+                 <div class="container">
+                    <div class="inner-title-ab">
+                        <h4>Categories</h4>
+                    </div>
+                 </div>
+
+                 <section class="categories-lists">
+                    <div class="container">
+                      <ul class="categories-lists-card">
+                          {% for i in category %}
+                          <li >
+                              <a class="card-categories" href="{% url 'category_list' i.slug %}">
+                                  <figure><img src="{{i.category_image.url}}"></figure>
+                                  <h4>{{i.name}}</h4>
+                              </a>
+                          </li>
+                          {% endfor %}
+                          {% comment %} <li>
+                              <a class="card-categories" href="javascript:;">
+                                  <figure><img src="images/furniture.svg"></figure>
+                                  <h4>Furniture</h4>
+                              </a>
+                          </li>
+                          <li>
+                              <a class="card-categories" href="javascript:;">
+                                  <figure><img src="images/rollaway-bed.svg"></figure>
+                                  <h4>Rollaway Bed</h4>
+                              </a>
+                          </li>
+                          <li>
+                              <a class="card-categories" href="javascript:;">
+                                  <figure><img src="images/baby-crib.svg"></figure>
+                                  <h4>Baby Crib</h4>
+                              </a>
+                          </li>
+                          <li>
+                              <a class="card-categories" href="javascript:;">
+                                  <figure><img src="images/office-furniture.svg"></figure>
+                                  <h4>Office Furniture</h4>
+                              </a>
+                          </li>
+                          <li>
+                              <a class="card-categories" href="javascript:;">
+                                  <figure><img src="images/appliances.svg"></figure>
+                                  <h4>Appliances</h4>
+                              </a>
+                          </li>
+                          <li>
+                              <a class="card-categories" href="javascript:;">
+                                  <figure><img src="images/electronics.svg"></figure>
+                                  <h4>Electronics</h4>
+                              </a>
+                          </li>
+                          <li class="request-item">
+                              <a class="card-categories" data-bs-toggle="modal" href="#exampleModalToggle" href="javascript:;">
+                                  <figure><img src="images/request-item.svg"></figure>
+                                  <h4>Request an item</h4>
+                              </a>
+                          </li> {% endcomment %}
+                      </ul>
+                    </div>
+                 </section>
+                 
+            </div>
+
+            <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Request an Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-line"></i></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="request-item">
+                        <ul class="request-item-add">
+                            <li>
+                                <div class="form-group">
+                                  <input type="text" class="form-control" placeholder="Enter item name">
+                                  <button class="btn rounded-btn"><i class="ri-subtract-line"></i></button>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="form-group">
+                                  <input type="text" class="form-control" placeholder="Enter item name">
+                                  <button class="btn rounded-btn"><i class="ri-subtract-line"></i></button>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="form-group">
+                                  <input type="text" class="form-control" placeholder="Enter item name">
+                                  <button class="btn rounded-btn"><i class="ri-add-fill"></i></button>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="text-center">
+                            <button class="btn" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Submit</button>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-line"></i></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="thankyou-part">
+                        <img src="images/thankyou-check.svg">
+                        <h3>Thankyou!</h3>
+                        <p>Your request has been added into the cart</p>
+                        <button type="button" class="btn">Go To Cart</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+        <!-- ----------footer section----- ------ -->
+               {% include 'web/basic/footer.html' %}
+
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+      {% include 'web/js/helper.html' %}
+
+    <!-- -----side menu------ -->
+    </body>
+{% endblock content %}
+
+</html>

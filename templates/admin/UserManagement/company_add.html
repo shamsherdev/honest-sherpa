@@ -1,0 +1,108 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+        <h4 class="title nk-block-title">Company Add</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-12" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="POST" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+               
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" > Company Name*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" maxlength="30"  onkeypress='return (event.keyCode >=65 && event.keyCode <= 90)|| (event.keyCode >=95 && event.keyCode <= 122)' type="text"  value="{{data.companyname}}" class="form-control" id="companyname" name="companyname" data-rule-required="true">
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" > Company Address*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  value="{{data.companyaddress}}" class="form-control" id="companyaddress" name="companyaddress" data-rule-required="true">
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" > Company Email*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="email"  value="{{data.companyemail}}" class="form-control" id="companyemail" name="companyemail" data-rule-required="true">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" > Company Contact*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  value="{{data.company_contact}}" class="form-control" id="company_contact" name="company_contact" 
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="12" data-rule-required="true">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" > Company Zip Code*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  value="{{data.company_zip}}" class="form-control" id="company_zip" name="company_zip" 
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="5" data-rule-required="true">
+                                
+                            </div>
+                        </div>
+                    </div>
+                     
+                  
+                  
+                    
+                    </div>
+                    {% comment %} <input type="hidden" class="form-control" id="email-address-1" name="customer" value="customer" data-rule-required="true"> {% endcomment %}
+
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary" style="margin-top: 74px"> Submit </button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+}
+</script>
+{% endblock js_content %}  

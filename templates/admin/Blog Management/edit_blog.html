@@ -1,0 +1,138 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Update Blog</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                {% comment %} <h5 class="card-title">User Create</h5> {% endcomment %}
+            </div>
+            <form method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Blog Title</label>
+                            <div class="form-control-wrap">
+                                <input type="text"  onkeypress='return (event.keyCode >=65 && event.keyCode <= 90)|| (event.keyCode >=95 && event.keyCode <= 122)' maxlength="150" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="blog_title" name="blog_title"  data-rule-required="true" value="{{edit_data.blog_title}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1"> Blog Image{{edit_data.blog_image}}</label>
+                            
+                            <div class="form-control-wrap">
+                            
+                                <input type="file" class="form-control" id="blog_image" name="blog_image"  accept="image/png, image/gif, image/jpeg">
+                                {% if edit_data.blog_image %}
+                                <img src ="{{edit_data.blog_image.url}}" style="width: 97px;">
+                                {% endif %}
+                            </div>
+           
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1"> Blog video</label>
+                            
+                            <div class="form-control-wrap">
+                            
+                                <input type="file" class="form-control" id="video" name="blog_video"  data-msg-accept="Please enter valid video file"  accept="video/mp4*">
+                                {% if edit_data.blog_video %}
+                                <video width="320" height="240" controls>
+                                    <source src="{{  edit_data.blog_video.url }}" type="video/mp4">
+                                </video>
+                                {% endif %}
+                            </div>
+           
+                        </div>
+                    </div>
+{% comment %}                     
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1">Blog Content</label>
+                            <div class="form-control-wrap"> {% endcomment %}
+                                {% comment %} <input type="text" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="phone-no-1" name="desgination" data-rule-required="true" 
+                                value="{{edit_data.desgination}}" > {% endcomment %}
+                                {% comment %} <textarea value="" data-rule-required="true" data-rule-noSpace="true" name="blog_content" required>{{edit_data.blog_content|safe}}</textarea>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Meta Keyword</label>
+                            <div class="form-control-wrap">
+                                <input type="text" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="meta_keyword" name="meta_keyword"  data-rule-required="true" value="{{edit_data.meta_keyword}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Meta Title</label>
+                            <div class="form-control-wrap">
+                                <input type="text" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="meta_title" name="meta_title"  data-rule-required="true" value="{{edit_data.meta_title}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1"> Meta Description</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="text" class="form-control" id="phone-no-1" name="desgination" data-rule-required="true" 
+                                value="{{edit_data.description|safe}}" > {% endcomment %}
+                                <textarea value="" data-rule-required="true" data-rule-noSpace="true" name="meta_description" required>{{edit_data.meta_description|safe}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    
+                    
+                    <div class="col-12  mb-3">
+                        <div class="form-group">
+                            <button onclick="Register()" type="submit" class="btn btn-lg btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+}
+</script>
+</script>
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('blog_content');
+    CKEDITOR.replace('meta_description');
+</script>
+{% endblock
+{% endblock js_content %}  

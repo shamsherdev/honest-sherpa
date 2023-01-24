@@ -1,0 +1,153 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">Product Management</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+        {% comment %} {% if perms.superadmin.add_product %} 
+        <div "nk-block-head-content" style="text-align: right;padding:1rem 2rem"> 
+            <a  href="{% url 'add_product' %}" class="btn btn-info" ><i class="fa-solid fa-plus"></i></a>
+        </div>
+        {% endif %}  {% endcomment %}
+        <div class="card-inner">
+            <table class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>User</th>
+                        <th>Product Name</th>
+                        <th>Image</th>
+
+                        <th>Quantity</th>                      
+                        <th>Action</th>
+                   
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in product %}
+                    
+                    <tr>
+                        <input type="hidden" value="{{i.user.id}}" id="user_id_{{i.id}}">
+                        <td>{{forloop.counter}}</td>
+                        <td>{{i.user.first_name|safe|truncatechars:30}}</td>
+                        <td>{{i.product.name|safe|truncatechars:30}}</td>
+                        
+                        {% if i.product.image %}
+                        <td><img width="20%" height="20%" src="{{i.product.image.url}}"></img></td>
+                        {% else  %}
+                        <td><img width="20%" height="20%" src="{{request.user.profile_pic}}"></img></td>
+                        {% endif %}
+                        <td id="quantity_{{i.id}}">{{i.quantity}}</td>
+                        {% if perms.superadmin.can_change_requestproducts%} 
+                        <td>  
+                            <a type="button"  onclick="approve_quantity({{i.id}})" class="btn btn-lg btn-success">Approve</a>    
+                        </td> 
+                        {% endif%}        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><!-- .card-preview -->
+</div> 
+
+ <div class="modal fade" tabindex="-1" role="dialog" id="open_modal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+                <div class="modal-body modal-body-md">
+                    <h5 class="title mb-4">Select Your Quantity</h5>
+                    <div class="nk-country-region">
+                        <div class="col-md-12 d-flex">
+                            <form method="POST" id="request_products_form">
+                                {% csrf_token %}
+                                <div class="col-md-6">
+                                    <input type="hidden" class="form-control" id="product_id_in_admin_modal" value="">
+                                    <input type="hidden"  id="user_id_in_admin_modal" value="">
+                                    <input class="form-control" data-rule-required="true" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" id="open_quantity_input_in_admin">
+                                    
+                                    <p style="color:red" id="error_text"></p>
+                                   
+                                   
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-primary" onclick="send_request()"> Send </button>
+                                <div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div><!-- .modal-content -->
+        </div><!-- .modla-dialog -->
+    </div>
+
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" defer ></script>
+
+<script>
+    function approve_quantity(id){
+        $('#open_modal').modal("show")
+        let quantity = $('#quantity_'+id).html()
+        let user_id = $('#user_id_'+id).val()
+        
+        $('#open_quantity_input_in_admin').val(quantity)   
+        $('#product_id_in_admin_modal').val(id)   
+        $('#user_id_in_admin_modal').val(user_id)  
+    }
+</script>
+
+<script>
+    function send_request(){
+    $('#request_products_form').valid()
+    let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    let product_id = $('#product_id_in_admin_modal').val()
+    let user_id = $('#user_id_in_admin_modal').val()
+    let quantity = $('#open_quantity_input_in_admin').val()
+    $.ajax({
+          type: "POST",
+          url: "{% url 'approved_request_products_by_admin' %}",
+          headers: { 'X-CSRFToken': csrftoken },
+          data:
+        {
+         product_id:product_id,
+         user_id:user_id,
+         quantity:quantity
+             
+        },
+      success:function(res){
+          console.log(res)
+          toastr.success(res.message);
+          $('#open_modal').modal("hide")
+          $('#request_products_form').trigger('reset')
+          
+          
+      },
+       error:function(res){
+       toastr.success(res.responseJSON.message);
+        
+         $('#error_text').html(`please select quantity less then ${res.responseJSON.quantity}`) 
+        
+        
+        }
+  });
+    
+}
+</script>
+{% endblock content %}

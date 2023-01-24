@@ -1,0 +1,158 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Add Offer</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-12" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row column" >
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Category</label>
+                            <div class="form-control-wrap">
+                                <select data-rule-required="true" class="form-control" id="category" name="category" required>
+                                    <option disabled selected >Select Category</option>  
+                                    {% for i in category %}
+                                    <option value="{{i.id}}">{{i.name}}</option>  
+                                    {% endfor %}
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > Offer Name*</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <input type="text" data-rule-required="true" data-rule-noSpace="true"  class="form-control" id="full-name-1" name="name" data-rule-required="true"
+                                 maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Image</label>
+                            <div class="form-control-wrap">
+                                <input type="file" class="form-control" data-rule-required="true" id="image" name="image" data-msg-accept="Please Select valid image" accept="image/png, image/gif, image/jpeg" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" > Discount (%)</label>
+                            <div class="form-control-wrap">
+                                <input type="number" data-rule-noZeroAtStart="true" onpaste="return false" maxlength="3" min="0" max="100" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="discount" name="discount" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Validity*</label>
+                            <div class="form-control-wrap">
+                                <input type="date" data-rule-required="true" onkeypress="return false" class="form-control" name="validity" min="{% now "Y-m-d" %}" id="birthday" name="birthday">
+                                {% comment %} <input type="datetime"  class="form-control" id="validity" name="validity" data-rule-required="true"  >  {% endcomment %}
+                                {% comment %} <textarea value="" data-rule-required="true" data-rule-noSpace="true" name="validity" required></textarea> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Terms&Condition*</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="url" class="form-control" id="description" name="validity" data-rule-required="true">  {% endcomment %}
+                                 <textarea value="" class="summernote-basic" data-rule-required="true" data-rule-noSpace="true" name="terms" required></textarea> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Status*</label>
+                            <div class="form-control-wrap">
+                                <select data-rule-required="true" class="form-control" id="basicSelect" name="status" required>
+                                    <option disabled selected >Select Status</option>  
+
+                                    <option value="True"> Active
+                                    </option>
+                                    <option value="False" >
+                                    {% comment %} {% if not is_active %} selected {% endif %}> {% if is_active %} selected {% endif %} {% endcomment %}
+                                        Deactive
+                                    </option>
+                                </select>
+                                
+                            </div>
+                        </div>
+                    </div> 
+                  
+                    
+                    </div>
+                    {% comment %} <input type="hidden" class="form-control" id="email-address-1" name="customer" value="customer" data-rule-required="true"> {% endcomment %}
+
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary" style="margin-top: 74px"> Add</button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+{% comment %} <script>
+function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+
+}
+</script> {% endcomment %}
+{% comment %} <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('terms');
+</script> {% endcomment %}
+<script>
+    function Register(){
+      jQuery.validator.addMethod("noSpace", function(value, element) { 
+        if(value.indexOf(" ")==0){
+            return false;
+        }
+        return true;
+    }, "No space please and don't leave it empty");
+    $.validator.addMethod('emailRegex', function(value, element) {
+    let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+    return emailExp.test(value);
+    }, 'Email format is not valid'); 
+    $.validator.addMethod("noZeroAtStart", function(value, element) {
+        return value.charAt(0) != '0'
+    }, "price can't be zero"); 
+    $('#register').valid()
+    }
+    </script>
+{% endblock js_content %}  

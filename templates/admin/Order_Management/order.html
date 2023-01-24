@@ -1,0 +1,68 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">Order Management</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+         {% if perms.superadmin.add_offermanagement %}  
+        <div "nk-block-head-content" style="text-align: right;padding:1rem 2rem"> 
+            <a  href="{% url 'Add_Order' %}" class="btn btn-info" ><i class="fa-solid fa-plus"></i></a>
+        </div>
+         {% endif %}  
+        <div class="card-inner">
+            <table class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>order_id</th>
+                        <th> User Name</th>
+                        <th> Offer Name</th>
+                        <th>Discount (%)</th>
+                        <th>Delivery</th>
+                        <th>Order Return</th>
+                        <th>Order Created By</th>
+                        <th>Action</th>
+                   
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in order_data %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{i.order_id}}
+                        <td>{{i.user.first_name}} {{i.user.last_name}}</td>
+                        <td>{{i.offer.offer_name|safe}}</td>
+                        <td>{{i.offer.offer_discount}}%</td>    
+                        <td>{{i.delivery}}</td>
+                        <td>{{i.order_return}}</td>    
+                        <td>{{i.order_created_by}}</td>
+                        <td>
+                            {% if perms.superadmin.view_offermanagement %} 
+                            <a href="{% url 'order_view' i.slug %}" class="btn btn-lg btn-primary"><i class="fa-solid fa-info"></i></a> 
+                             {% endif %} 
+                            {% if perms.superadmin.change_offermanagement%}  
+                            <a href="{% url 'order_edit' i.slug %}" class="btn btn-lg btn-success"><i class="fas fa-edit"></i></a>
+                            {% endif %} 
+                             {% if perms.superadmin.delete_offermanagement %} 
+                            <a href="{% url 'order_delete' i.slug %}"  onclick="return confirm('Are you sure you want to delete this item')" class="btn btn-lg btn-danger"><i class="fa-solid fa-trash-can"></i></a> 
+                             {% endif %} 
+                        </td>         
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><!-- .card-preview -->
+</div> 
+{% endblock content %}

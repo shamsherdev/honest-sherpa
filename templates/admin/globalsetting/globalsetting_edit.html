@@ -1,0 +1,119 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Update Global Setting </h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                {% comment %} <h5 class="card-title">User Create</h5> {% endcomment %}
+            </div>
+            <form method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Text</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" class="form-control" id="full-name-1" name="title"  data-rule-required="true" value="{{edit_data.text}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Logo</label>
+                            
+                            <div class="form-control-wrap">
+                            
+                                <input type="file" class="form-control" data-msg-accept="PLease select valid image" id="full-name-2" name="image"  accept="image/png, image/gif, image/jpeg ">
+                                {% if edit_data.global_image %}
+                                <img src ="{{edit_data.global_image.url}}" style="width: 97px;">
+                                {% endif %}
+                            </div>
+           
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" > Instagram URL*</label>
+                            <div class="form-control-wrap">
+                                <input type="url" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="insta_url" name="insta_url" value="{{edit_data.global_url_insta}}" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" > Facebook URL*</label>
+                            <div class="form-control-wrap">
+                                <input type="url" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="facebook_url" name="facebook_url"  value="{{edit_data.global_url_facebook}}" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Twitter URL*</label>
+                            <div class="form-control-wrap">
+                                <input type="url" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="twitter_url" name="twitter_url"   value="{{edit_data.global_url_twitter}}" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Status</label>
+                            <div class="form-control-wrap">
+                                <select data-rule-required="true" data-rule-noSpace="true" class="form-control" id="basicSelect" name="status" required>
+                                    <option value="True" 
+                                    {% if edit_data.is_active %} selected {% endif %}>
+                                        Active
+                                    </option>
+                                    <option value="False" 
+                                    {% if not edit_data.is_active %} selected {% endif %}>
+                                        Deactive
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-12  mb-3">
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+}
+</script>
+{% endblock js_content %}  

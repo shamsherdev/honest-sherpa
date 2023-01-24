@@ -1,0 +1,275 @@
+{% extends 'web/basic/base.html' %}
+ {% load static %}
+  {% block title %}Contact Us{% endblock %}
+
+ {% block content %}
+<html>
+   
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+        {% if request.user.is_authenticated   and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper wtvh100 top_gradient">
+                 <div class="container">
+                    <div class="inner-title-ab">
+                        <h4>Contact Us</h4>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+                    </div>
+                 </div>
+                 <section class="inner-space-main">
+                    <div class="container">
+                        <div class="contact-sec-info">
+                            <div class="d-flex align-items-start">
+                              <div class="nav flex-column nav-pills nav_contact" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                <button class="nav-link active" onclick="contact()" id="v-pills-home-tab" value="propertymanager" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">I am a: Property Manager</button>
+                                <button class="nav-link"  onclick="contact2()" id="v-pills-profile-tab" value="homeowner" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">I am a: Homeowner</button>
+                                <button class="nav-link"  onclick="contact3()" id="v-pills-messages-tab" value="vacationer" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">I am a: Vacationer</button>
+                                {% comment %} <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">I am a: Potential Franchise Owner</button>
+                                <button class="nav-link" id="v-pills-settings1-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings1" type="button" role="tab" aria-controls="v-pills-settings1" aria-selected="false">I am a: Vendor</button>
+                                <button class="nav-link" id="v-pills-settings2-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings2" type="button" role="tab" aria-controls="v-pills-settings2" aria-selected="false">I am a: Potential Employee</button> {% endcomment %}
+                              </div>
+                              <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                    <form class="row" method="POST" id="contact_us">
+                                        {% csrf_token %}
+                                        <input type="hidden" id="user_type" name="user_type" class="form-control"  placeholder="user_type">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" data-rule-required="true"   data-rule-noSpace="true" class="form-control" name="name" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" data-rule-required="true" data-rule-noSpace="true"   data-rule-emailRegex="true" class="form-control" name="email" placeholder="Email address">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" data-rule-required="true" data-rule-noSpace="true" class="form-control" name="subject" placeholder="Subject">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <textarea type="text" data-rule-required="true" data-rule-noSpace="true" class="form-control" name="message" placeholder="Message"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pt-2 min-wd154">
+                                            <button onclick="conatct_us()"class="btn" type="submit">Send</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                                    <form class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Email address">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Subject">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <textarea type="text" class="form-control" placeholder="Message"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pt-2 min-wd154">
+                                            <button class="btn" type="button">Send</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                                    <form class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Email address">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Subject">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <textarea type="text" class="form-control" placeholder="Message"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pt-2 min-wd154">
+                                            <button class="btn" type="button">Send</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                {% comment %} <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                                    <form class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Email address">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Company name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Subject">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <textarea type="text" class="form-control" placeholder="Message"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pt-2 min-wd154">
+                                            <button class="btn" type="button">Send</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-settings1" role="tabpanel" aria-labelledby="v-pills-settings1-tab">
+                                    <form class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Email address">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Company name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Subject">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <textarea type="text" class="form-control" placeholder="Message"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pt-2 min-wd154">
+                                            <button class="btn" type="button">Send</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="v-pills-settings2" role="tabpanel" aria-labelledby="v-pills-settings2-tab">
+                                    <form class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Email address">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Company name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Subject">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <textarea type="text" class="form-control" placeholder="Message"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pt-2 min-wd154">
+                                            <button class="btn" type="button">Send</button>
+                                        </div>
+                                    </form>
+                                </div> {% endcomment %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                 </section>
+            </div>
+        <!-- ----------footer section----- ------ -->
+        {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+   
+    <!-- -----side menu------ -->
+    </body>
+</html>
+<script>
+    function contact(){
+       let property = $('#v-pills-home-tab').val()
+       if (property){
+         $('#user_type').val(property)
+       
+
+    }
+}
+</script>
+<script>
+    function contact2(){
+     let homeowner = $('#v-pills-profile-tab').val()
+       if(homeowner){
+            $('#user_type').val(homeowner)
+       }
+    }
+</script>
+  <script>
+    function contact3(){
+     let vacationer = $('#v-pills-messages-tab').val()
+       if(vacationer){
+            $('#user_type').val(vacationer)
+       }
+    }
+</script>
+<script>
+    function conatct_us(){
+        $('#contact_us').valid()
+        jQuery.validator.addMethod("noSpace", function(value, element) { 
+            if(value.indexOf(" ")==0){
+                return false;
+            }
+            return true;
+            }, "No space please and don't leave it empty");
+         $.validator.addMethod('emailRegex', function(value, element) {
+            let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+            return emailExp.test(value);
+        }, 'Email format is not valid');  
+    }
+</script>
+{% include 'web/js/helper.html' %}
+{% endblock content %}

@@ -1,0 +1,115 @@
+<div class="col-md-12 mt-3">
+    <table class="table">
+        <tr>
+            <th>Zip code</th>
+            <th>Daily</th>
+            <th>Weekly</th>
+            <th>Two Weekly</th>
+            <th>Monthly</th>
+            <th>yearly</th>
+            {% for j in user %}
+                {% if j.user_type == "homeowner" or j.user_type == "propertymanager" %}
+                    {% if forloop.counter == 1 %}
+                        <th>Daily-Wholesale </th>
+                        <th>Weekly-Wholesale </th>
+                        <th>Two Weekly-Wholesale </th>
+                        <th>Monthly-Wholesale </th>
+                        <th>Yearly-Wholesale </th>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+                           
+        </tr>
+        {% for i in user %}
+            <tr>
+                {% if forloop.counter == 1 %}
+                    {% if i.user_type == "guest"%} 
+                        {% comment %} <label  class="form-label" for="full-name-1" style="margin-top: 20px" >Guest Price Table</label> {% endcomment %}
+                    {% elif i.user_type == "homeowner"%} 
+                        <label class="form-label" for="full-name-1" style="margin-top: 20px" >Homeowner Price Table</label>
+                    {% elif  i.user_type == "vacationer"%}
+                        <label class="form-label" for="full-name-1" style="margin-top: 20px" >Vacationer Price Table</label>
+                    {% else %}
+                        <label class="form-label" for="full-name-1" style="margin-top: 20px" >Property manager Price Table</label>
+                    {% endif %}
+                {% endif %}
+                <td>
+                    <div class="form-control-wrap">
+                        <input  name="user_type[{{ i.user_type }}][{{i.pincode_index}}]user_type" id="property_checkbox_user_type" value="{{i.user_type}}" type="hidden">
+
+                        <input type="hidden" name="user[{{ i.user_type }}][{{i.pincode_index}}]user" value="{{i.user_id}}" class="form-control" >
+                        <input type="text" readonly  name="pincodes[{{ i.user_type }}][{{i.pincode_index}}]pincode" value="{{i.pin_code}}" class="form-control count" >
+                    </div>
+                </td>
+                
+                <td>
+                    <div class="form-control-wrap">                                               
+                        <input type="number"    oninput="validate(this)"  data-rule-required="true" data-rule-noSpace="true" name="daily[{{ i.user_type }}][{{i.pincode_index}}]daily" class="form-control" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code %} value="{{j.daily_price}}" {% endif %} {% endfor %}>
+                        
+                        
+                    </div>
+                </td>
+                <td>
+                    <div class="form-control-wrap">
+                        <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" name="weekly[{{ i.user_type }}][{{i.pincode_index}}]weekly" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code %} value="{{j.weekly_price}}" {% endif %} {% endfor %} class="form-control" >
+                    </div>
+                </td>
+                <td>
+                    <div class="form-control-wrap">
+                        <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" name="twoweekly[{{ i.user_type }}][{{i.pincode_index}}]twoweekly" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code %} value="{{j.two_weekly_price}}" {% endif %} {% endfor %} class="form-control" >
+                    </div>
+                </td>
+                <td>
+                    <div class="form-control-wrap">
+                        <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" name="monthly[{{ i.user_type }}][{{i.pincode_index}}]monthly" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code %} value="{{j.monthly_price}}" {% endif %} {% endfor %} class="form-control" >
+                    </div>
+                </td>
+                <td>
+                    <div class="form-control-wrap">
+                        <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" name="yearly[{{ i.user_type }}][{{i.pincode_index}}]yearly" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code %} value="{{j.yearly_price}}" {% endif %} {% endfor %} class="form-control"value="{{i.yearly_price}}">
+                    </div>
+                </td>
+                {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %} 
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" name="dailywholesale[{{ i.user_type }}][{{i.pincode_index}}]dailywholesale" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code  %} value="{{j.daily_wholesale_price}}" {% endif %} {% endfor %} class="form-control"value="{{i.daily_wholesale_price}}">
+                        </div>
+                    </td>
+                {% endif %}
+                {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %} 
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" name="weeklywholesale[{{ i.user_type }}][{{i.pincode_index}}]weeklywholesale" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code %} value="{{j.weekly_wholesale_price}}" {% endif %} {% endfor %} class="form-control"value="{{i.weekly_wholesale_price}}">
+                        </div>
+                    </td>
+                {% endif %}
+                {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %} 
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" name="twoweeklywholesale[{{ i.user_type }}][{{i.pincode_index}}]twoweeklywholesale" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code %} value="{{j.twoweekly_wholesale_price}}" {% endif %} {% endfor %} class="form-control"value="{{i.twoweekly_wholesale_price}}">
+                        </div>
+                    </td>
+                 {% endif %}
+                {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %} 
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" name="monthlywholesale[{{ i.user_type }}][{{i.pincode_index}}]monthlywholesale" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code %} value="{{j.monthly_wholesale_price}}" {% endif %} {% endfor %} class="form-control"value="{{i.monthly_wholesale_price}}">
+                        </div>
+                    </td>
+               {% endif %}
+                {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %} 
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" name="yearlywholesale[{{ i.user_type }}][{{i.pincode_index}}]yearlywholesale" {% for j in get_pincode_price%}{% if i.pin_code == j.pin_code %} value="{{j.yearly_wholesale_price}}" {% endif %} {% endfor %} class="form-control"value="{{i.yearly_wholesale_price}}">
+                        </div>
+                    </td>
+                {% endif %}
+                {% comment %} {% else %}
+                   
+                {% endif %}  {% endcomment %}
+            </tr>                
+        {% endfor %}
+                    
+                        
+    </table>
+</div>

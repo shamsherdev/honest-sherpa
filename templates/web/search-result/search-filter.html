@@ -1,0 +1,166 @@
+ <div class="col-md-4 filter-270">
+                                <div class="accordion-linebx">
+                                    <div class="title-filter"><h4>Filter</h4></div>
+                                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                                      <hr class="liner-line">
+                                      <div class="accordion-item">
+                                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                            Category
+                                          </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                                          <div class="accordion-body">
+                                            <div class="check-lists">
+                                              {% for i in category %}
+                                                <div class="form-check">
+                                                  <form method="POST">
+                                                    {% csrf_token %}
+                                                  <input class="form-check-input" type="checkbox"   onclick="select_category({{i.id}})" value="{{i.id}}" id="flexCheckDefault_{{i.id}}">
+                                                  </form>
+                                                  <label class="form-check-label" for="flexCheckDefault">
+                                                    {{i.name}}
+                                                  </label>
+                                                </div>
+                                             {% endfor%}
+
+                                                <a class="request" href="javascript:;">Request on item</a>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <hr class="liner-line">
+                                      <div class="accordion-item">
+                                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                            Sub-Category
+                                          </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                                          
+                                        </div>
+                                      </div>
+                                      <hr class="liner-line">
+                                      <div class="accordion-item">
+                                        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                                            Size    
+                                          </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                                          <div class="accordion-body">
+                                                <div class="check-lists">
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" value="" id="flexSmall">
+                                                      <label class="form-check-label" for="flexSmall">
+                                                        Small
+                                                      </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" value="" id="flexMedium">
+                                                      <label class="form-check-label" for="flexMedium">
+                                                        Medium
+                                                      </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" value="" id="flexLarge">
+                                                      <label class="form-check-label" for="flexLarge">
+                                                        Large
+                                                      </label>
+                                                    </div>
+                                                </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <hr class="liner-line">
+                                      <div class="accordion-item">
+                                        <h2 class="accordion-header" id="panelsStayOpen-headingThree01">
+                                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree01" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree01">
+                                            Price    
+                                          </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseThree01" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree01">
+                                          <div class="accordion-body">
+                                                <div class="check-lists">
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" value="" id="flexSmall1">
+                                                      <label class="form-check-label" for="flexSmall1">
+                                                        4000
+                                                      </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" value="" id="flexMedium2">
+                                                      <label class="form-check-label" for="flexMedium2">
+                                                        56543
+                                                      </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" value="" id="flexLarge3">
+                                                      <label class="form-check-label" for="flexLarge3">
+                                                        5000
+                                                      </label>
+                                                    </div>
+                                                </div>
+
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <hr class="liner-line">
+                                      <div class="accordion-item">
+                                        <h2 class="accordion-header" id="panelsStayOpen-headingThree02">
+                                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree02" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree02">
+                                            Type    
+                                          </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseThree02" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree02">
+                                          <div class="accordion-body">
+                                            <p>This is the third item's accordion body.</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <hr class="liner-line">
+                                      <div class="accordion-item">
+                                        <h2 class="accordion-header" id="panelsStayOpen-headingThree03">
+                                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree03" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree03">
+                                            Location    
+                                          </button>
+                                        </h2>
+                                        <div id="panelsStayOpen-collapseThree03" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree03">
+                                          <div class="accordion-body">
+                                            <p>This is the third item's accordion body.</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+
+<script>
+cat_id_list = []
+function select_category(id){
+let cat_id = $('#flexCheckDefault_' + id).val()
+cat_id_list.push(cat_id)
+
+console.log(cat_id_list)
+let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+$.ajax({
+          type: "POST",
+          url: "{% url 'sub_category_ajax_dayanamic' %}",
+          headers: { 'X-CSRFToken': csrftoken },
+          data:
+        {
+         cat_id:cat_id_list
+     },
+      success:function(res){
+          console.log(res)
+          $('#panelsStayOpen-collapseTwo').html(res)
+          
+        },
+        error:function(res){
+          toastr.error(res.responseJSON.message);
+        }
+  });
+  }
+</script>

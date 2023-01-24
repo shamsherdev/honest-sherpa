@@ -1,0 +1,302 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+        <h4 class="title nk-block-title">Franchise Registration </h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-12" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="POST" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row column" >
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >First Name*</label>
+                            <div class="form-control-wrap">
+                                <input type="hidden" class="form-control" id="full-name-1" name="franchise"  value="franchise" data-rule-required="true">
+                                <input  data-rule-required="true"  onkeypress='return (event.keyCode >=65 && event.keyCode <= 90)|| (event.keyCode >=95 && event.keyCode <= 122)' data-rule-noSpace="true" type="text" class="form-control" id="full-name-1" name="firstname" data-rule-required="true"
+                                 maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Last Name*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true"  data-rule-noSpace="true"  onkeypress='return (event.keyCode >=65 && event.keyCode <= 90)|| (event.keyCode >=95 && event.keyCode <= 122)' type="text" class="form-control" id="full-name-2" name="lastname" data-rule-required="true"
+                                 maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Email address*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" data-rule-emailRegex="true" type="email" class="form-control" id="email-address-1" name="email" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Role*</label>
+                            <div class="form-control-wrap">
+                                <input readonly  type="text" class="form-control" value="Franchise" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Contact No*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" class="form-control" id="phone-no-1" name="contactnumber" data-rule-required="true"
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="15" >
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >FAX*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" class="form-control" id="fax" name="fax" data-rule-required="true"
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="15" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Profile Picture*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true"  accept="image/png, image/gif, image/jpeg"  data-rule-noSpace="true" type="file" class="form-control" id="image" name="image" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Time Zone*</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="timezone" name="timezone" >
+                                    {% for i in timeZone %}
+                                    <option value="{{i}}"> {{i}}</option>
+                                    {% endfor%}
+\                                </select> 
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Identification Number*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="9" class="form-control" id="identification_number" name="identification_number" data-rule-required="true" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Manager*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" maxlength="10" type="text" class="form-control" id="manager" name="manager" data-rule-required="true" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Department*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" value="{{request.user.email}}" readonly class="form-control" id="department" name="department" data-rule-required="true" >
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >License*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text" class="form-control" id="license" name="license" data-rule-required="true" 
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="15" onpaste="return true" >
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >ID-Number*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text" class="form-control" id="id_number" name="id_number" data-rule-required="true" 
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" maxlength="15" onpaste="return true" >
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Company Name*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text" class="form-control" id="company_name" name="company_name" data-rule-required="true" 
+                                maxlength="50">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Address*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="address" name="address" data-rule-required="true">
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Country*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="country" name="country" data-rule-required="true"
+                                maxlength="50">
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >State*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="state" name="state" data-rule-required="true"
+                                 maxlength="50">
+                                 
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >City*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="city" name="city" data-rule-required="true" 
+                                 maxlength="50">
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Company Address*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" type="text"  class="form-control" id="company_address" name="company_address" data-rule-required="true" 
+                                 maxlength="50">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" id="pin_code_0">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Pin Code*</label>
+                            <input type="hidden" id="count" name="count">
+                            <div class="form-control-wrap">
+                                <input data-rule-required="true" data-rule-noSpace="true" type="text" class="form-control" id="phone-no-1111" name="pincode[0]name" 
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="5" 
+                                >
+                            </div>
+                            <div id="pin_code">
+
+                            </div>
+                            <button type="button" class="btn btn btn-success mt-5" onclick="pin_code_read_more()" >Add More</button>
+                       
+                        </div>
+                    </div> 
+                   
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Status*</label>
+                            <div class="form-control-wrap">
+                              
+                                <select class="form-control"  data-rule-required="true"   id="is_active" name="is_active" required>
+                                <option  selected >Select Status</option>  
+                                <option value="True">Active</option>  
+                                <option value="False">Deactive</option>  
+                              
+                            </select> 
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Description*</label>
+                            <div class="form-control-wrap">
+                                <textarea data-rule-required="true" data-rule-noSpace="true" type="text" class="summernote-basic" id="description" name="description" data-rule-required="true" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    
+                    </div>
+                    {% comment %} <input type="hidden" class="form-control" id="email-address-1" name="customer" value="customer" data-rule-required="true"> {% endcomment %}
+
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary" style="margin-top: 74px">Submit</button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+    function Register(){
+    jQuery.validator.addMethod("noSpace", function(value, element) { 
+        if(value.indexOf(" ")==0){
+            return false;
+        }
+        return true;
+    }, "No space please and don't leave it empty");
+    $.validator.addMethod('emailRegex', function(value, element) {
+    let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+    return emailExp.test(value);
+    }, 'Email format is not valid');  
+    $('#register').valid()
+    }
+</script>
+<script>
+    let i = 1
+    function pin_code_read_more(){
+        $('#pin_code:last').append(` 
+        <div class="form-group" id="pin_code_${i}">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Pin Code*</label>
+                            <div class="form-control-wrap">
+                                <input name="pincode[${i}]name"  data-rule-required="true" data-rule-noSpace="true" type="text" class="form-control" id="phone-no-1111" 
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="5" 
+                                >
+                            </div>
+                            <button onclick="remove(this,${i})" type="button" class="btn btn btn-danger mt-5" onclick="pin_code_read_more()">Remove</button> 
+                        </div>`)
+                        i++
+                        $('#count').val(i)
+                        console.log($('#count').val(i))
+
+    }
+    function remove(e,id){   
+        $('#pin_code_'+id).remove();
+        i--
+        $('#count').val(i)
+
+      
+    }
+</script>
+{% endblock js_content %}  

@@ -1,0 +1,808 @@
+<html>
+  {% extends 'web/basic/base.html' %}
+ {% load static %}
+  {% block title %}Product details{% endblock %}
+
+ {% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+       {% if request.user.is_authenticated  and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper wtvh100">
+                <section class="search-bg-banner">
+                     <div class="container">
+                        <div class="inner-title-ab">
+                            <form class="input_search_bx">
+                                <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Enter zip code/city/state">
+                                <button type="button" class="btn search-btn"><i class="ri-search-line"></i></button>
+                            </form>
+                        </div>
+                     </div>
+                </section>
+               
+                 <section class="product-detail-sec">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-7">
+                              <!-- ----product-slider----- -->
+                                <div id="detail">
+                                    <div class="main_img">
+                                        <div class="product-images demo-gallery">
+                                            <div class="main-img-slider">
+                                                {% if product.image %}
+                                              <a data-fancybox="gallery" href="{{product.image.url}}"><img src="{{product.image.url}}" class="img-fluid"></a>
+                                              {% endif %}
+                                              {% if product.image1 %}
+                                              <a data-fancybox="gallery" href="{{product.image1.url}}"><img src="{{product.image1.url}}" class="img-fluid"></a>
+                                              {% endif %}
+                                              {% if product.image2 %}
+                                              <a data-fancybox="gallery" href="{{product.image2.url}}"><img src="{{product.image2.url}}" class="img-fluid"></a>
+                                              {% endif %}
+                                              {% if product.image3 %}
+                                              <a data-fancybox="gallery" href="{{product.image3.url}}"><img src="{{product.image3.url}}" class="img-fluid"></a>
+                                              {% endif %}
+                                               {% if product.image4 %}
+                                              <a data-fancybox="gallery" href="{{product.image4.url}}"><img src="{{product.image4.url}}" class="img-fluid"></a>
+                                            {% endif %}
+                                            </div>
+                                           
+                                            <ul class="thumb-nav thumb-nav-outline">
+                                                {% if product.image %}
+                                              <li><img src="{{product.image.url}}"></li>
+                                              {% endif %}
+                                              {% if product.image1 %}
+                                              <li><img src="{{product.image1.url}}"></li>
+                                              {% endif %}
+                                              {% if product.image2 %}
+                                              <li><img src="{{product.image2.url}}"></li>
+                                              {% endif %}
+                                              {% if product.image3 %}
+                                              <li><img src="{{product.image3.url}}"></li>
+                                              {% endif %}
+                                              {% if product.image4 %}
+                                              <li><img src="{{product.image4.url}}"></li>
+                                              {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                              <!-- ----End product-slider----- -->
+                            </div>
+                            <div class="col-md-5">
+                                <div class="product-gallery-dtl">
+                                    <h2>{{product.name}}</h2>
+                                    <div class="reviews-box" disabled>
+                                        <ul class="star-check" >
+                                          {% comment %} <li class="active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                          <li class="active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                          <li class="active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                          <li class=""><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                          <li class=""><a href="javascript:;"><i class="ri-star-fill"></i></a></li> {% endcomment %}
+                                          <li class="{% if product_rating >= 1 %}active{% endif %}">
+                                              <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                          </li>
+                                          <li class="{% if product_rating >= 2 %}active{% endif %}"  >
+                                              <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                          </li>
+                                          <li class="{% if product_rating >= 3 %}active{% endif %}" >
+                                              <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                          </li>
+                                          <li class="{% if product_rating >= 4 %}active{% endif %}" >
+                                              <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                          </li>
+                                          <li class="{% if product_rating >= 5 %}active{% endif %}" >
+                                              <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                          </li>
+                                        </ul>
+                                        {% if review_data == 0 %}
+                                        <a class="review-link" href="#Reviews">Review</a>
+                                        {% else %}
+                                        <a class="review-link" href="#Reviews">{{review_data}} Review</a>
+                                        {% endif %}
+                                      </div>
+
+                                    <div class="product-stock">
+                                        {% if product.avaliable == True %}
+                                        <h4>In stock</h4>
+                                        {% endif %}
+                                        {% for prices in price %}                                       
+                                            {% if request.user.is_authenticated %}
+                                                {% if prices.product.is_return == 1 %}
+                                                    {% if request.user.roll == "propertymanager" %}
+                                                    <h5>${{prices.zero_seven_days_wholesale}}</h5>
+                                                    {% else %}
+                                                    <h5>${{prices.zero_seven_days}}</h5>
+                                                    {% endif %}
+                                                {% else %}
+                                                <h5>${{prices.sale_price}}</h5>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if prices.product.is_return == 1 %}
+                                                    <h5>${{prices.zero_seven_days}}</h5>
+                                                {% else %}
+                                                    <h5>${{prices.sale_price}}</h5>
+                                                {% endif %}
+                                                    
+                                            {% endif %}
+                                        {% endfor %}
+                                        <h6>Product Information</h6>
+                                        <ul>
+                                            <li>Office Furniture</li>
+                                            <li>Office Chair</li>
+                                        </ul>
+                                    </div>
+                                    <div class="color-selector-circle">
+                                         
+                                        {% for i in option %}
+                                            {% if i.product_id == product.id %}
+                                                {% if i.option_value.option_name == 'Color' %}
+                                                    <h5 class="color-title">{{i.option_value.option_name}}</h5>
+
+                                                    <div class="color-choices">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioyellow">
+                                                            <label class="form-check-label" for="flexRadioyellow">
+                                                                <span class="yellow-ck"></span>{{i.option_value.option_value}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if i.option_value.option_name == 'Size' %}
+                                                    <div class="size-selector-slick">
+                                                        <h5>Sizes</h5>
+                                                        <ul>
+                                                            <li class="active">
+                                                                <a href="javascript:;">{{i.option_value.option_value}}</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div> 
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if product.avaliable == True %}
+                                            <div class="cart-selector">
+                                                <form method ="POST">
+                                                    {% csrf_token %}
+                                                    {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                        {% if product.id in fav_product %}
+                                                        
+                                                            <button type"button" class="btn" data-fav-id="{{product.id}}" id="fav{{product.id}}"   onclick="like({{product.id}})"><i class="ri-heart-line"></i> In Wishlist</button>
+                                                        {% else %}
+                                                        <button type"button" class="btn" data-fav-id="{{product.id}}" id="fav{{product.id}}"   onclick="like({{product.id}})"><i class="ri-heart-line"></i>Add to Wishlist</button>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <a class="btn"  onclick="login_popup()"><i class="ri-heart-line"></i>Add to Wishlist</a>
+                                                    {% endif %}
+                                                    <input value="1" id="is_favourite" type="hidden">
+                                                    <input value="{{i.id}}" id="is_product_{{i.id}}" type="hidden">
+                                                </form>
+
+
+                                                {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                        {% comment %} <button  type="button" class="btn black-btn"><i class="ri-heart-line"></i> Wishlist</button> {% endcomment %}
+                                                    <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#staticselectdate"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                                {% else %}
+                                                    <a class="btn"  onclick="login_popup()"><i class="ri-shopping-cart-line"></i>Add to Cart</a>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <div class="cart-selector">
+                                                <form method ="POST">
+                                                    {% csrf_token %}
+                                                        {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                            {% if product.id in fav_product %}
+                                                                
+                                                                <button type"button" class="btn" data-fav-id="{{product.id}}" id="fav{{product.id}}" style="color:#00a99d"  onclick="like({{product.id}})"><i class="ri-heart-line"></i> In Wishlist</button>
+                                                            {% else %}
+                                                                <button type"button" class="btn" data-fav-id="{{product.id}}" id="fav{{product.id}}"   onclick="like({{product.id}})"><i class="ri-heart-line"></i>Add to Wishlist</button>
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <a class="btn"  onclick="login_popup()"><i class="ri-heart-line"></i>Add to Wishlist</a>
+                                                        {% endif %}
+                                                        <input value="1" id="is_favourite" type="hidden">
+                                                        <input value="{{i.id}}" id="is_product_{{i.id}}" type="hidden">
+                                                </form>
+                                                <button disabled  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#staticselectdate"><i class=""></i> Out of stock</button>
+                                            </div>
+                                        {% endif%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="description-pro">
+                            <h4>Description</h4>
+                            <p>{{product.description|safe}}</p>
+
+                            {% comment %} <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p> {% endcomment %}
+                        </div>
+                    </div>
+                   
+                 
+                    {% if session_product_list %}
+                    <div class="container related-prod-sec">
+                        <div class="heading-row">
+                            <h3>Recent Products</h3>
+                            <a class="view-all-btn" href="{% url 'view_all_product_listing' %}">View All <i class="ri-arrow-right-s-line"></i></a>
+                        </div>
+
+                        <div class="row">
+                            {% for i in session_product_list %}
+                            {% for j in i %}
+                            
+                            <div class="col-md-3">
+                                <div class="card-product">
+                                    <div class="card-product-img">
+                                        <div class="stock-points">
+                                            {% if j.avaliable == True %}
+                                            <span class="in_stock">In {stock}</span>
+                                            {% else %}
+                                            <span class="in_stock">Out of stock</span>
+                                            {% endif %}
+                                            <form method="POST">
+                                                {% csrf_token %}
+                                                {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                {% if j.id in fav_product %}
+                                                <a class="click_heart_btn" data-fav-id="{{j.id}}" id="fav{{j.id}}" style="color:#00a99d"  onclick="like({{j.id}})"><i class="ri-heart-line"></i></a>
+                                                {% else %}
+                                                <a class="click_heart_btn" data-fav-id="{{j.id}}" id="fav{{j.id}}"   onclick="like({{j.id}})"><i class="ri-heart-line"></i></a>
+                                                {% endif %}
+                                                {% else %}
+                                                <a class="click_heart_btn" dfvf  onclick="login_popup()"><i class="ri-heart-line"></i></a>
+                                                {% endif %}
+                                                <input value="{{request.user.id}}" id="user" type="hidden">
+
+                                                <input value="1" id="is_favourite" type="hidden">
+                                                <input value="{{j.id}}" id="is_product_{{j.id}}" type="hidden">
+                                                </form>
+                                            
+                                        
+                                        
+                                        </div>
+                                        {% if j.image %}
+                                            <a href="/product/details/{{j.slug}}">
+                                            <figure><img src="{{j.image.url}}"></figure>
+                                            </a>
+                                            {% endif %}
+                                </div>
+                                <figcaption>
+                                    
+                                    <a href="/product/details/{{i.slug}}"><h4>{{i.name}}</h4></a>
+                                        <a href="/product/details/{{j.slug}}"><p>{{j.category.name}}</p></a>
+                                        <ul class="star-check">
+                                             <li class="{% if j.average_rating >= 1 %}active {% else %}{% endif %}">
+                                                <a  class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                            <li class="{% if j.average_rating >= 2 %}active{% else %}{% endif %}"  >
+                                                <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                            <li class="{% if j.average_rating >= 3 %}active{% else %}{% endif %}" >
+                                                <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                            <li class="{% if j.average_rating >= 4 %}active{% else %}{% endif %}" >
+                                                <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                            <li class="{% if j.average_rating >= 5 %}active{% else %}{% endif %}" >
+                                                <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="dtr-card">
+                                            {% for k in option %}
+                                                {% if j.id == k.product_id%}
+                                                    <span>{{k.option_value.option_name}}:{{k.option_value.option_value}}</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>  
+                                        {% for x in product_price %} 
+                                                                   
+                                            {% if request.user.roll %}
+                                            
+                                                {% if x.product.is_return == 1 %}
+                                                    {% if x.product_id == j.id and request.user.roll == "vacationer" %}
+                                                        <span >Price:${{x.zero_seven_days}}</span>
+                                                    {% elif x.product_id == j.id and  request.user.roll  == "homeowner" %}
+                                                        <span >Price:${{x.zero_seven_days}}</span>
+                                                    
+                                                    {% elif x.product_id == j.id and  request.user.roll  == "propertymanager" %}
+                                                        <span >Price:${{x.zero_seven_days_wholesale}}</span>
+                                                    {% endif %}
+                                                {% elif x.product_id == j.id %}
+                                                    <span >Price:${{x.sale_price}}</span>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if x.product.is_return == 1 %}
+                                                    {% if  x.product_id == j.id  and x.user_type == 'vacationer' %}
+                                                
+                                                        {% comment %} {% if pin_code_price.pin_code %} {% endcomment %}
+                                                    
+                                                        <span >Price:${{x.zero_seven_days}}</span>   
+                                                        {% comment %} {% endif %} {% endcomment %}
+                                                        
+                                                    {% endif %}    
+                                                {% elif x.product_id == j.id %}
+                                                    <span >Price:${{x.sale_price}}</span>
+                                                {% endif %} 
+                                            {% endif %}
+                                        {% endfor %}
+                                            {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                {% if j.avaliable == True  %}
+                                                    {% if j.id not in add_cart%}
+                                                        <button type="button" id="goto{{j.id}}" data-goto-id='{{ j.id }}' onclick="add_cart({{j.id}})" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                                    {% else%}
+                                                        <a href="/cart/items" class="btn black-btn go-to-cart"><i class="ri-shopping-cart-line"></i> Go to cart</a>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if j.avaliable == True  %}
+                                                    <button type="button" onclick="login_popup()" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                                {% else %}
+                                                    <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                                {% endif %}
+                                            {% endif %}
+                                    </figcaption>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% endfor %}
+                    
+                        </div>
+                        <hr>
+                    </div>
+                    {% endif %}
+
+                    <div class="container related-prod-sec">
+                        <div class="heading-row">
+                            <h3>Related Products</h3>
+                            <a class="view-all-btn" href="{% url 'view_all_product_listing' %}">View All <i class="ri-arrow-right-s-line"></i></a>
+                        </div>
+
+                        <div class="row">
+                            {% for i in related_product%}
+                            
+                            <div class="col-md-3">
+                                <div class="card-product">
+                                    <div class="card-product-img">
+                                        <div class="stock-points">
+                                            {% if i.avaliable == True %}
+                                            <span class="in_stock">In stock</span>
+                                            {% else %}
+                                             <span class="in_stock">Out of stock</span>
+                                              {% endif %}
+                                            <form method="POST">
+                                                {% csrf_token %}
+                                                    {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                        {% if i.id in fav_product %}
+                                                            <a class="click_heart_btn" data-fav-id="{{i.id}}" id="fav{{i.id}}" style="color:#00a99d"  onclick="like({{i.id}})"><i class="ri-heart-line"></i></a>
+                                                        {% else %}
+                                                            <a class="click_heart_btn" data-fav-id="{{i.id}}" id="fav{{i.id}}"   onclick="like({{i.id}})"><i class="ri-heart-line"></i></a>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <a class="click_heart_btn" dfvf  onclick="login_popup()"><i class="ri-heart-line"></i></a>
+                                                    {% endif %}
+                                                    <input value="{{request.user.id}}" id="user" type="hidden">
+
+                                                    <input value="1" id="is_favourite" type="hidden">
+                                                    <input value="{{i.id}}" id="is_product_{{i.id}}" type="hidden">
+                                            </form>
+                                        </div>
+                                        {% if i.image %}
+                                        <a href="/product/details/{{i.slug}}">
+                                        <figure><img src="{{i.image.url}}"></figure>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                    <figcaption>
+                                        
+                                        <a href="/product/details/{{i.slug}}"><h4>{{i.name}}</h4></a>
+                                        <a href="/product/details/{{i.slug}}"><p>{{i.category.name}}</p></a>
+                                        <ul class="star-check">
+                                            <li class="{% if i.average_rating >= 1 %}active {% else %}{% endif %}">
+                                                <a  class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                            <li class="{% if i.average_rating >= 2 %}active{% else %}{% endif %}"  >
+                                                <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                            <li class="{% if i.average_rating >= 3 %}active{% else %}{% endif %}" >
+                                                <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                            <li class="{% if i.average_rating >= 4 %}active{% else %}{% endif %}" >
+                                                <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                            <li class="{% if i.average_rating >= 5 %}active{% else %}{% endif %}" >
+                                                <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                            </li>
+                                        </ul>
+                                        <div class="dtr-card">
+                                            {% for j in option %}
+                                            {% if i.id == j.product_id%}
+                                            <span>{{j.option_value.option_name}}:{{j.option_value.option_value}}</span>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>  
+                                        {% for x in product_price %} 
+                                                                   
+                                                    {% if request.user.roll %}
+                                                  
+                                                        {% if x.product.is_return == 1 %}
+                                                            {% if x.product_id == i.id and request.user.roll == "vacationer" %}
+                                                                <span >Price:${{x.zero_seven_days}}</span>
+                                                            {% elif x.product_id == i.id and  request.user.roll  == "homeowner" %}
+                                                                <span >Price:${{x.zero_seven_days}}</span>
+                                                            
+                                                            {% elif x.product_id == i.id and  request.user.roll  == "propertymanager" %}
+                                                                <span >Price:${{x.zero_seven_days_wholesale}}</span>
+                                                            {% endif %}
+                                                        {% elif x.product_id == i.id %}
+                                                            <span >Price:${{x.sale_price}}</span>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if x.product.is_return == 1 %}
+                                                            {% if  x.product_id == i.id  and x.user_type == 'vacationer' %}
+                                                        
+                                                                {% comment %} {% if pin_code_price.pin_code %} {% endcomment %}
+                                                            
+                                                                <span >Price:${{x.zero_seven_days}}</span>   
+                                                                {% comment %} {% endif %} {% endcomment %}
+                                                                
+                                                            {% endif %}    
+                                                        {% elif x.product_id == i.id %}
+                                                            <span >Price:${{x.sale_price}}</span>
+                                                        {% endif %} 
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                       {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                            {% if i.avaliable == True  %}
+                                            {% if i.id not in add_cart%}
+                                            <button type="button" id="goto{{i.id}}" data-goto-id='{{ i.id }}' onclick="add_cart({{i.id}})" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                            {% else%}
+                                            <a href="/cart/items" class="btn black-btn go-to-cart"><i class="ri-shopping-cart-line"></i> Go to cart</a>
+                                            {% endif %}
+                                            {% else %}
+                                            <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                            {% endif %}
+                                            {% else %}
+                                            {% if i.avaliable == True  %}
+                                            <button type="button" onclick="login_popup()" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                            {% else %}
+                                            <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                            {% endif %}
+                                            {% endif %}
+                                    </figcaption>
+                                </div>
+                            </div>
+                         {% endfor %}
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="container reviews-write-sec">
+                        
+                        <div class="heading-row" id="Reviews">
+                            {% if review_data == 0 %}
+                                <h3>Reviews</h3>
+                            {% else %}
+                                <h3>{{review_data}} Reviews</h3>
+                            {% endif %}
+                            
+                            {% if request.user.is_authenticated and request.user.is_superuser == 0 %}                               
+                                    {% if not is_user_commented %}
+                                        <a class="view-all-btn" data-bs-toggle="modal" data-bs-target="#staticselectreview" 
+                                        href="">Write a Review</a>
+                                    {% endif %}
+                            {% else %}
+                            <a onclick="login_popup()" class="view-all-btn"> Write a Review</a>
+                            {% endif %}
+                        </div>
+                        
+                        
+                          
+                        <ul class="reviews-write-card">
+                            {% if page_obj %}
+                                {% for review in page_obj %}
+                                
+                                    <li>
+                                        <article>
+                                            <div class="reviews-box">
+                                            <h5>{{review.user.first_name}} {{review.user.last_name}}</h5>
+                                            <ul class="star-check">
+                                                <li class="{% if review.rating >= 1 %}active{% else %}{% endif %}">
+                                                    <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                                </li>
+                                                <li class="{% if review.rating >= 2 %}active{% else %}{% endif %}"  >
+                                                    <a class="reviews-box"> <i class="ri-star-fill"></i></a>
+                                                </li>
+                                                <li class="{% if review.rating >= 3 %}active{% else %}{% endif %}" >
+                                                    <a class="reviews-box"> <i class="ri-star-fill"></i></a>
+                                                </li>
+                                                <li class="{% if review.rating >= 4 %}active{% else %}{% endif %}" >
+                                                    <a class="reviews-box"> <i class="ri-star-fill"></i></a>
+                                                </li>
+                                                <li class="{% if review.rating >= 5 %}active{% else %}{% endif %}" >
+                                                    <a class="reviews-box"> <i class="ri-star-fill"></i></a>
+                                                </li>
+                                            </ul>
+                                            </div>
+                                            <p>{{review.review}}</p>
+                                            <span class="review-date">{{review.created|date:'Y-m-d'}}</span>
+                                        </article>
+                                    </li>
+                                {% endfor %}
+                                <nav aria-label="..." class="pagination-nav ">
+                                    <ul class="pagination margin-top: 321px;" >
+                                        <li class="page-item ">
+                                            {% if page_obj.has_previous %} {# whether the previous page exists #}
+                                            <a class="page-link " href="?page={{page_obj.previous_page_number}}" tabindex="-1"><i class="ri-arrow-left-s-line"></i></a>
+                                            {% endif %}
+                                        </li>
+                                        <li class="page-item active ">
+                                            <a class="page-link " href="#">{{page_obj.number}} <span class="sr-only">(current)</span></a>
+                                        </li> 
+                                        <li class="page-item">
+                                            {% if page_obj.has_next %} {# whether the next page exists #}
+                                            <a class="page-link" href="?page={{page_obj.next_page_number}}"><i class="ri-arrow-right-s-line"></i></a>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </nav>
+                            {% else %}
+                            <li>
+                            No review found.</li>
+                            {% endif %}
+
+                            {% comment %} <li>
+                                <article>
+                                    <div class="reviews-box">
+                                      <h5>Joesph Abraham</h5>
+                                      <ul class="star-check">
+                                        <li class="active"><i class="ri-star-fill"></i></a></li>
+                                        <li class="active"><i class="ri-star-fill"></i></a></li>
+                                        <li class="active"><i class="ri-star-fill"></i></a></li>
+                                        <li class=""><i class="ri-star-fill"></i></a></li>
+                                        <li class=""><i class="ri-star-fill"></i></a></li>
+                                      </ul>
+                                    </div>
+                                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don’t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn’t anything</p>
+                                    <span class="review-date">20 Aug 2022</span>
+                                </article>
+                            </li> {% endcomment %}
+                            {% comment %} <li>
+                                <article>
+                                    <div class="reviews-box">
+                                      <h5>Smith Jhone</h5>
+                                      <ul class="star-check">
+                                        <li class="active"><i class="ri-star-fill"></i></a></li>
+                                        <li class="active"><i class="ri-star-fill"></i></a></li>
+                                        <li class="active"><i class="ri-star-fill"></i></a></li>
+                                        <li class=""><i class="ri-star-fill"></i></a></li>
+                                        <li class=""><i class="ri-star-fill"></i></a></li>
+                                      </ul>
+                                    </div>
+                                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don’t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn’t anything</p>
+                                    <span class="review-date">20 Aug 2022</span>
+                                </article>
+                            </li> {% endcomment %}
+                            {% comment %} <li>
+                                <article>
+                                    <div class="reviews-box">
+                                      <h5>Joesph Abraham</h5>
+                                      <ul class="star-check">
+                                        <li class="active"><i class="ri-star-fill"></i></a></li>
+                                        <li class="active"><i class="ri-star-fill"></i></a></li>
+                                        <li class="active"><i class="ri-star-fill"></i></a></li>
+                                        <li class=""><i class="ri-star-fill"></i></a></li>
+                                        <li class=""><i class="ri-star-fill"></i></a></li>
+                                      </ul>
+                                    </div>
+                                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don’t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn’t anything</p>
+                                    <span class="review-date">20 Aug 2022</span>
+                                </article>
+                            </li> {% endcomment %}
+                        </ul>
+                    </div>
+
+                </section>
+                 
+            </div>
+        <!-- ----------footer section----- ------ -->
+         {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----modal----- -->
+
+        <!-- Modal 1-->
+        <div class="modal fade top_modal" id="staticselectdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticselectLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header border-0">
+                    <h5 class="modal-title" id="staticselectLabel">Select Date</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-line"></i></button>
+                  </div>
+                  <hr class="liner-line">
+                  <div class="modal-body">
+                     <form class="active">
+                            <div class="form-group">
+                              <label class="form-label">Delivery Date</label>
+                              <div class="popover-icon">
+                                  <input type="date" class="form-control" placeholder="Select date">
+                                  <a><i class="ri-calendar-line"></i></a>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="form-label">Pick Up Date</label>
+                              <div class="popover-icon">
+                                  <input type="date" class="form-control" placeholder="Select date">
+                                  <a><i class="ri-calendar-line"></i></a>
+                              </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn">Continue</button>
+                            </div>
+                     </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal 2-->
+       
+        <div class="modal fade top_modal" id="staticselectreview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticselectLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="staticselectLabel">Write A Review</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-line"></i></button>
+                </div>
+                <hr class="liner-line">
+                <div class="modal-body">
+                    <form class="form-review" method="POST" id="rating-review" required>
+                        {% csrf_token %}
+                            <ul class="star-check" id="star-rating">
+                                <li class="{% if rating >= 1 %}active{% else %}rating{% endif %}" data-rating="1" >
+                                    <a  class="reviews-box"><i class="ri-star-fill"></i></a>
+                                </li>
+                                <li class="{% if rating >= 2 %}active{% else %}rating{% endif %}" data-rating="2" >
+                                    <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                </li>
+                                <li class="{% if rating >= 3 %}active{% else %}rating{% endif %}" data-rating="3">
+                                    <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                </li>
+                                <li class="{% if rating >= 4 %}active{% else %}rating{% endif %}" data-rating="4">
+                                    <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                </li>
+                                <li class="{% if rating >= 5 %}active{% else %}rating{% endif %}" data-rating="5">
+                                    <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                </li>
+                            </ul>
+                            {% comment %} <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Email Address">
+                            </div> {% endcomment %}
+                            <div class="form-group">
+                                <input type="text" class="form-control"  data-rule-required="true" name="review" id="review" data-rule-noSpace="true" placeholder="Write a review">
+                            </div>
+                            <input type="hidden" class="form-control" name="user" id="user" value="{{request.user.id}}">
+                            <input type="hidden" class="form-control" name="product" id="product" value="{{product.id}}">
+                            
+                            <div class="text-center">
+                                <button type="submit" onclick="starrating()" class="btn">Submit</button>
+                            </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+      
+    <!-- -----modal----- -->
+
+
+    <!-- -----java script------ -->
+    
+    <!-- -----side menu------ -->
+
+   
+
+
+      
+    </body>
+</html>
+
+<script>
+    function login_popup(){
+        $('#login-first').modal('show')
+    }
+</script>
+<script>
+    function starrating(){
+        $('#rating-review').valid()
+   
+      jQuery.validator.addMethod("noSpace", function(value, element) { 
+            if(value.indexOf(" ")==0){
+                return false;
+            }
+            return true;
+            }, "No space please and don't leave it empty");
+    
+        const rat=localStorage.getItem("rating");
+        const review = $('#review').val()
+        const user_id=  $('#user').val()
+        const product_id=  $('#product').val()
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
+
+        $.ajax({
+                type:"POST",
+                headers: { 'X-CSRFToken': csrftoken }, 
+                url:"/review_rating/",
+                data:{
+                    rating:rat,product_id:product_id,user_id:user_id,review:review
+                }
+                 ,
+                success: function(res) 
+                {
+                    console.log("res", res)
+                    toastr.success("Review and Rating successfully" );
+                    
+                    
+                },
+                error:function(res)
+                {
+                    console.log("ress error", res)
+                    toastr.error("Review and Rating successfully");
+                }   
+        });
+
+    
+} 
+</script>
+<script>
+    function activeStar() {
+        $(this).addClass('active')
+        $(this).prevAll().addClass('active')
+        $(this).nextAll().removeClass('active')
+        const star =$(this)
+        const rating =star.data('rating')
+        localStorage.setItem("rating", rating);
+        
+       
+
+        
+      
+        
+    }
+
+    document.querySelectorAll('#star-rating li').forEach(function(element) {
+        element.addEventListener('click', activeStar)
+        
+    
+
+        
+    })
+  
+    const reviewDisabled = document.getElementById('review-disabled')
+    if(reviewDisabled) {
+        reviewDisabled.onclick = () => {
+            toastr.error("Review already exist!!")
+        }
+    }
+    
+    
+</script>
+
+{% endblock content %}
+{% block javascript %}
+{% include 'web/js/helper.html' %}
+{% endblock javascript %}

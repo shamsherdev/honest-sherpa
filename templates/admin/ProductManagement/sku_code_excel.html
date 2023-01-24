@@ -1,0 +1,35 @@
+<div class="card-inner">
+    <div class="table-responsive">
+        <table class="datatable-init nowrap table">
+            <thead>
+                <tr>
+                    <th>Sr No</th>
+                    <th>Category</th>
+                    <th>Sub Category</th>
+                    <th>Product</th>
+                    <th>SKU CODE</th>
+                 
+                
+            
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    
+                    <td>{{product.product.category.name|safe|truncatechars:30}}</td>
+                    <td>{{i.subcategory.name|safe|truncatechars:30}}</td>
+                    <td>{{i.name|safe|truncatechars:30}}</td>
+                    
+                   
+                    
+                  
+                    <td>{{i.description|safe|truncatechars:20}}</td>
+                    </tr>         
+                </tr>
+              
+            </tbody>
+        </table>
+    </div>
+</div>

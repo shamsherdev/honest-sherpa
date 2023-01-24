@@ -1,0 +1,86 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+        <h4 class="title nk-block-title">Edit Superadmin </h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                {% comment %} <h5 class="card-title">User Create</h5> {% endcomment %}
+            </div>
+            <form method="post" id="register">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">First Name</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true"  data-rule-required="true" type="text" class="form-control" id="full-name-1" name="firstname" data-rule-required="true" value="{{edit_data.first_name}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Last Name</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true"  data-rule-required="true"  type="text" class="form-control" id="full-name-2" name="lastname" data-rule-required="true" value="{{edit_data.last_name}}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1">Contact No</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true"  data-rule-required="true"  type="text" class="form-control" id="phone-no-1" name="contactnumber" data-rule-required="true" 
+                                value="{{edit_data.mobile_number}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Email address</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true"   data-rule-required="true"  type="email" class="form-control" id="email-address-1" name="email" data-rule-required="true" value="{{edit_data.email}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button onclick="Register()" type="submit" class="btn btn-lg btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+   function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$('#register').valid()
+
+}
+</script>
+{% endblock js_content %}  

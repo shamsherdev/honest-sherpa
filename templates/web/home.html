@@ -1,0 +1,700 @@
+ {% extends 'web/basic/base.html' %}
+ {% load static %}
+  {% block title %}Home{% endblock %}
+
+ {% block content %}
+
+<html>
+   <body>
+        <div class="wraper-main">
+            <!-- ----Header---- -->
+            {% if request.user.is_authenticated and request.user.is_superuser == 0  %}
+           
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+           
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+            <!-- ---End Header--- -->
+           
+            <input value="{{request.user.id}}" id="user" type="hidden">
+                <div class="wraper pt85 wtvh100">
+                <section class="home-carousel">
+                    <div class="container-fluid">
+                        <div class="owl-carousel home-banners owl-theme">
+                            {% for i in banner %}
+                                <div class="item">
+                                    <div class="item-inner">
+                                        <div class="home-texts-inner">
+                                            <figure><img src="{{i.image.url}}"></figure>
+                                        </div>
+                                        <div class="home-item-text">
+                                            <h1>{{i.title|safe}}</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                       
+                        <div class="home_only_inputs">
+                            <form id="search_id" class="input_search_bx" method="POST" action="/search/result/">
+                                {% csrf_token %}
+                                <input class="form-control"   
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' 
+                                data-rule-required="true" data-msg-required="Please enter valid pin code"
+                                 data-rule-integer="true" data-msg-integer="Please enter valid pin code"  
+                                 data-msg-maxlength="Please select valid pin code" data-rule-maxlength="5" 
+                                 maxlength="5" data-msg-minlength="Please select valid pin code" data-rule-minlength="5"
+                                  onpaste='return false' name="pin_code" list="datalistOptions" id="exampleDataList" placeholder="Enter zip code/city/state">
+                                <button onclick="search_button()" type="submit" class="btn search-btn"><i class="ri-search-line"></i></button>
+                            </form>
+                        </div>
+                       
+                    </div>
+                </section>
+                    <div class="home-category-list">
+                        <ul>
+                            {% for i in category %}
+                            <li>
+                                <a href="{% url 'category_list' i.slug %}">
+                                    <span><img src="{{i.category_image.url}}"></span>
+                                    <h6>{{i.name}}</h6>
+                                </a>
+                            </li>
+                            {% endfor %}
+                            {% comment %} <li>
+                                <a href="javascript:;">
+                                    <span><img src="{% static 'web/images/cati-2.svg'%}"></span>
+                                    <h6>Baby Crib</h6>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <span><img src="{% static 'web/images/cati-3.svg' %}"></span>
+                                    <h6>Rollaway Bed</h6>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <span><img src="{% static 'web/images/cati-4.svg'%}"></span>
+                                    <h6>BBQ Grillis</h6>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <span><img src="{% static 'web/images/cati-5.svg' %}"></span>
+                                    <h6>Office Furniture</h6>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <span><img src="{% static 'web/images/cati-6.svg'%}"></span>
+                                    <h6>Furniture</h6>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <span><img src="{% static 'web/images/cati-7.svg'%}"></span>
+                                    <h6>Appliances</h6>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <span><img src="{% static 'web/images/cati-8.svg' %}"></span>
+                                    <h6>Electronics</h6>
+                                </a>
+                            </li>{% endcomment %}
+                            <li class="see_more_opt">
+                                <a href="/view/all/category">
+                                    <span class="right-up-icon"><i class="ri-arrow-right-up-line"></i></span>
+                                    <h6>See More</h6>
+                                </a>
+                            </li> 
+                        </ul>
+                    </div>
+
+                    <section class="upcoming-toppicks-sec">
+                        <div class="container">
+                            <div class="heading-row">
+                                <h3>Top Picks</h3>
+                                <a class="view-all-btn" href="{% url 'view_all_product_listing' %}">View All <i class="ri-arrow-right-s-line"></i></a>
+                            </div>
+
+                            <div class="row">
+                                {% for i in product %}
+                                    <div class="col-md-3">
+                                        <div class="card-product">
+                                            <div class="card-product-img">
+                                                <div class="stock-points">
+                                                    {% if i.avaliable == True %}
+                                                    <span class="in_stock">In stock</span>
+                                                    {% else %}
+                                                    <span class="in_stock">Out of stock</span>
+                                                    {% endif %}
+                                                    <form method="POST">
+                                                    {% csrf_token %}
+                                                    {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                    {% if i.id in fav_product %}
+                                                    <a class="click_heart_btn" data-fav-id="{{i.id}}" id="fav{{i.id}}" style="color:#00a99d"  onclick="like({{i.id}})"><i class="ri-heart-line"></i></a>
+                                                    {% else %}
+                                                    <a class="click_heart_btn" data-fav-id="{{i.id}}" id="fav{{i.id}}"   onclick="like({{i.id}})"><i class="ri-heart-line"></i></a>
+                                                    {% endif %}
+                                                    {% else %}
+                                                    <a class="click_heart_btn"  onclick="login_popup()"><i class="ri-heart-line"></i></a>
+                                                    {% endif %}
+                                                    <input value="1" id="is_favourite" type="hidden">
+                                                    <input value="{{i.id}}" id="is_product_{{i.id}}" type="hidden">
+                                                    </form>
+
+                                                </div>
+                                                <figure>
+                                                    <a href="/product/details/{{i.slug}}">
+                                                {% if i.image%}
+                                                    <img src="{{i.image.url}}">
+                                                    {% else %}
+                                                    <img src="{% static 'web/images/No_Image_Available.jpg' %}">
+                                                    {% endif %}
+                                                    </a>
+                                                </figure>
+                                            </div>
+                                            
+                                            <figcaption>
+                                            
+                                                <a href="/product/details/{{i.slug}}"><h4>{{i.name}}</h4></a>
+                                                <a href="/product/details/{{i.slug}}"><p>{{i.category.name}}</p></a>
+                                                <ul class="star-check">
+                                                    <li class="{% if i.average_rating >= 1 %}active {% else %}{% endif %}">
+                                                        <a  class="reviews-box"><i class="ri-star-fill"></i></a>
+                                                    </li>
+                                                    <li class="{% if i.average_rating >= 2 %}active{% else %}{% endif %}"  >
+                                                        <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                                    </li>
+                                                    <li class="{% if i.average_rating >= 3 %}active{% else %}{% endif %}" >
+                                                        <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                                    </li>
+                                                    <li class="{% if i.average_rating >= 4 %}active{% else %}{% endif %}" >
+                                                        <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                                    </li>
+                                                    <li class="{% if i.average_rating >= 5 %}active{% else %}{% endif %}" >
+                                                        <a class="reviews-box"><i class="ri-star-fill"></i></a>
+                                                    </li>
+                                                    
+                                                </ul>
+                                                
+                                                <div class="dtr-card">
+                                                    
+                                                    {% for j in option %}
+                                                    {% if i.id == j.product_id %}
+                                                    <span>{{j.option_value.option_name}}:{{j.option_value.option_value}}</span>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                    
+                                                    {% comment %} <span>Size: Small</span> {% endcomment %}
+                                                </div>
+                                                {% for x in product_price %} 
+                                                                   
+                                                    {% if request.user.roll %}
+                                                  
+                                                        {% if x.product.is_return == 1 %}
+                                                            {% if x.product_id == i.id and request.user.roll == "vacationer" %}
+                                                                <span >Price:${{x.zero_seven_days}}</span>
+                                                            {% elif x.product_id == i.id and  request.user.roll  == "homeowner" %}
+                                                                <span >Price:${{x.zero_seven_days}}</span>
+                                                            
+                                                            {% elif x.product_id == i.id and  request.user.roll  == "propertymanager" %}
+                                                                <span >Price:${{x.zero_seven_days_wholesale}}</span>
+                                                            {% endif %}
+                                                        {% elif x.product_id == i.id %}
+                                                            <span >Price:${{x.sale_price}}</span>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if x.product.is_return == 1 %}
+                                                            {% if  x.product_id == i.id  and x.user_type == 'vacationer' %}
+                                                        
+                                                                {% comment %} {% if pin_code_price.pin_code %} {% endcomment %}
+                                                            
+                                                                <span >Price:${{x.zero_seven_days}}</span>   
+                                                                {% comment %} {% endif %} {% endcomment %}
+                                                                
+                                                            {% endif %}    
+                                                        {% elif x.product_id == i.id  %}
+                                                           <span >Price:${{x.sale_price}}</span>
+                                                        {% endif %} 
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% comment %} {% for x in product_price %}
+                                                {% if request.user.roll %}
+                                                    {% if i.id == x.product_id and x.user_type == request.user.roll %}
+                                                    <span >Price:{{x.daily_price}}$</span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if i.id == x.product_id and x.user_type == 'vacationer' %}
+                                                    <span >Price:{{x.daily_price}}$</span>   
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% endfor %} {% endcomment %}
+                                            {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                {% if i.avaliable == True  %}
+                                                    {% if product_price %}
+                                                       
+                                                            {% if i.id not in add_cart %} 
+                                                                <button type="button" id="goto{{i.id}}" data-goto-id='{{ i.id }}' onclick="add_cart({{i.id}})" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                                            {% else%}
+            
+                                                                
+                                                                <a  href="/cart/items"  class="btn black-btn"><i class="ri-shopping-cart-line"></i>Go to cart</a>
+                                                               
+                                                           
+                                                            {% endif %}
+                                                    {% else %}
+                                                    <button type="button"   class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if i.avaliable == True  %}
+                                                    <button type="button" onclick="login_popup()" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                                {% else %}
+                                                    <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                                {% endif %}
+                                            {% endif %}
+                                            </figcaption>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="about-blogs">
+                        <div class="container-fluid">
+                            <div class="about-blogs-img">
+                                {% if banner_about_us.image %}
+                                <img src="{{banner_about_us.image.url}}">
+                                {% endif %}
+                            </div>
+                            <div class="container">
+                                <div class="about-blogs-des">
+                                    <h5>{{banner_about_us.title|safe}}</h5>
+                                    <h6>{{banner_about_us.text1|safe}}</h6>
+                                    <p>{{banner_about_us.text2|safe}}</p>
+
+                                    <p>{{banner_about_us.text3|safe}}.</p>
+                                    <a class="btn" href="/about/">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="upcoming-featured-sec">
+                        <div class="container">
+                            <div class="heading-row">
+                                <h3>Featured Products</h3>
+                                <a class="view-all-btn" href="{% url 'featured_all_product_listing' %}">View All <i class="ri-arrow-right-s-line"></i></a>
+                            </div>
+
+                            <div class="row">
+                                {% for i in feature_product%}
+                                <div class="col-md-3">
+                                    <div class="card-product">
+                                        <div class="card-product-img">
+                                            <div class="stock-points">
+                                                {% if i.avaliable == True %}
+                                                <span class="in_stock">In stock</span>
+                                                {% else %}
+                                                <span class="in_stock">Out of stock</span>
+                                                {% endif %}
+                                                <form method="POST" id="feature_product">
+                                                {% csrf_token %}
+                                                {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                    {% if i.id in fav_product %}
+                                                        <a class="click_heart_btn" data-fav-id="{{i.id}}" id="fav{{i.id}}" style="color:#00a99d"  onclick="like({{i.id}})"><i class="ri-heart-line"></i></a>
+                                                
+                                                    {% else %}
+                                                        <a class="click_heart_btn"  data-fav-id="{{i.id}}"  id="fav{{i.id}}"  onclick="like({{i.id}})"><i class="ri-heart-line"></i></a>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <a class="click_heart_btn"  onclick="login_popup()"><i class="ri-heart-line"></i></a>
+                                                {% endif %}
+                                                <input value="1" id="is_favourite" type="hidden">
+                                                <input value="{{i.id}}" id="is_product_{{i.id}}" type="hidden">
+                                                </form>
+
+                                            </div>
+                                            <figure>
+                                                <a href="/product/details/{{i.slug}}">
+                                                {% if i.image%}
+                                                <img src="{{i.image.url}}">
+                                                {% else %}
+                                                 <img src="{% static 'web/images/No_Image_Available.jpg' %}">
+                                                {% endif %}
+                                                </a>
+                                            </figure>
+                                        </div>
+                                        <figcaption>
+                                            <a href="/product/details/{{i.slug}}"><h4>{{i.name}}</h4></a>
+                                            <a href="/product/details/{{i.slug}}"><p>{{i.category.name}}</p></a>
+                                            <ul class="star-check">
+                                                <li class="{% if i.average_rating >= 1 %}active {% else %}{% endif %}">
+                                                    <a  href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                </li>
+                                                <li class="{% if i.average_rating >= 2 %}active{% else %}{% endif %}"  >
+                                                    <a href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                </li>
+                                                <li class="{% if i.average_rating >= 3 %}active{% else %}{% endif %}" >
+                                                    <a href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                </li>
+                                                <li class="{% if i.average_rating >= 4 %}active{% else %}{% endif %}" >
+                                                    <a href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                </li>
+                                                <li class="{% if i.average_rating >= 5 %}active{% else %}{% endif %}" >
+                                                    <a href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                </li>
+                                            </ul>
+                                            <div class="dtr-card">
+                                                {% for j in feature_product_option %}
+                                                {% if i.id == j.product_id %}
+                                                <span>{{j.option_value.option_name}}:{{j.option_value.option_value}}</span>
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% comment %} <span>Size: Small</span> {% endcomment %}
+                                            </div>
+                                            {% for x in product_price %} 
+                                                                   
+                                            {% if request.user.roll %}
+                                          
+                                                {% if x.product.is_return == 1 %}
+                                                    {% if x.product_id == i.id and request.user.roll == "vacationer" %}
+                                                        <span >Price:${{x.zero_seven_days}}</span>
+                                                    {% elif x.product_id == i.id and  request.user.roll  == "homeowner" %}
+                                                        <span >Price:${{x.zero_seven_days}}</span>
+                                                    
+                                                    {% elif x.product_id == i.id and  request.user.roll  == "propertymanager" %}
+                                                        <span >Price:${{x.zero_seven_days_wholesale}}</span>
+                                                    {% endif %}
+                                                {% elif x.product_id == i.id %}
+                                                    <span >Price:${{x.sale_price}}</span>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if x.product.is_return == 1 %}
+                                                    {% if  x.product_id == i.id  and x.user_type == 'vacationer' %}
+                                                
+                                                        {% comment %} {% if pin_code_price.pin_code %} {% endcomment %}
+                                                    
+                                                        <span >Price:${{x.zero_seven_days}}</span>   
+                                                        {% comment %} {% endif %} {% endcomment %}
+                                                        
+                                                    {% endif %}    
+                                                {% elif x.product_id == i.id  %}
+                                                    <span >Price:${{x.sale_price}}</span>
+                                                {% endif %} 
+                                            {% endif %}
+                                        {% endfor %}
+                                            {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                            {% if i.avaliable == True  %}
+                                            {% if product_price %}
+                                                    {% if i.id not in add_cart%}
+                                                    <button type="button" id="goto{{i.id}}" data-goto-id='{{ i.id }}' onclick="add_cart({{i.id}})" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                                    {% else%}
+                                                    <a href="/cart/items" class="btn black-btn go-to-cart"><i class="ri-shopping-cart-line"></i> Go to cart</a>
+                                                    {% endif %}
+                                            {% else %}
+                                            <button type="button"   class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                            {% endif %}
+                                            {% else %}
+                                            <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                            {% endif %}
+                                            {% else %}
+                                            {% if i.avaliable == True  %}
+                                            <button type="button" onclick="login_popup()" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                            {% else %}
+                                            <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                            {% endif %}
+                                            {% endif %}
+                                        </figcaption>
+                                    </div>
+                                </div>   
+                                {% endfor %}                    
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="how-itworks">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="itworks-img">
+                                        {% if banner_how_it_work.image %}
+                                        <img src="{{banner_how_it_work.image.url}}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="itworks-des">
+                                        <article>
+                                            <h4>{{banner_how_it_work.title|safe}}</h4>
+                                            <p>{{banner_how_it_work.content|safe}}.</p>
+                                            <ul>
+                                                <li>{{banner_how_it_work.text1|safe}}.</li>
+                                                <li>{{banner_how_it_work.text2|safe}}.</li>
+                                                <li>{{banner_how_it_work.text3|safe}}</li>
+                                            </ul>
+                                            <a class="btn" href="javascript:;">Learn More</a>
+                                        </article>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="our_blog_sec">
+                        <div class="container">
+                            <div class="heading-row text-center">
+                                <h3>Our Blog</h3>
+                            </div>
+                            <div class="row">
+                                {% for i in blog %}
+                                <div class="col-md-6">
+                                    <div class="card-blog">
+                                        <figure>
+                                            <img src="{{i.blog_image.url}}">
+                                        </figure>
+                                        <div class="dtr-card">
+                                                <span>{{i.created_at}}</span>
+                                        </div>
+                                        <h4>{{i.blog_title}}</h4>
+                                        <p>{{i.blog_description|safe}}</p>
+                                        <a class="view-all-btn" href="{% url 'blog_detail' i.slug %}">Read More <i class="ri-arrow-right-up-line"></i></a>
+                                    </div>
+                                </div>
+                               {% endfor %}
+                                <div class="col-md-12 text-center pt-2">
+                                    <a class="btn" href="{% url 'blog_list' %}">View More</a>
+                                </div> 
+                            </div>
+                        </div>
+                    </section>
+                    
+
+                </div>
+            <!-- ----------footer section----- ------ -->
+            {% include 'web/basic/footer.html' %}
+            <!-- ----------footer section----------- -->     
+        </div>
+
+        
+
+
+        <div class="modal fade select-type-modal" id="exampleselectuser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+         <!--     <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> -->
+                    <div class="modal-body">
+                        <div class="select-type-row">
+                            <a class="navbar-brand" href="/">
+                            <img src="{% static 'web/images/logo.svg'%}">
+                            </a>
+                            <h3>Select User Type</h3>
+                            <form>
+                            <ul class="select-type-check">
+                                <li class="user_type">
+                                    <a href="/login/" >
+                                        <figure><img src="{% static 'web/images/vacationer.svg'%}"></figure>
+                                        <span>Vacationer</span>
+                                    </a>
+                                </li>
+                                <li class="user_type">
+                                    <a href="/login/">
+                                        <figure><img src="{% static 'web/images/homeowner.svg'%}"></figure>
+                                        <span>Homeowner</span>
+                                    </a>
+                                </li>
+                                <li class="user_type">
+                                    <a href="/login/">
+                                        <figure><img src="{% static 'web/images/property-manager.svg'%}"></figure>
+                                        <span>Property Manager</span>
+                                    </a>
+                                </li>
+                            </ul>
+                             <a href="/login/" class="btn">Next</a>
+                        </form>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div> 
+      <div class="modal fade select-type-modal" id="login-first" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!--     <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> -->
+                    <div class="modal-body">
+                        <div class="wraper-main">
+                            <div class="login-form-container">
+                                <div class="login-left my-auto">
+                                    <div class="login-left-in">
+                                        <a href="/login/"><img src="{% static 'web/images/logo.svg' %}"></a>
+                                        <h2>Lorem Ipsum is simply dummy text</h2>
+                                        <img src="{% static 'web/images/login-img.svg'%}">
+                                    </div>
+                                </div>
+                                <div class="login-right my-auto">
+                                    <div class="login-right-in">
+                                        <div class="login-right-center">
+                                        <div class="login-head">
+                                            <h4>Login</h4>
+                                            <p>Use your credentials to access your account.</p>
+                                        </div>
+                                        <div class="login-form">
+                                            <form method="POST" action="/login/" id="login_form_id">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <input type="email"  value="{{data.email}}" name="email" data-rule-required="true" class="form-control" id="exampleFormControlInput1" placeholder="Email address">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password" value="{{data.password}}" name="password" class="form-control" id="exampleFormControlInput2" placeholder="Password" data-rule-required="true">
+                                                </div>
+                                                <div class="d-flex fg-links">
+                                                    <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="remember-me">
+                                                    <label class="form-check-label" for="remember-me">
+                                                    Remember me
+                                                    </label>
+                                                    </div>
+                                                    <a href="/forgot/password/" class="ms-auto">Forgot Password?</a>
+                                                </div>
+                                                <button tye="submit" onclick="login_forms()" class="btn btn-site w-100">Login</button>
+                                                <div class="divi-line">
+                                                    <span>Or Login with</span>
+                                                </div>
+                                                {% comment %} <div class="social-icon">
+                                                    <ul>
+                                                    <li><a class="bg-facebook" href="javascript:;"><i class="ri-facebook-fill"></i><span>Facebook</span></a></li>
+                                                    <li><a class="bg-twitter" href="javascript:;"><i class="ri-twitter-fill"></i><span>Twitter</span></a></li>
+                                                    <li><a class="bg-apple" href="javascript:;"><i class="ri-apple-fill"></i><span>Apple</span></a></li>
+                                                    </ul>
+                                                </div> {% endcomment %}
+                                                <div class="not-account">
+                                                    <p>Don't have an account? <a href="/sign-up/">Sign up</a></p>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </body>
+</html>
+<script>
+    function login_popup(){
+        $('#login-first').modal('show')
+    }
+</script>
+<script>
+    function login_forms(){
+        $('#login_form_id').valid()
+    }
+</script>
+<script>
+    function select_user(){
+        $('#exampleselectuser').modal('show')
+    }
+</script>
+<script>
+    const userType = document.querySelectorAll('.user_type')
+    userType.forEach((a) => {
+        a.addEventListener('click', function addActiveClass() {
+            $('.user_type').removeClass('active')
+            $(this).addClass('active')
+        })
+    })
+</script>
+<script>
+    function search_button(){
+        $('#search_id').valid()
+        
+    }
+</script>
+<script> 
+    if(!localStorage.getItem('haveLocation')) {
+        function myGetLocation(locationData) {
+      
+            let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
+            
+            const lat = locationData.coords.latitude
+           
+            const long = locationData.coords.longitude
+            console.log(lat)          
+            console.log(long)
+            console.log(locationData)
+            
+    
+            $.ajax({
+                url: `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${long}&key=63a04d4ae8d04a9cba3e6e6efc71be04`,
+               
+                success: function(response) {
+                    pincode = response.results[0].components.postcode
+                    console.log(pincode)
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: "/location_pincode/",
+                        headers: { 'X-CSRFToken': csrftoken }, 
+                         data: 
+                        {
+                            pincode,pincode,
+                        },
+                        
+                        success: function(response) {
+                            console.log(response, "-=-=-=-==---")
+                            {% comment %} console.log(response?.results[0].components.postcode,"qqqqqqqqqqqqqqqq") {% endcomment %}
+                            localStorage.setItem('haveLocation', true)
+                            location.href="/"
+                        }
+                    })
+                }
+            })
+        }
+        window.navigator.geolocation.getCurrentPosition(myGetLocation);
+    }
+</script>
+{% comment %} <script>
+    
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(showPosition);
+      } else { 
+        console.log("Geolocation is not supported by this browser.")
+      }
+    }
+
+    getLocation()
+        
+    function showPosition(position) {
+        console.log("Latitude: " + position.coords.latitude + 
+        "<br>Longitude: " + position.coords.longitude)
+    }
+    </script> {% endcomment %}
+<script >
+    if (window.location.hash == '#_=_') {
+       window.location.hash = '';
+    }
+    if (window.location.href.indexOf('#') > -1) {
+        window.location.href = '/';
+    }
+ </script>
+
+{% endblock content %}
+{% block javascript %}
+{% include 'web/js/helper.html' %}
+{% endblock javascript %}

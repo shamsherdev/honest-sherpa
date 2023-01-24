@@ -1,0 +1,56 @@
+{% load static %}
+<head>
+    <base href="../">
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="{% static '/franchise/images/favicon.png' %}">
+    <!-- Page Title  -->
+    <title>Dashboard |  Honest-Sherpa Franchise Panel</title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="{% static '/franchise/assets/css/dashlite.css' %}">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet" /> 
+    <link id="skin-default" rel="stylesheet" href="{% static '/franchise/assets/css/theme.css' %}">
+</head>
+{% block content %}
+  
+
+{% endblock content %}
+
+
+<script src="{% static '/franchise/assets/js/bundle.js' %}"></script>
+<script src="{% static '/franchise/assets/js/scripts.js' %}"></script>
+<script src="{% static '/franchise/assets/js/charts/gd-invest.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.79/jquery.form-validator.min.js"></script>
+
+
+ <script>
+  toastr.options = {
+            positionClass:"toast-top-center",
+            timeOut:10e3
+          }
+</script>
+{% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success'%}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'info' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'warning' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% elif message.tags == 'error' %}
+                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+            {% endif %}
+        {% endfor %}
+{% endif %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+{% block js_content %}{% endblock js_content %}               
+                  
+

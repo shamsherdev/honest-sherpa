@@ -1,0 +1,122 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Edit App banner </h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-12" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row column" >
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Title*</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <input type="text"  value="{{appbanner.title}}" class="form-control" id="full-name-1" maxlength="30" name="title" data-rule-required="true" data-rule-noSpace="true">
+                            </div>
+                        </div>
+                    </div>
+                    {% if appbanner.image %}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Image</label>
+                            <div class="form-control-wrap">
+                                <img width="40%" height="40%"src="{{appbanner.image.url}}"></img>
+
+                                <input type="file" value="{{appbanner.image.url}}" class="form-control" id="image" name="image"  data-msg-accept="Please enter valid image file"  accept="image/*" >
+                            </div>
+                        </div>
+                    </div>
+                    {% else  %}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Image</label>
+                            <div class="form-control-wrap">
+                                <input type="file" data-rule-required="true"value="" class="form-control" id="image" name="image"  data-msg-accept="Please enter valid image file"  accept="image/*" >
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                   {% if  appbanner.slug == "app-banner-fskdhfgdhsjgfkh"   %}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Video</label>
+                            <div class="form-control-wrap">
+                                 {% if appbanner.video %}
+                                <video width="200" height="200" controls>
+                                    <source src="{{appbanner.video.url}}" type="video/mp4">
+                                    Your browser does not support HTML video.
+                                    </video> 
+                                    <input type="file" value="{{appbanner.video}}" class="form-control" id="video" name="video" data-msg-accept="Please enter valid video file"  accept="video/mp4*">
+
+                                    {% else  %}
+                                    <input type="file" value="" data-rule-required="true" class="form-control" id="video" name="video" data-msg-accept="Please enter valid video file"  accept="video/mp4*" >
+                                    {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Content</label>
+                            <div class="form-control-wrap">
+                                <textarea value="" name="content" class="summernote-basic"  required>{{appbanner.content}}</textarea>
+
+                                {% comment %} <input type="text" value="" class="form-control" id="full-name-1" maxlength="30" name="content" data-rule-required="true" data-rule-noSpace="true"> {% endcomment %}
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary" style="margin-top: 74px"> Add</button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                    </div>     
+                    </div>        
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+}
+</script>
+{% comment %} <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('descrip');
+</script> {% endcomment %}
+{% endblock js_content %}  

@@ -1,0 +1,705 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+
+
+{% comment %} {% if perms.superadmin.add_customer %}
+{% url 'customer_registration' as customer_registration %}
+{% include "admin/basic/section.html" with page_title="Customer Managment" btn_url=customer_registration btn_text="Add Customer"  %}
+{% endif %} {% endcomment %}
+
+<div class="card card-bordered">
+    <div class="card-inner">
+        <div class="user-card mb-3">
+            <div class="user-avatar sq xl">
+                {% if view_data.profile_pic %}
+                <img src="{{view_data.profile_pic.url}}">
+                {% else %}
+              
+                <img src="https://images.unsplash.com/photo-1668499755630-930be926f0f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="">
+               {% endif %}
+            </div>
+            <div class="user-info">
+                <h4>{{view_data.first_name}} {{view_data.last_name}}</h4>
+                <span class="lead-text"></span>
+               
+                                
+                    {% if view_data.is_active == 1 %}
+                        <p style="color: green;">Active  </p>
+                    {% else %}
+                        <p style="color: red;">Deactive</p>
+                    {% endif %}
+                <div class="list">
+                    <div class="row">
+                        <div class="col-md-2 mr-5">
+                            {% if view_data.roll == "subadmin" %}
+                            <a href="{% url 'edit_subadmin'  view_data.slug %}"class="btn btn-outline-primary"><em class="icon ni ni-edit-alt mr-1"></em> Edit</a>
+                                {% endif %}
+                            {% if view_data.roll == "franchise" %}
+                            <a href="{% url 'edit_franchise'  view_data.slug %}"class="btn btn-outline-primary"><em class="icon ni ni-edit-alt mr-1"></em> Edit</a>
+                            {% endif %}
+                            {% if view_data.roll == "propertymanager" %}
+                             <a href="{% url 'edit_propertymanager'   view_data.slug %}"class="btn btn-outline-primary"><em class="icon ni ni-edit-alt mr-1"></em> Edit</a>
+                                {% endif %}
+                                
+                            {% if view_data.roll == "homeowner" %}
+                            <a href="{% url 'edit_homeowner'  view_data.slug %}"class="btn btn-outline-primary"><em class="icon ni ni-edit-alt mr-1"></em> Edit</a>
+                            {% endif %}
+                                {% if view_data.roll == "vacationer" %}
+                            <a href="{% url 'customer_edit'  view_data.slug %}"class="btn btn-outline-primary"><em class="icon ni ni-edit-alt mr-1"></em> Edit</a>
+                                {% endif %}
+                        </div>
+                      
+                        <div class="col-md-7 mr-5">
+                            <button type="submit" onclick="statuschange()" class="btn btn-outline-primary"><em class="icon ni ni-stop-circle mr-1"></em>   
+                                
+                                    {% if view_data.is_active == 1 %}
+                                        Mark as Deactive 
+                                    {% else %}
+                                        Mark  as Active
+                                    {% endif %}
+                            </button>   
+                        </div>
+
+                        {% if view_data.roll == "homeowner" %}
+                            <div class="col-md-3 mr-5 ">
+                                {% if view_data.wholesale_price_status == 0 %}
+                                    {% comment %} {% if zipcodedata %} {% endcomment %}
+                                        <form method ="POST" action="{% url 'whole_sale_status' view_data.slug %}" >
+                                            {% csrf_token %}
+                                            <div class="custom-control custom-switch">    
+                                                <input type ="text" hidden value="{{zipcodedata.id}}" name="wholsesale">
+                                                <input type ="text" hidden value="{{view_data.id}}" name="user">
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch2" name="is_enable" value="1" onclick="clickFn(event)">    
+                                                <label class="custom-control-label" for="customSwitch2">Whole  Sale Price </label>
+                                            </div>
+                                        </form>
+                                    {% comment %} {% endif %} {% endcomment %}
+                                {% else %}
+                                    <form method ="POST" action="{% url 'whole_sale_status' view_data.slug %}" >
+                                        {% csrf_token %}
+                                        <div class="custom-control custom-switch checked ">
+                                            <input type ="text" hidden value="{{zipcodedata.id}}" name="wholsesale">
+                                            <input type ="text"  hidden value="{{view_data.id}}" name="user">
+                                            <input type="checkbox" checked class="custom-control-input" id="customSwitch2" name="is_enable" value="0" onchange="clickFn(event)">    
+                                            <label class="custom-control-label" for="customSwitch2">Whole Sale Price </label>
+                                        </div>
+                                    </form>
+                                {% endif %}  
+                            </div>
+                        {% endif %}
+                        {% if  view_data.roll == "propertymanager"%}
+                            <div class="col-md-3 mr-5 ">
+                                {% if view_data.propertymanager_negotiable == 0 %}
+                                   
+                                        <form method ="POST" action="{% url 'propertymanager_negotiable_status' view_data.slug %}" >
+                                            {% csrf_token %}
+                                            <div class="custom-control custom-switch">    
+                                                
+                                                <input type ="text" hidden value="{{view_data.id}}" name="user">
+                                                <input type="checkbox" class="custom-control-input" id="customSwitch2" name="is_negotiable" value="1" onclick="clickFns(event)">    
+                                                <label class="custom-control-label" for="customSwitch2">Negotiable</label>
+                                            </div>
+                                        </form>
+                                    
+                                {% else %} 
+                                    <form method ="POST" action="{% url 'propertymanager_negotiable_status' view_data.slug %}" >
+                                        {% csrf_token %}
+                                        <div class="custom-control custom-switch checked ">
+                                            
+                                            <input type ="text"  hidden value="{{view_data.id}}" name="user">
+                                            <input type="checkbox" checked class="custom-control-input" id="customSwitch2" name="is_negotiable" value="0" onchange="clickFns(event)">    
+                                            <label class="custom-control-label" for="customSwitch2">Non-Negotiable </label>
+                                        </div>
+                                    </form>
+                                 {% endif %} 
+                              
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+           <li class="nav-item">        
+                <a class="nav-link active" data-toggle="tab" href="#tabItem1">
+                    <em class="icon ni ni-user"></em>
+                    <span>User Details</span>
+                </a>    
+            </li>
+           <li class="nav-item">        
+                <a class="nav-link" data-toggle="tab" href="#tabItem2">
+                    <em class="icon ni ni-user"></em>
+                    <span> Order Details</span>
+                </a>    
+            </li>
+            <li class="nav-item">        
+                <a class="nav-link" data-toggle="tab" href="#tabItem3">
+                    <em class="icon ni ni-user"></em>
+                    <span>Address Book</span>
+                </a> 
+                
+            </li> 
+           {% comment %} <li class="nav-item">        
+                <a class="nav-link" data-toggle="tab" href="#tabItem4">
+                    <em class="icon ni ni-user"></em>
+                    <span>Details</span>
+                </a>    
+            </li> {% endcomment %}
+        </ul>
+        <div class="tab-content">
+           <div class="tab-pane active" id="tabItem1">
+             <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>First Name</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{view_data.first_name}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>Last Name</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{view_data.last_name}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>Role</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{view_data.roll}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>Email</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{view_data.email}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>Contact Number</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{view_data.mobile_number}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% for j in view_datass %}
+                
+                {% if forloop.counter == 1 %}
+                {% if j.user_id == view_data.id %}
+               
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>Country</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{j.country}}</p>
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>State</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{j.state}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>City</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{j.city}}</p>
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>Zip Code</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{j.zip_code}}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>Status</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            {% if view_data.is_active == 1 %}
+                            <p class ="py-2">Active</p>
+                            {% else %}
+                            <p class ="py-2">Deactive</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>Date of Joined</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{view_data.date_joined|date:'d-m-Y'}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% if view_data.last_login %}
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class ="py-2"><b>Last Login</b></p>
+                        </div>
+                        <div class="col-md-8">
+                            <p class ="py-2">{{view_data.last_login|date:'d-m-Y'}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+           </div>
+           <div class="tab-pane" id="tabItem2">
+              <h5>Comming Soon</h5>
+           </div>
+          
+           <div class="tab-pane card_3d" id="tabItem3">
+           
+               <div class="row">
+
+              {% if view_data.address %} 
+                <div class="card-on">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Address</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{view_data.address}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Country</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{view_data.country}}</p>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>State</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{view_data.state}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>City</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{view_data.city}}</p>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Zip Code</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{view_data.zip_code}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button"  class="btn btn-info mr-4">Edit</button>
+                        <a type="button" href="{% url 'user_address_delete' view_data.id %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+                {% endif %}
+              
+                {% for i in view_datass %}
+                
+
+                {% if i.user_id == view_data.id %}
+                    <div class="col-md-4">
+                        <div class="card-inner" style="border: 1px solid #e5e9f2;border-radius:10px;">
+                        <div class="address-card">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p><b>Address</b></p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p>{{i.address}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="address-card">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p><b>Country</b></p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p>{{i.country}}</p>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="address-card">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p><b>State</b></p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p>{{i.state}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="address-card">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p><b>City</b></p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p>{{i.city}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="address-card">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p><b>Zip Code</b></p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p>{{i.zip_code}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" onclick="update_address({{i.id}})" class="btn btn-info mr-4">Edit</button>
+                            <a type="button" href="{% url 'delete_address' i.id %}" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                   
+                {% comment %} {% else %}
+                    <h5>No Adress Found</h5>
+                {% endif %}  {% endcomment %}
+              {% comment %} <input type="submit" name="address" id="address" class="summernote-basic">{{view_data.address}}</textarea> {% endcomment %}
+                </div>
+                <div class="text-right">
+                    <button onclick="addressadd()"  class="btn btn-outline-primary mt-4">Add Address<em class="fa fa-plus" aria-hidden="true"></em></button> 
+                </div>
+           </div>
+           <div class="tab-pane" id="tabItem4">
+              <p>4</p>
+           </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Add New Address</h5>
+          <a type="button" href="{% url 'details' view_data.slug %}" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+        </div>
+        <form method="POST" action="{% url 'addaddress' view_data.slug %}" id="proposal-form">
+           {% csrf_token %}
+            <div class="modal-body">
+            
+                <div class="form-group">
+                    <input type="hidden" value="{{view_data.id}}" name="user">
+                    <label for="recipient-name" class="col-form-label">Address</label>
+                    <input type="text" class="form-control" name="address" value=""  data-rule-noSpace="true"  data-rule-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Country</label>
+                    <input type="text" class="form-control" name="country" data-rule-noSpace="true"  data-rule-required="true">
+                
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">State</label>
+                    <input type="text" class="form-control" name="state" data-rule-noSpace="true"  data-rule-required="true">
+                
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">City</label>
+                    <input type="text" class="form-control"  name="city" data-rule-noSpace="true"  data-rule-required="true">
+                
+                </div>
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Zip Code</label>
+                    <input type="text" class="form-control"name="zip_code" data-rule-noSpace="true"  data-rule-required="true" 
+                    onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="5">
+                
+                </div>
+            
+            </div>
+            <div class="modal-footer ">
+                <a type="button" href="{% url 'details' view_data.slug %} "class="btn btn-secondary" data-dismiss="modal">Close</a>
+                <button type="submit" onclick="submits()" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="status" role="dialog" style="background: rgba(0, 0, 0, 0.5);" >
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title">Change The Status </h4>
+            </div>
+            <form method ="POST" action="/admin/user_detail_status/{{view_data.slug}}" id ="submit" >
+                {% csrf_token %} 
+                <div class="modal-body">
+                    <div class="form-group" >
+                    <h6> Are You Sure To Change The Status?</h6>
+                    </div>
+                    <input type ="hidden" value="{{view_data.is_active}}" id="status" name="status">
+                    {% if view_data.is_active == 1 %}
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label"><b>Reason<b></label>
+                    
+                        <textarea class ="summernote-basic" id="reason" name="reason" required></textarea>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer d-flex justify-content-between mt-4">
+                    <a  href="{% url 'details' view_data.slug %}"   class="btn btn-secondary mr-4 ml-auto" data-dismiss="modal">Close</a> 
+                    <button type="submit"  class="btn btn-primary" data-dismiss="modal">Yes</a> 
+                </div>
+            </form>
+        </div>
+      
+    </div>
+</div>
+
+<div class="modal fade" id="myModaledits" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="background: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Update The Address</h5>
+            <a type="button" href="{% url 'details' view_data.slug %}" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </a>
+            </div>
+            {% comment %} {% for j in view_datass %} {% endcomment %}
+            
+            
+                <form method="POST" action="{% url 'edit_address'%}" id="update">
+                {% csrf_token %}
+                    <div class="modal-body">
+                    
+                        <div class="form-group">
+                            <input type="hidden"  id="slug" name="slug">
+                            <label for="recipient-name" class="col-form-label">Address</label>
+                            <input type="text" id="address" class="form-control" name="address"   data-rule-noSpace="true"  data-rule-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Country</label>
+                            <input type="text" id="country" class="form-control" name="country"   data-rule-noSpace="true"  data-rule-required="true">
+                        
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">State</label>
+                            <input type="text" id="state" class="form-control" name="state"   data-rule-noSpace="true"  data-rule-required="true">
+                        
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">City</label>
+                            <input type="text"  id="city" class="form-control"  name="city"    data-rule-noSpace="true"  data-rule-required="true">
+                        
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Zip Code</label>
+                            <input type="text"  id="zip_code" class="form-control"name="zip_code"   data-rule-noSpace="true"  data-rule-required="true" 
+                            onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="5">
+                        
+                        </div>
+                    
+                    </div>
+                    <div class="modal-footer">
+                        <a type="button" href= "{% url 'details' view_data.slug %}"class="btn btn-secondary" data-dismiss="modal">Close</a>
+                        <button type="submit" onclick="submitss()" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+                {% comment %} {% endfor %} {% endcomment %}
+      </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    function Submit_status(user_id){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        let is_approve = $('#is_approve_'+user_id).val()
+        $.ajax({
+            type: "POST",
+            url: "{% url 'vacationer_verificatoin_admin' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+          {
+            user_id:user_id,
+            is_approve:is_approve
+       },
+        success:function(res){
+            console.log(res.data)
+            toastr.success(res.message);
+            
+
+        }
+    });
+     
+    }
+</script>
+<script>
+   
+      
+    
+    function submits(){
+        jQuery.validator.addMethod("noSpace", function(value, element) { 
+        if(value.indexOf(" ")==0){
+            return false;
+        }
+        return true;
+    }, "No space please and don't leave it empty");
+
+    $('#proposal-form').valid()
+    }
+
+    function submitss(){
+        jQuery.validator.addMethod("noSpace", function(value, element) { 
+        if(value.indexOf(" ")==0){
+            return false;
+        }
+        return true;
+    }, "No space please and don't leave it empty");
+
+    $('#update').valid()
+    }
+   
+
+</script>
+<script>
+    function statuschange(){
+        $("#status").addClass('show')
+        $('#status').show()
+    }
+</script>
+<script>
+    function update_address(id){
+        $("#myModaledits").addClass('show')
+        $("#myModaledits").show()
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+       
+        $.ajax({
+            type: "POST",
+            url: "{% url ' fetch_address' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+          {
+            user_id:id,
+           
+       },
+        success:function(res){
+            console.log(res.address)
+            $('#address').val(res.address)
+            $('#country').val(res.country)
+            $('#state').val(res.state)
+            $('#city').val(res.city)
+            $('#zip_code').val(res.zip_code)
+            $('#slug').val(res.slug)
+            
+
+        }
+    });
+     
+
+    }
+</script>
+<script>
+    $("#submit").ready(function () {
+
+        $("#submit").validate({
+          
+        
+            reason: {
+              required: true,
+              minlength: 5,
+              maxlength: 30,
+              lettersonly: true
+            }
+          },
+         messages: {
+                   
+                    message: {required: "Enter your message 3-20 characters"},
+              },
+     });
+    })
+</script>
+<script>
+    function clickFn(event) {
+        event.currentTarget.closest('form').submit() 
+    }
+</script>
+<script>
+    function clickFns(event) {
+        event.currentTarget.closest('form').submit() 
+    }
+</script>
+
+
+{% endblock content %}

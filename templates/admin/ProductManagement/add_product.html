@@ -1,0 +1,930 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Add Product</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-12" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row column" >
+                   
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Category</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control"  data-rule-required="true"  onchange="categorys()" id="cat" name="category" required>
+                                    <option disabled selected >Select  Category</option>  
+
+                                    {% for i in category %}
+                                    <option value="{{i.id}}">{{i.name}}</option>  
+                                    {% endfor %}
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select  Sub Category</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control"   id="subcategory" name="subcategory" >
+                                    <option disabled selected >Select Sub Category</option>  
+                                    {% comment %} <option value=""></option>   {% endcomment %}
+                                   
+                                </select> 
+                            </div>
+                        </div>
+                   
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > Product Name</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="name" name="name" data-rule-required="true" data-rule-noSpace="true"  
+                                onkeypress='return (event.keyCode >=65 && event.keyCode <= 90)|| (event.keyCode >=95 && event.keyCode <= 122)' 
+                                maxlength="10" oncopy="return false" onpaste="return false" >
+                                <input type="hidden" class="form-control" id="count" name="count" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > One Day Price</label>
+                            <div class="form-control-wrap">
+                                <input type="number" oninput="validate(this)"    class="form-control" id="onedayprice" name="onedayprice" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Week Price</label>
+                            <div class="form-control-wrap">
+                                <input  type="number"    oninput="validate(this)" data-rule-noSpace="true" class="form-control" id="weekprice" name="weekprice" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > Two Week Price</label>
+                            <div class="form-control-wrap">
+                                <input type="number"    oninput="validate(this)" data-rule-noSpace="true"  class="form-control" id="twoweekprice" name="twoweekprice" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > Month Price</label>
+                            <div class="form-control-wrap">
+                                <input  type="number"    oninput="validate(this)" data-rule-noSpace="true"   class="form-control" id="monthprice" name="monthprice" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Annual Price</label>
+                            <div class="form-control-wrap">
+                                <input  type="number"  oninput="validate(this)"   data-rule-noSpace="true"  class="form-control" id="annualprice" name="annualprice" >
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Quantity</label>
+                            <div class="form-control-wrap">
+                                <input type="text" data-rule-noSpace="true"  oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)"  data-rule-noZeroAtStart="true" class="form-control" id="quantity" name="quantity" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Image</label>
+                            {% comment %} <div class="form-control-wrap">
+                                <input type="file" class="form-control" id="image" name="image" data-rule-required="true"  accept="image/*" >
+                            </div> {% endcomment %}
+                            <div class="d-flex photo_of_events" id="image">
+                                <div class="imgPic">
+                                    <span> Photo of Event</span> 
+                                    <div class="form-group">
+                                        <div class="dz-message" data-dz-message>
+                                            <div class="upload-profile"> 
+                                                {% comment %} {% if request.user.profile_pic %} {% endcomment %}
+                                                <figure>
+                                                <img class="frame" src="{% static 'web/images/44289.png' %}" />
+                                                </figure> 
+                                                {% comment %} {% else %}
+                                                <img class="frame" src="" />
+                                                {% endif %} {% endcomment %}
+                                            </div> 
+                                            <input type="file" name="image" class="image_id mb-3" 
+                                            onchange="loading(this);" accept="image/*" 
+                                             data-rule-accept="image/png" 
+                                              data-msg-accept="Upload image only" >   
+        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="addImgCutton" class="btn btn-lg btn-primary mb-3" 
+                            onclick="img_copy()" >Add More</button>
+                        </div>
+                    </div>
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Description</label>
+                            <div class="form-control-wrap">
+                                <textarea value="" name="content"  class="form-control"  required></textarea>
+                                <input type="hidden" class="form-control" id="lat" name="lat" data-rule-required="true" data-rule-noSpace="true">
+                                 <input type="hidden" class="form-control" id="long" name="long" data-rule-required="true" data-rule-noSpace="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Purchased Date</label>
+                            <div class="form-control-wrap">
+                                <input type="date" data-rule-noSpace="true" onkeydown="return false"  class="form-control" id="date" name="date" data-rule-required="true" max="{% now 'Y-m-d' %}">
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Purchased Price</label>
+                            <div class="form-control-wrap">
+                                <input type="text" maxlength="6" step="0.01" data-msg-step="after decimal only two number allowed"  oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true" 
+                                 data-rule-noSpace="true" name="purchased_price" data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true" class="form-control" >
+                                
+                            </div>
+                        </div>
+                    </div>
+                     {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Address</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="autocom" name="autocom" data-rule-required="true" data-rule-noSpace="true">
+                                
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Available</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="available" name="available" required>
+                                    <option value="True"> In Stock </option>
+                                    <option value="False" >Out Of Stocks</option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Feature</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="feature" name="feature" required>
+                                    <option value="True">Yes</option>
+                                    <option value="False" >No</option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Return</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="return" name="return" onchange="selectOther()" required>
+                                    <option value="True"> Yes</option>
+                                    <option value="False">No</option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="col-lg-6" id="returnNo" style="display:none">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1"  >Sale Price</label>
+                            <div class="form-control-wrap">
+                                <input type="text" maxlength="6" step="0.01" data-msg-step="after decimal only two number allowed"  oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true" 
+                                 data-rule-noSpace="true" name="sale_price" data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true" class="form-control" >
+                                
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Status*</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="basicSelect" name="status" data-rule-required="true">
+                                <option value="True"> Active
+                                    </option>
+                                    <option value="False" >
+                                    {% comment %} {% if not is_active %} selected {% endif %}> {% if is_active %} selected {% endif %} {% endcomment %}
+                                        Deactive
+                                    </option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                {% comment %} <div class="col-lg-12" >  
+                    <label class="form-label" for="status" style="margin-top:20px;" >Options</label>
+
+                    <div class="option" id="option_div_0"> 
+                         <div class="form-group row" id="div_section_0">   
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control" id="options_0" onchange="select_option(0)" name="option[0]name" required>
+                                            <option selected disabled >Select option</option>
+                                            {% for i in option %}
+                                            <option value="{{i.id}}">{{i.name}}</option>  
+                                            {% endfor %}
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select image</label>
+                                    <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="image" name="option[0]image"  accept="image/*" >
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options Key</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control" id="option_key_0"  onchange="select_option_key(0)" name="option[0]key" required>
+                                             <option selected disabled >Select Option key</option>
+                                            <option value=""> </option>  
+                                            
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options Value</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control"  id="option_value_0" name="option[0]value" required>
+                                            <option selected disabled >Select Option Value</option>
+
+                                            <option value=""></option>  
+                                            
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Price</label>
+                                    <div class="form-control-wrap">
+                                    <input type="text" name="option[0]price" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" class="form-control" id="price" name="price" data-rule-required="true"  >
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Quantity</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text" data-rule-noSpace="true" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" name="option[0]quantity" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" id="quantity" name="quantity" data-rule-required="true"  >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                <button type="button" onclick="vaccination()" class="btn btn-lg btn-primary" style="margin-top: 44px"> Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+                <div class="col-lg-12 row" id="option_div">
+
+                </div>
+
+                <div class="col-md-6 mt-3">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="form-label">Choose Franchise</label>
+                                <div class="form-control-wrap">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                    <select name="franchise-user[]" data-rule-required="true"  onchange="show_user_type()"  id="example-getting-started" multiple="multiple" class="form-control w-100">
+                                        {% for i in franchise_user %}
+                                        <option value="{{i.id}}">{{i.first_name}} {{i.last_name}}  </option>
+                                        {% endfor%}
+                                    </form>
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                {% comment %} <div class="col-md-6 mt-3">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="form-label">Choose Property Manager</label>
+                                <div class="form-control-wrap">
+                                     <form method="POST">
+                                        {% csrf_token %}
+                                        <select name="propertymanager[]" data-rule-required="true"   id="property-manager" multiple="multiple" class="form-control w-100">
+                                            {% for i in propertymanager %}
+                                            <option value="{{i.id}}">{{i.first_name}} {{i.last_name}}</option>
+                                            {% endfor%}
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+                <div class="row" id="product-detail">
+                    
+                </div>
+
+                <div class="col-md-12 mt-3" id="user_type" style="display:display">
+                    <label class="form-label" id="user_label" for="status" style="margin-top: 20px" >User Type </label>
+                    {% comment %} {% for i in franchise_user %}
+                  
+                        {% if forloop.counter == 1 %} {% endcomment %}
+                        <input type="text"  data-rule-required="true" hidden data-rule-noSpace="true" name="user_id" value="[{% for i in franchise_user %}{{i.id}},{% endfor %}]" class="form-control" >
+                            
+                                <div class="row" id="price_data">
+                                
+                                    <div class="col">
+                                        <img src="{% static 'admin/images/checked.png' %}">
+                                        {% comment %} <input onchange="ddd(this)" name="frenchsy"  value="vacationer" type="checkbox" style="display: none"> {% endcomment %}
+                                        <label class="form-label" for="status"  style="margin-top: 20px">vacationer </label>
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="status" style="margin-top: 20px">0-7 days  Price</label>
+                                            <input type="text"  hidden  data-rule-required="true"  data-rule-noSpace="true" name="vacationer" value="vacationer" class="form-control" >
+                                            <input type="text" maxlength="6" step="0.01"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  data-msg-step="after decimal only two number allowed"  oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true" name="vacationer_0_7_days" class="form-control" >
+                                        </div>
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="status" style="margin-top: 20px">Greater than 7 days  Price</label>
+                                            <input type="text" maxlength="6"   step="0.01"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  data-msg-step="after decimal only two number allowed" oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true"  name="vacationer_greaterthan_7_days" class="form-control" >
+                                        </div>
+                                    
+                                    </div>
+                                    <div class="col">
+                                        <img src="{% static 'admin/images/checked.png' %}">
+                                        {% comment %} <input onchange="ddd(this)" name="frenchsy"  value="homeowner" type="checkbox" style="display: none"> {% endcomment %}
+                                        <label class="form-label" for="status" style="margin-top: 20px">Homeowner </label>
+                                        <div class="form-control-wrap">
+                                            <input type="text"    data-rule-required="true"  data-rule-noSpace="true" name="homeowner" value="homeowner" hidden class="form-control" >
+                                            <label class="form-label" for="status" style="margin-top: 20px">0-7 days Price</label>
+                                            <input type="text" maxlength="6" step="0.01"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  data-msg-step="after decimal only two number allowed" oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true"  name="homeowner_0_7_days" class="form-control" >
+                                        </div>
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="status" style="margin-top: 20px">Greater than 7 days  Price</label>
+                                            <input type="text" maxlength="6" step="0.01"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  data-msg-step="after decimal only two number allowed"  oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true"  name="homeowner_greaterthan_7_days" class="form-control" >
+                                        </div>
+                                        {% comment %} <div class="form-control-wrap">
+                                            <label class="form-label" for="status" style="margin-top: 20px">0-7 days Wholesale Price</label>
+                                            <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true"  name="homeowner_0_7_days_wholesale" class="form-control" value="">
+                                        </div>
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="status" style="margin-top: 20px">Greater than 7 days Wholesale Price</label>
+                                            <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='dailywholesale' name="homeowner_greaterthan_7_days_wholesale" class="form-control" value="">
+                                        </div> {% endcomment %}
+                                    </div>
+                                
+                                    <div class="col">
+                                        <img src="{% static 'admin/images/checked.png' %}">
+                                        {% comment %} <input onchange="ddd(this)" name="frenchsy"  value="propertymanager" type="checkbox" style="display: none"> {% endcomment %}
+                                        <label class="form-label" for="status" style="margin-top: 20px">Property manager </label>
+                                        {% comment %} <div class="form-control-wrap">
+                                            <input type="text"    data-rule-required="true"  data-rule-noSpace="true" name="propertymanager" hidden value="propertymanager" class="form-control" >
+                                            <label class="form-label" for="status" style="margin-top: 20px">0-7 days  Price</label>
+                                            <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true"   name="propertymanager_0_7_days" class="form-control" >
+                                        </div>
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="status" style="margin-top: 20px">Greater than 7 days  Price</label>
+                                            <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true" name="propertymanager_greaterthan_7_days" class="form-control" >
+                                        </div> {% endcomment %}
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="status" style="margin-top: 20px">0-7 days Wholesale Price</label>
+                                            <input type="text" maxlength="6"  step="0.01"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  data-msg-step="after decimal only two number allowed" oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true" name="propertymanager_0_7_days_wholesale" class="form-control" value="">
+                                        </div>
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="status" style="margin-top: 20px">Greater than 7 days Wholesale Price</label>
+                                            <input type="text" maxlength="6"  step="0.01"  data-rule-noZeroAtStart="true"  data-rule-afterdecimalZero="true"  data-msg-step="after decimal only two number allowed" oncopy="return false" onpaste="return false"  onkeypress="return isNumberKey(event,this)" data-rule-required="true"  data-rule-noSpace="true" name="propertymanager_greaterthan_7_days_wholesale" class="form-control" value="">
+                                        </div>
+                                    </div>
+                                    <input type="text" hidden id="price_count" name="price_count" value="" class="form-control" >
+                                </div>
+                        {% comment %} {% endif %}
+                    {% endfor %} {% endcomment %}
+                </div>
+              
+                 {% comment %} <div class="col-lg-12 row" id="user_div">
+                    
+                </div>
+               
+                <div class="col-lg-12 row" id="user1_div">
+
+
+                </div> 
+                <div class="col-lg-12 row" id="user2_div">
+
+
+                </div> 
+                <div class="col-lg-12 row" id="user3_div">
+     
+
+                </div>  {% endcomment %}
+                </div>            
+            </div>
+                    {% comment %} <input type="hidden" class="form-control" id="email-address-1" name="customer" value="customer" data-rule-required="true"> {% endcomment %}
+
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary" style="margin-top: 74px"> Add</button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block js_content %}
+
+<script>
+
+    function isNumberKey(evt, obj) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        var value = obj.value;
+        var dotcontains = value.indexOf(".") != -1;
+        if (dotcontains)
+            if (charCode == 46) return false;
+        if (charCode == 46) return true;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+
+
+</script>
+<script>
+    function Register(){
+    jQuery.validator.addMethod("noSpace", function(value, element) { 
+        if(value.indexOf(" ")==0){
+            return false;
+        }
+        return true;
+    }, "No space please and don't leave it empty");
+    $.validator.addMethod('emailRegex', function(value, element) {
+    let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+    return emailExp.test(value);
+    }, 'Email format is not valid'); 
+    $.validator.addMethod("noZeroAtStart", function(value, element) {
+        return value.charAt(0) != '0'
+    }, "price can't be zero");
+    $.validator.addMethod('afterdecimalZero', function(value, element) {
+        let decimalExp = new RegExp(/^\d+(?:\.\d{1,2})?$/i);
+        return decimalExp.test(value);
+        }, 'Not start with point.');  
+    $('#register').valid()
+    }
+</script>
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('content');
+</script> 
+<script>
+  let i = 1
+  function vaccination(){
+  $('#option_div:last').append(`
+                <div class="col-lg-12">  
+                    <div class="option" id="option_div_${i}"> 
+                         <div class="form-group row" id="div_section_${i}">   
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control" id="options_${i}" onchange="select_option(${i})" name="option[${i}]name" required>
+                                            <option value="" disabled selected >Select Option</option>  
+                                            {% for i in option %}
+                                            <option value="{{i.id}}">{{i.name}}</option>  
+                                            {% endfor %}
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select image</label>
+                                    <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="image" name="option[${i}]image" accept="image/png, image/gif, image/jpeg" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options Key</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control" id="option_key_${i}" data-rule-noSpace="true" onchange="select_option_key(${i})" name="option[${i}]key" required>
+                                              <option value="" disabled selected >Select Option key</option>  
+                                            <option value=""></option>  
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options Value</label>
+                                    <div class="form-control-wrap">
+                                        <select id="option_value_${i}"  name="option[${i}]value"  class="form-control" required>
+                                              <option value="" disabled selected >Select Option Value</option>  
+                                            <option value=""></option>  
+                                            
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Price</label>
+                                    <div class="form-control-wrap">
+                                    <input type="text" name="option[${i}]price"  data-rule-noSpace="true" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" id="price" name="price" data-rule-required="true"  >
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Quantity</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text" name="option[${i}]quantity" data-rule-noSpace="true" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" id="quantity" name="quantity" data-rule-required="true"  >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                <button type="button" id="remove_${i}" onclick="remove(this,${i})"  class="btn btn-danger" style="margin-top: 44px"> Remove </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                   
+
+    `)
+    i++
+        $('#count').val(i)
+        console.log($('#count').val(i))
+        
+    }
+    function remove(e,id){   
+            $('#option_div_'+id).remove();
+            i--
+            $('#count').val(i)
+        }
+    function select_option(id){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        let option_id = $('#options_'+id).val()
+        $.ajax({
+            type: "POST",
+            url: "{% url 'fetch_product_option' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+            {
+            option_id:option_id
+        },
+        success:function(res){
+            console.log(res.data)
+            option = ""
+                if(jQuery.isEmptyObject(res.data)){
+                    option += "<option disabled  selected value=''>No  data Found</option>";
+                    
+
+                }else{
+                    option += '<option selected disabled >Select Option</option>';
+                    res.data.forEach(item => {
+                        option += '<option value='+ item.id +'>' + item.option_name + '</option>';
+                    });
+                }
+                $("#option_key_"+id).html(option);
+                    
+            
+            },
+            error:function(res){
+            toastr.error(res.responseJSON.message);
+            }
+    });
+    }
+    function select_option_key(id){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        let option_value = $('#option_key_'+id).val()
+        $.ajax({
+            type: "POST",
+            url: "{% url 'fetch_product_option_value' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+            {
+            option_value:option_value
+        },
+        success:function(res){
+            console.log(res.data)
+            option = ""
+                if(jQuery.isEmptyObject(res.data)){
+                    option += "<option disabled selected value='0'>No  data Found</option>";
+
+                }else{
+                    option += '<option selected disabled >Select Option</option>';
+                    res.data.forEach(item => {
+                        option += '<option value='+ item.id +'>' + item.option_value + '</option>';
+                    });
+                }
+                $("#option_value_"+id).html(option);
+                    
+            
+            },
+            error:function(res){
+            toastr.error(res.responseJSON.message);
+            }
+    });
+    
+    }
+</script>
+<script>
+    function categorys(){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        let category_id = $('#cat').val()
+        $.ajax({
+            type: "POST",
+            url: "{% url 'select_subcategory' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+          {
+            category_id:category_id
+       },
+        success:function(res){
+            console.log(res.data)
+            option = ""
+              if(jQuery.isEmptyObject(res.data)){
+                  option += "<option disabled selected required value=''>No  data Found</option>";
+  
+              }else{
+                  option += '<option selected disabled >Select Sub Category</option>';
+                  res.data.forEach(item => {
+                      option += '<option value='+ item.id +'>' + item.name + '</option>';
+                  });
+              }
+              $("#subcategory").html(option);
+                  
+           
+          },
+          error:function(res){
+            toastr.error(res.responseJSON.message);
+          }
+    });
+     
+    }
+</script>
+<script>
+    var  x = 1;
+    function loading(e){        
+        console.log(e, "=----------------")
+        let files = e.files,
+        filesLength = files.length;
+         
+        for (let i = 0; i < filesLength; i++) {
+            let f = files[i]
+            const fileReader = new FileReader();
+            fileReader.onload = (function (event) {
+                
+                $(e).siblings('.upload-profile').find('.frame').attr("src", event.target.result)
+            });
+            fileReader.readAsDataURL(f);
+      }
+    }
+    function img_copy() {
+        if(x<=4){      
+            let img= $(".imgPic").clone().find("input:file").val("").end()
+            $(img[0]).find('.frame').attr('src', "{% static 'web/images/44289.png' %}")
+            $(img[0]).find('.image_id').attr('name', "image"+x)
+            
+            $(img[0]).appendTo("#image");
+            x+=1;
+        }else{
+            $('#addImgCutton').hide();
+        }
+      }
+</script>
+{% comment %} toastr.success(res.message); {% endcomment %}
+{% comment %} <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1rt8OKhZ-8_Fv_OjiSA0n1NC1M6TAN94&callback=initMap&libraries=places&v=weekly" async></script>
+
+<script>
+    function initMap()
+    {
+      var input = document.getElementById('autocom');
+      var options =     {
+              types: ['geocode']
+              
+          
+          };
+        var input= document.getElementById('autocom')
+        autocomplete = new google.maps.places.Autocomplete(input, options);
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        var place = autocomplete.getPlace();
+        
+        let lat = place.geometry.location.lat()
+        let long = place.geometry.location.lng()
+        console.log(lat,long )
+        $('#lat').val(lat);
+        $('#long').val(long);
+       
+      
+
+        });
+     
+    }
+    
+   
+</script> {% endcomment %}
+<script>
+    let  info = $("#example-getting-started :selected").map(function(i, el) {
+        console.log(info)
+            return $(el).val();
+                }).get(); 
+</script>
+<script>
+    $('[name=frenchsy]').prop('checked', true)
+     function show_user_type(){
+        $('#user_type').css("display","block")
+        
+        $('.count').remove()
+        $('[name=frenchsy]:checked').trigger('change', this)
+       
+   } 
+    {% comment %} $('#user_div').hide()  
+    $('#user1_div').hide()   
+    $('#user2_div').hide()    
+    $('#user3_div').hide()  {% endcomment %}
+   {% comment %} function ddd(e){
+    
+        const user = $('#example-getting-started').val()
+     
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; {% endcomment %}
+        
+        
+        /*$.ajax({
+            type: "POST",
+            url: "{% url 'product_ajax' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+            {
+                info_user:user,
+                input_count: $('.count').length,
+                user_type:e.value
+                
+            },
+            success:function(res){
+                switch(e.value) {
+                    {% comment %} case "guest":
+                        $('#user_div').html(res)  
+                        if ($(e).is(':checked')) {
+                            $('#user_div').show()
+                            
+                        } else {
+                            $('#user_div').hide()
+                        }
+                        break {% endcomment %}
+                    case "homeowner":
+                        $('#user1_div').html(res)
+                        if ($(e).is(':checked')) {
+                            $('#user1_div').show()
+                            
+                        } else {
+                            $('#user1_div').hide()
+                        }
+                        break
+                    case "vacationer":
+                        $('#user2_div').html(res)
+                        if ($(e).is(':checked')) {
+                            $('#user2_div').show()
+                            
+                        } else {
+                            $('#user2_div').hide()
+                        }
+                        break
+                    case "propertymanager":
+                        $('#user3_div').html(res)
+                        if ($(e).is(':checked')) {
+                            $('#user3_div').show()
+                            
+                        } else {
+                            $('#user3_div').hide()
+                        }
+                        break
+                }
+                {% comment %} let price_input_count = $('[value=guest]').length; {% endcomment %}
+                let price_input_count = $('[value=homeowner]').length;
+                console.log(price_input_count,'-=====================')
+               
+                $('#price_count').val(price_input_count)
+            }
+                
+        }); */
+    {% comment %} } {% endcomment %}
+   
+</script>
+<link rel="stylesheet" type="text/css" href="https://davidstutz.github.io/bootstrap-multiselect/dist/css/bootstrap-multiselect.css">
+<script type="text/javascript" src="https://davidstutz.github.io/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#example-getting-started').multiselect();
+        $('#property-manager').multiselect();
+    });
+</script>
+<script>
+    $(document).on('keyup', '[data-user-type]', function() {
+        const userType = $(this).data('user-type')
+     
+        const price = $(this).data('price')
+        
+        $(`[data-user-type=${userType}][data-price=${price}]`).val($(this).val())
+    })
+
+    $('#property-manager').on('change', function() {
+        const userIds = $('[name="franchise-user[]"]').val()
+        console.log(userIds)
+        
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        if(userIds) {
+          
+            $.ajax({
+                type: "POST",
+                url:" {% url 'negotiable_price_ajax' %}",
+                headers: { 'X-CSRFToken': csrftoken },
+                data: {
+                    userIDS: userIds,
+                    input_count: $('.count').length,
+                },
+                success: function(response) {
+                    $('#product-detail').html(response)
+                   
+                   
+                    
+                       
+                        
+                    
+                }
+            })
+               
+        }
+    })
+</script>
+<script>
+    function selectOther(){
+        let propertytype =  $('#return').val()
+       
+        if (propertytype == "False"){
+            $('#returnNo').css("display", "block")
+            $('#user_type').css("display", "none")
+            $('#price_data').css("display", "none")
+            $('#user_label').css("display", "none")
+            
+        }
+        else{
+            $('#returnNo').css("display", "none")
+            $('#user_type').css("display", "block")
+            $('#price_data').css("display", "block")
+            $('#user_label').css("display", "block")
+
+        }
+    
+    }
+</script>
+
+
+  {% endblock js_content %}  

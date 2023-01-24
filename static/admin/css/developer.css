@@ -1,0 +1,108 @@
+
+
+.selection .select2-selection{width: 180px;text-align: left;}
+.row.justify-between.g-2 .col-7.col-sm-4.text-left{display: flex;justify-content: flex-start;}
+.row.justify-between.g-2  div.dataTables_filter input {margin-left: 0;}
+
+.checkbox_list_block.mt-5 .row.mb-4 .col-md-2:first-child{flex: 0 0 100%;max-width: 100%;}
+.checkbox_list_block.mt-5 .row.mb-4 .col-md-2:first-child .checkbox_list_item h6 input{margin-left: 10px;}
+.checkbox_list_block.mt-5 .row.mb-4 .col-md-2:first-child .checkbox_list_item h6{
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.checkbox_list_block.mt-5 .row.mb-4 .col-md-2 .checkbox_list_item label{margin-right: 5px;}
+.checkbox_list_block.mt-5 .row.mb-4 .mb-4{flex: 0 0 100%;max-width: 100%;padding-left: 15px;}
+
+.option_add_mare label.form-label{max-width: 300px;
+min-width: 300px;}
+
+.photo_of_events{flex-wrap: wrap !important;}
+.photo_of_events .upload-profile figure{width: 70px;height: 65px;min-width: 70px;border-radius: 5px;overflow: hidden;margin-bottom: 4px;}
+.photo_of_events .upload-profile figure img{width: 100%;height: 100%;object-fit: cover;object-position: center;}
+.photo_of_events .imgPic span{
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.photo_of_events .imgPic {padding-right: 22px;}
+.photo_of_events .imgPic input.image_id.mb-3 {
+    font-size: 11px;
+    width: 73px;
+}
+.multiselect-native-select .btn-group { display: block;position: relative; }
+.multiselect-native-select .btn-group:after { position: absolute;
+font-family: "Nioicon";
+top: 50%;
+content: "";
+right: 0.7rem;
+transform: translateY(-50%) rotate(90deg);
+font-size: 1.2rem;
+color: #000;
+transition: transform .3s, color .1s, opacity .3s ease .3s;pointer-events: none; }
+.user-avatar { overflow:hidden; }
+.card_3d .card-on {
+  border: 1px solid rgba(123, 128, 177, 0.125);
+  border-radius: 0.25rem;
+  box-shadow: 3px 4px 10px #a5a5a54f;
+  padding: 20px;
+  width: 31.33%;
+  display: inline-block;
+  margin: 20px 10px;
+}
+.card_3d .card-on .col-md-6{flex: 0 0 100%;max-width: 100%;}
+
+
+.dropbtn {
+  background-color: #3498DB;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+.multiselect-native-select { display:flex; }
+.form-control-wrap .selection .select2-selection { width: auto;
+display: inline-block;min-width:300px;padding:0; }
+.form-control-wrap .select2 { width:auto !important; }
+.form-control-wrap .select2-container .select2-search--inline .select2-search__field { line-height: 33px;height: 34px;margin: 0; }
+.form-control-wrap .btn-group { margin-right:10px; }
+.form-control-wrap { margin-bottom:10px; }
+.form-control-wrap .multiselect-native-select { flex-direction: row-reverse;
+justify-content: left; }
+
+
+
+

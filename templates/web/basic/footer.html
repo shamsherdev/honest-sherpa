@@ -1,0 +1,67 @@
+{% load static %}
+<footer>
+            <div class="container">
+                <div class="row">
+                   <div class="col-md-4">
+                        <div class="seedesta-footer">
+                              <a class="footer-logo" href="/">
+                                   {% if globalseeting.global_image %}
+                                  <img src ="{{globalseeting.global_image.url}}">
+                                  {% else %}
+                                  {% endif %}
+                                {% comment %} <img src="{% static 'web/images/logo-white.svg' %}">  {% endcomment %}
+                              </a>
+                              <p>{{globalseeting.text}}</p>
+                        </div>
+                   </div>
+                   <div class="col-md-3">
+                      <div class="footer-content">
+                         <h3>Important links </h3>
+                         <ul>
+                             <li><a href="/about/">About us</a></li>
+                             <li><a href="/contact/us">Contact Us</a></li>
+                             {% comment %} <li><a href="javascript:;">News</a></li> {% endcomment %}
+                             <li><a href="{% url 'blog_list' %}">Blog</a></li>
+                         </ul>
+                      </div>
+                   </div>
+                   <div class="col-md-3">
+                      <div class="footer-content">
+                         <h3>Support</h3>
+                         <ul>
+                             <li><a href="javascript:;">Terms and Conditions</a></li>
+                             <li><a href="javascript:;">Privacy Policy</a></li>
+                             {% comment %} <li><a href="javascript:;">Return policy</a></li> {% endcomment %}
+                         </ul>
+                      </div>
+                   </div>
+                   <div class="col-md-2">
+                      <div class="footer-social-head">
+                         <h3>Social Link</h3>
+                        
+
+                         
+                            <ul class="footer-social">
+                             
+                                <li>
+                                    <a target="_blank" href="{{globalseeting.global_url_facebook}}"><i class="ri-facebook-circle-fill"></i></a>
+                                </li>
+                             
+                                <li>
+                                    <a target="_blank" href="{{globalseeting.global_url_insta}}"><i class="ri-instagram-line"></i></a>
+                                </li>
+                                <li>
+                                    <a target="_blank" href="{{globalseeting.global_url_twitter}}"><i class="ri-twitter-fill"></i></a>
+                                </li>
+                            </ul>
+                           
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+              <div class="copyright-text">
+                 <p>© 2022 All Rights Reserved by honest sherpa</p>
+              </div>   
+            </div>
+        </footer>

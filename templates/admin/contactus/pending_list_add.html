@@ -1,0 +1,97 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Add Pending list</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-9" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="column" >
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Email*</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <input type="email" class="form-control" id="full-name-1" name="email" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Question</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="image" name="question" data-rule-required="true" accept="image/png, image/gif, image/jpeg" 
+                                onkeypress='return (event.keyCode >=65 && event.keyCode <= 90)|| (event.keyCode >=95 && event.keyCode <= 122)' maxlength="250">
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Desgination*</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="desgination" name="desgination" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Status*</label>
+                            <div class="form-control-wrap">
+                                <select class="form-select" id="basicSelect" name="status" required>
+                                    <option value="">
+                                    </option>
+                                    <option value="True"> Pending
+                                    </option>
+                                 <option value="False" >
+                                        Resolve
+                                    </option> 
+                                </select>
+                                
+                            </div>
+                        </div>
+                    </div> 
+                  
+                    
+                    </div>
+                    {% comment %} <input type="hidden" class="form-control" id="email-address-1" name="customer" value="customer" data-rule-required="true"> {% endcomment %}
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-lg btn-primary" style="margin-top: 74px"> Add</button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+    function Register(){
+    $('#register').valid()
+    }
+</script>
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('descrip');
+</script>
+{% endblock js_content %}  

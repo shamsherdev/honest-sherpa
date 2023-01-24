@@ -1,0 +1,118 @@
+<html>
+{% extends 'web/basic/base.html' %}
+ {% load static %}
+{% block title %}My Profile{% endblock %}
+
+ {% block content %}
+   <body>
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+          {% include 'web/basic/inner-header.html' %}
+
+        <!-- ---End Header--- -->
+            <div class="wraper pt85 wtvh100">
+
+                <section class="breadcrumb-bg-sec">
+                    <div class="container">
+                        <nav aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/my/profile/{{request.user.slug}}">My Profile</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Edit profile</li>
+                          </ol>
+                        </nav>
+                    </div>
+                </section>
+
+                 <section class="in-sp5 dashboard-us-sec">
+
+                        <div class="container">
+                            <div class="row inner-dash-bord">
+                                <div class="col-md-3 dash_left">
+                                    <!-- -------left-menu-------- -->
+                                   {% include 'web/profile-setup/my-profile-sidebar.html' %}
+                                    <!-- -------left-menu-------- -->
+                                </div>
+                                <div class="col-md-9 dash_right">
+                                    <div class="dashboard-right-body">
+                                        <!-- -------dashboard Heading-------- -->
+                                        <div class="head-dash-board">
+                                            <div class="row">
+                                                <div class="col-md-6 head-dash-title">
+                                                    <h2>Edit Profile</h2>
+                                                </div>
+                                                <div class="col-md-6">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- -------dashboard Heading-------- -->
+
+                                        <!-- -------dashboard body-------- -->
+                                        <div class="dashboard-body">
+                                            <div class="equal-spacing30">
+                                                <div class="cover_my_profile">
+                                                    <form class="row" method="POST" id="update_profile_form">
+                                                        {% csrf_token %}
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">First Name</label>
+                                                                <input data-rule-required="true" maxlength="15" data-rule-noSpace="true"  type="text" name="first_name" value="{{user.first_name}}" class="form-control" placeholder="Smith jhone">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Last Name</label>
+                                                                <input data-rule-required="true" maxlength="15" data-rule-noSpace="true" type="text" name="last_name" value="{{user.last_name}}" class="form-control" placeholder="Abraham">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Email Address</label>
+                                                                <input type="email" readonly disabled name="email" value="{{user.email}}" class="form-control" placeholder="joesphabr@gmail.com">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Phone Number</label>
+                                                                <input data-rule-required="true" data-rule-noSpace="true" minlength="10" maxlength="12" data-msg-minlength="Please enter valid mobile number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false" type="text" name="mobile_num" value="{{user.mobile_number}}" class="form-control" placeholder="+91 23456 45678">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 pt-2 min-wd154">
+                                                            <button onclick="update_profile()" class="btn" type="submit">Update</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- -------dashboard body-------- -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                 </section>
+                 
+            </div>
+        <!-- ----------footer section----- ------ -->
+       {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+    </body>
+    {% include 'web/js/helper.html' %}
+    <script>
+    function update_profile(){
+        $('#update_profile_form').valid()
+        $.validator.addMethod("PASSWORD", function (value, element) {
+                  return /[\@\#\$\%\^\&\*\(\)\_\+\!]/.test(value) && /[a-z]/.test(value) && /[0-9]/.test(value) && /[A-Z]/.test(value);
+    },"Passwords are 8-16 characters with uppercase letters, lowercase letters and atleast one number and one special character.");
+    jQuery.validator.addMethod("noSpace", function(value, element) { 
+            if(value.indexOf(" ")==0){
+                return false;
+            }
+            return true;
+            }, "No space please and don't leave it empty");    
+}
+    
+</script>
+{% endblock content %}
+</html>

@@ -1,0 +1,195 @@
+ {% load static %}
+ <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Honest Sherpa | {% block title %}{% endblock %}</title>
+        <link rel="icon" href="{% static 'web/images/logo.svg' %}" type="image/gif" sizes="29x29">
+        <!--responsive-meta-here-->
+        <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1.0,width=device-width, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <!--responsive-meta-end-->
+        
+        <link href="{% static 'web/css/bootstrap.css' %}" rel="stylesheet" />
+        <link href="{% static 'web/css/bootstrap.min.css' %}" rel="stylesheet" />
+        <link  href="{% static 'web/css/fontawesome-all.css' %}" rel="stylesheet"/>
+        <link  href="{% static 'web/css/fontawesome.css' %}" rel="stylesheet"/>      
+        <link  href="{% static 'web/css/jquery.mCustomScrollbar.min.css' %}" rel="stylesheet"/>      
+
+        <link href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+        {% comment %} <link  href="{% static 'web/css/fontawesome-all.min.css' %}" /> {% endcomment %}
+        <link href="{% static 'web/css/owl.carousel.css' %}" rel="stylesheet"/>
+
+        <link href="{% static 'web/css/owl.carousel.min.css' %}" rel="stylesheet"/>
+        <link href="{% static 'web/css/owl.theme.css' %}" rel="stylesheet"/>
+
+        <link href="{% static 'web/fonts/remixicon.css' %}" rel="stylesheet"/> 
+        <link  href="{% static 'web/css/responsive.css' %}" rel="stylesheet"/>
+        <link href="{% static 'web/css/slick.css' %}" rel="stylesheet"/>
+        <link href="{% static 'web/css/style.css' %}" rel="stylesheet"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet" /> 
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+        
+        <style>
+            .error{
+                color:red;
+            }
+        </style>
+    </head>
+        <div class="alert alert-danger" role="alert" id="location-alert" style="z-index: 9999; position: sticky; top: 72px; display: none">
+            please allow the location!
+        </div>      
+      {% block content %}{% endblock content %}
+      <script type="text/javascript" src="{% static 'web/js/jquery-3.3.1.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'web/js/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/js/bootstrap.min.js'%}"></script>
+
+    <script type="text/javascript" src="{% static 'web/js/owl.carousel.js' %}"></script>
+    <script type="text/javascript" src="{% static 'web/js/owl.carousel.min.js' %}"></script>
+
+    
+    <script type="text/javascript" src="{% static 'web/js/slick.min.js' %}"></script>
+    <script src="{% static 'web/js/location_helper.js' %}"></script>
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.js"></script>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<form method="POST">
+    {% csrf_token %}
+</form>
+    <script>
+     {% if request.user.is_authenticated %}
+        const setUser =  localStorage.getItem('userType') ?? ''
+        localStorage.removeItem("userType");
+        console.log(setUser, "-------------")
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
+        if(setUser) {
+            $.ajax({
+                    type: "POST",
+                    url: "{% url 'select_user' %}",
+                    headers: { 'X-CSRFToken': csrftoken }, 
+                    data:
+                    {
+                     
+                        setuser:setUser
+                    },
+                success:function(res){
+                    console.log(res)
+                
+                }, error:function(res){
+                    toastr.error(res.responseJSON.message);
+                }
+            });
+        }
+    {% endif %} 
+</script>
+     <script>
+    $(window).scroll(function(){var body=$('body'),scroll=$(window).scrollTop();if(scroll>=5){body.addClass('fixed');}else{body.removeClass('fixed');}});
+    </script>
+        
+        
+                        {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'success'%}
+                                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                            {% elif message.tags == 'info' %}
+                                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                            {% elif message.tags == 'warning' %}
+                                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                            {% elif message.tags == 'error' %}
+                                <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+        <!-- -----side menu------ -->
+            <script>
+                
+            $('#menu-button').click(function(e) {
+                e.stopPropagation();
+                $('#hide-menu').toggleClass('show-menu');
+            });
+            $('#hide-menu').click(function(e) {
+                e.stopPropagation();
+            });
+            $('body,html,.closebtn').click(function(e) {
+                $('#hide-menu').removeClass('show-menu');
+            });
+            </script>
+        <!-- -----side menu------ -->
+
+        <script type="text/javascript">
+        $('.home-banners').owlCarousel({
+            loop:true,
+            margin:0,
+            nav:false,
+            dots:true,
+            autoplay:true,
+            autoplayTimeout:2000,
+            smartSpeed: 1000,
+            responsive:{
+                0:{
+                    items:1
+                },
+                600:{
+                    items:1
+                },
+                1000:{
+                    items:1
+                }
+            }
+        })
+        </script>
+         <script id="rendered-js">
+      /*--------------*/
+
+      // Main/Product image slider for product page
+      $('#detail .main-img-slider').slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        infinite: true,
+        arrows: true,
+        fade: true,
+        autoplay: false,
+        autoplaySpeed: 4000,
+        speed: 300,
+        lazyLoad: 'ondemand',
+        asNavFor: '.thumb-nav',
+        prevArrow: '<div class="slick-prev"><i class="i-prev"></i><span class="sr-only sr-only-focusable"><</span></div>',
+        nextArrow: '<div class="slick-next"><i class="i-next"></i><span class="sr-only sr-only-focusable">></span></div>' });
+
+      // Thumbnail/alternates slider for product page
+      $('.thumb-nav').slick({
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        infinite: true,
+        centerPadding: '0px',
+        asNavFor: '.main-img-slider',
+        dots: false,
+        centerMode: false,
+        draggable: true,
+        speed: 200,
+        focusOnSelect: true,
+        prevArrow: '<div class="slick-prev"><i class="i-prev"></i><span class="sr-only sr-only-focusable"><</span></div>',
+        nextArrow: '<div class="slick-next"><i class="i-next"></i><span class="sr-only sr-only-focusable">></span></div>' });
+
+
+
+      //keeps thumbnails active when changing main image, via mouse/touch drag/swipe
+      $('.main-img-slider').on('afterChange', function (event, slick, currentSlide, nextSlide) {
+        //remove all active class
+        $('.thumb-nav .slick-slide').removeClass('slick-current');
+        //set active class for current slide
+        $('.thumb-nav .slick-slide:not(.slick-cloned)').eq(currentSlide).addClass('slick-current');
+      });
+      //# sourceURL=pen.js
+    </script>
+   
+    {% block javascript %}
+    {% endblock javascript %}
+</html>

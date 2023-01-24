@@ -1,0 +1,277 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+{% comment %} {% if perms.superadmin.add_customer %}
+{% url 'customer_registration' as customer_registration %}
+{% include "admin/basic/section.html" with page_title="Customer Managment" btn_url=customer_registration btn_text="Add Customer"  %}
+{% endif %} {% endcomment %}
+<section class="section">
+    <div class="nk-block nk-block-lg">
+        <div class="nk-block-head">
+            <div class="nk-block-head-content">
+                
+                <h4 class="nk-block-title"> User Management</h4>
+                <div class="nk-block-des">
+                    {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+                </div>
+            </div>
+        </div>
+        <div class="card card-preview ">
+            
+           
+            
+        {% comment %} {% if perms.superadmin.add_customer %}
+            <div "nk-block-head-content" style="text-align: right;padding:1rem 2rem"> 
+                <a  href="{% url 'customer_registration' %}" class="btn btn-info" ><i class="fa-solid fa-plus"></i></a>
+            </div>
+        {% endif %} {% endcomment %}
+
+
+            
+            <div class="card-inner">
+                {% include 'admin/UserManagement/table-header.html'%}
+                <div class="d-flex mt-3 align-items-center">
+                        <div class="custom-control custom-control-sm custom-checkbox mr-4">
+                            <input type="checkbox" {% if HideShow.sr == True %} checked {% endif %} class="custom-control-input" id="sr" name="name_input" value="sr">
+                            <label class="custom-control-label" for="sr"> Sr no</label><br>  
+                        </div>
+                        <div class="custom-control custom-control-sm custom-checkbox mr-4">
+                        <input type="checkbox" {% if HideShow.name == True %} checked {% endif %} class="custom-control-input" id="name" name="name_input" value="name">
+                            <label class="custom-control-label" for="name"> Name</label><br>   
+                        </div>
+                        <div class="custom-control custom-control-sm custom-checkbox mr-4">
+                            <input type="checkbox" {% if HideShow.email == True %} checked {% endif %}  class="custom-control-input" id="email" name="name_input" value="email">
+                            <label class="custom-control-label" for="email"> Email</label><br>   
+                        </div>
+                        <div class="custom-control custom-control-sm custom-checkbox mr-4">
+                            <input {% if HideShow.role == True %} checked {% endif %}  type="checkbox" class="custom-control-input" id="roll" name="name_input" value="roll">
+                            <label class="custom-control-label" for="roll"> Role </label><br>  
+                        </div>
+                        <div class="custom-control custom-control-sm custom-checkbox mr-4">
+                            <input {% if HideShow.action == True %} checked {% endif %}  type="checkbox" class="custom-control-input" id="action" name="name_input" value="action">
+                            <label class="custom-control-label" for="action"> Action</label><br>  
+                        </div>
+                        <button type="button" class="btn btn-lg btn-primary" onclick="ShowHide()" >Show/hide</button>
+                    </div>
+                     <table class="datatable-init nowrap table mt-5"  id="table_id">
+                    <thead>
+                        {% if view_data %}
+                        <tr>
+                            <th class="stopSorting">
+                                <div class="custom-control custom-control-sm custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="com-email">
+                                    <label class="custom-control-label" for="com-email"></label>
+                                </div>
+                            </th>
+                              {% if not HideShow.sr %}
+                                <th class="sr_th">Sr No </th>
+                              {% endif %}
+                            
+                            {% if not HideShow.name %}
+                            <th class="name_th">Name  </th>
+                            {% endif %}
+                            {% if not HideShow.email %}
+                            <th class="email_th">Email</th>
+                            {% endif %}
+                             {% if not HideShow.role %}
+                            <th class="roll_th">Role</th>
+                            {% endif %}
+                            {% if not HideShow.role %}
+                            <th class="roll_th">Status</th>
+                            {% endif %}
+
+                            {% comment %} <th class="mobile_th">Contact No</th> {% endcomment %}
+                            {% comment %} <th>Status</th> {% endcomment %}
+                            {% if not HideShow.action %}
+                            <th class="action_th">Action</th>
+                            {% endif %}
+                            {% comment %} <th>Start date</th>
+                            <th>Salary</th> {% endcomment %}
+                        </tr>
+                    </thead>
+                        <tbody>
+                            {% for i  in view_data %}
+                            <tr>
+                                <td class="remove-sorting">
+                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <input type="checkbox" name="child_div" value="{{i.id}}" class="custom-control-input child_div" id="com-email_{{i.id}}">
+                                            <label class="custom-control-label" for="com-email_{{i.id}}"></label>
+                                        <form>
+                                    </div>
+                                </td>
+                                {% if not HideShow.sr %}
+                                <td class="sr_td" >{{ forloop.counter }}</td>
+                                {% endif %}
+                                {% if not HideShow.name %}
+                                <td class="name_td"><a href="{% url 'details' i.slug %}">{{i.first_name|truncatechars:30}} {{i.last_name|truncatechars:30}}</a></td>
+                                {% endif %}
+                                {% if not HideShow.email %}
+                                {% comment %} <p class="emails">{{i.email}}</p> {% endcomment %}
+                                <td class="email_td">{{i.email}}</td>
+                                {% endif %}
+                                {% if not HideShow.role %}
+
+                                    <td  class="roll_td" >{{i.roll}}</td> 
+                                    {% endif %}
+                                    {% if not HideShow.role %}
+                                        {% if i.is_active == 1 %}
+
+                                            <td  class="roll_td" >Active</td> 
+                                        {% else %}
+                                            <td  class="roll_td" >Deactive</td> 
+                                        {% endif %}
+                                    {% endif %}
+                                {% comment %} <td> <div class="form-group">
+                                <div class="form-control-wrap">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <select onchange="Submit_status({{customer.id}})" class="form-control"  data-rule-required="true"   id="is_approve_{{customer.id}}" name="is_approve" required>
+                                    <option  selected >Select Status</option>  
+                                    <option {% if customer.is_active == True %} selected {% endif %} value="True">Approved</option>  
+                                    <option {% if customer.is_active == False %} selected {% endif %}  value="False">Rejected </option>  
+                                
+                                    </select> 
+                                </form>   
+                                </div>
+                            </div>
+                        </td> {% endcomment %}
+                                {% if not HideShow.action %}
+
+                                <td class="action_td">
+                                    {% if perms.superadmin.view_user %}
+                                    <a href="{% url 'details' i.slug %}" class="btn btn-lg btn-primary"><i class="fa-solid fa-info"></i></a>
+                                {% endif %}
+                                    {% comment %} {% if perms.superadmin.change_customer %}
+                                    <a href="{% url 'customer_edit' i.slug %}" class="btn btn-lg btn-info"><i class="fas fa-edit"></i></a>
+                                {% endif %}
+                                {% if perms.superadmin.delete_customer %}
+                                    <a href="{% url 'customer_delete' i.id %}" onclick="return confirm('Are you sure you want to delete this item')"  class="btn btn-lg btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+                                    {% endif %} {% endcomment %}
+                                </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %} 
+                        </tbody>
+                
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            <strong style="font-size: 1.5em;">No Records</strong>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table> 
+                </div> 
+               
+            </div>
+        </div><!-- .card-preview -->
+    </div> 
+   
+</section>
+<!-- Modal Trigger Code --><!-- Modal Content Code -->
+<div class="modal" tabindex="-1" id="modalEmail" style="background: rgba(0,0,0,.5);">
+    <div style="max-width:900px;" class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body modal-body-lg">
+                <div class="nk-modal">
+                    <div class="text-align:center; width:100%;">
+                         <em style="display:block;margin:auto;" class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-air-baloon bg-primary m-auto"></em>
+                    </div>
+                    <h4 class="nk-modal-title">Send Email!</h4>
+                   
+                        <div class="nk-modal-text">
+                             <form  method="post" id="register" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <lebel>Subject</lebel>
+                                <input class="form-control" hidden id="dropdownid" name="DropdownId">
+                                <input class="form-control" id="subject" name="subject"><br>
+                                <lebel>Message</lebel>
+                                <textarea name="message" id="message" class="form-control summernote-basic"> </textarea>
+                                <button type="submit" onclick="send_mail()" class="btn btn-lg btn-mw btn-primary mt-4">Send mail</button>
+
+                            </form>
+                        </div>
+                        {% comment %} <div class="nk-modal-action mt-5">
+                         
+                        </div> {% endcomment %}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Trigger Code -->
+<!-- Modal Trigger Code --><!-- Modal Content Code -->
+<div class="modal" tabindex="-1" id="modalDefault" style="background: rgba(0,0,0,.5);">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body modal-body-lg text-center">
+                <div class="nk-modal">
+                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-cross bg-danger"></em>
+                    <h4 class="nk-modal-title">Alert!</h4>
+                    <div class="nk-modal-text">
+                        <p class="lead">We are sorry, Please select at least one checkbox</p>
+                    </div>
+                    <div class="nk-modal-action mt-5">
+                        <a href="/admin/customer-view/" class="btn btn-lg btn-mw btn-light" data-bs-dismiss="modal">Return</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" tabindex="-1" id="modalDelete" style="background: rgba(0,0,0,.5);">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+   <div class="modal-body modal-body-lg text-center">
+      <div class="nk-modal">
+         <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-cross bg-danger"></em>
+         <h4 class="nk-modal-title">Alert!</h4>
+         <div class="nk-modal-text">
+            <p class="lead">Are you sure want to delete this user.</p>
+         </div>
+         <div class="nk-modal-action mt-5 pd-3 ">
+              <button type="button" id="delete-user-btn" class="btn btn-lg btn-primary">Yes</button>
+             <a href="/admin/customer-view/" class="btn btn-lg btn-mw btn-danger" data-bs-dismiss="modal">Return</a>
+            </div>
+      </div>
+   </div>
+</div>
+
+   </div>
+</div>
+
+
+
+<script>
+    function Submit_status(user_id){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        let is_approve = $('#is_approve_'+user_id).val()
+        $.ajax({
+            type: "POST",
+            url: "{% url 'vacationer_verificatoin_admin' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+          {
+            user_id:user_id,
+            is_approve:is_approve
+       },
+        success:function(res){
+            console.log(res.data)
+            toastr.success(res.message);
+
+        }
+    });
+     
+    }
+</script>
+
+{% endblock content %}

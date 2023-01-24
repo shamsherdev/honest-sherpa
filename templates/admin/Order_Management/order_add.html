@@ -1,0 +1,538 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Create Order</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-12" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row column" >
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select User Type</label>
+                            <div class="form-control-wrap">
+                                <select data-rule-required="true" class="form-control" id="user-type" name="user-type" onchange="SelectUser()" required>
+                                    <option disabled selected >Select User Type</option>  
+                                   
+                                    <option value="vacationer">Vacationer</option>
+                                    <option value="homeowner">Homeowner</option>  
+                                    <option value="propertymanager">PropertyManager</option>    
+                                   
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select User</label>
+                            <div class="form-control-wrap">
+                                <select data-rule-required="true" class="form-control" id="user" name="user" required>
+                                    <option disabled selected >Select User</option>  
+                                    {% comment %} {% for us in user %}
+                                    <option value="{{us.id}}">{{us.first_name}}</option>
+                                    
+                                    {% endfor %} {% endcomment %}
+                                   
+                                   
+                                </select> 
+                            </div>
+                        </div>
+                      
+                    </div>
+                   
+                    
+                    <div class ="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Zip Code</label>
+                            <div class="form-control-wrap">
+                                <select data-rule-required="true" class="form-control" id="zip-code" name="zip-code" onchange="PinCodes()" required>
+                                    <option disabled selected >Select </option>  
+                                    {% for zip in zip_code %}
+                                    <option value="{{zip.pin_code}}">{{zip.pin_code}}({{zip.user.first_name}}-{{zip.user.last_name}})</option>
+                                    {% endfor %}  
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class ="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Products</label>
+                            <div class="form-control-wrap">
+                                <select data-rule-required="true" class="form-control w-100" onchange="Products()" name="product[]"  id="example-getting-started" multiple="multiple"  required>
+                                    
+                                   
+                                   
+                                </select> 
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <input type="hidden" name="product_quantity_data">
+                            <label class="form-label">Products</label>
+                            <div class="form-control-wrap">
+                                <select class="form-select" id="example-getting-started" multiple="multiple" data-placeholder="Select Products" onchange="Products()" name="products[]" required>
+                                     
+                                </select>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class ="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Offers</label>
+                            <div class="form-control-wrap">
+                                <select  class="form-control" id="offer" name="offer" onchange="Offers()">
+                                    <option disabled selected >Select Offers</option>  
+                                   
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > Delivery Date*</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <input type="date" data-rule-required="true" data-rule-noSpace="true"  value="{{tomorrow|date:"Y-m-d"}}" onkeypress="return false" class="form-control" id="delivery-date" onchange="changeDate()" name="delivery-date" data-rule-required="true" min="{{tomorrow|date:"Y-m-d"}}"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Return Date*</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <input type="date" data-rule-required="true" value="{{seven_days|date:"Y-m-d"}}" 
+                                data-rule-noSpace="true" onkeypress="return false" class="form-control" id="return-date" 
+                                name="return-date" onchange="changeDate()" min="{{seven_days|date:"Y-m-d"}}" data-rule-required="true"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Product Quantity</label>
+                            <div class="form-control-wrap">
+                                <input type="text" onpaste="return false" min="1" max="5" maxlength="1" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="quantity" name="quantity" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                   
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Actual Price</label>
+                            <div class="form-control-wrap">
+                                <input type="text" onpaste="return false"  readonly data-rule-required="true" data-rule-noSpace="true" class="form-control" id="actual" name="actual" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                       
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Effective Price</label>
+                            <div class="form-control-wrap">
+                                <input type="text"  onpaste="return false" class="form-control"  readonly id="effective" name="effective">
+                                {% comment %} <input type="datetime"  class="form-control" id="validity" name="validity" data-rule-required="true"  >  {% endcomment %}
+                                {% comment %} <textarea value="" data-rule-required="true" data-rule-noSpace="true" name="validity" required></textarea> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Address*</label>
+                            <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="address" name="address" data-rule-required="true">  
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Status*</label>
+                            <div class="form-control-wrap">
+                                <select data-rule-required="true" class="form-control" id="basicSelect" name="status" required>
+                                    <option disabled selected >Select Status</option>  
+
+                                    <option value="True"> Active
+                                    </option>
+                                    <option value="False" >
+                                  
+                                    </option>
+                                </select>
+                                
+                            </div>
+                        </div>
+                    </div>  {% endcomment %}
+                  
+                    
+                    </div>
+                    {% comment %} <input type="hidden" class="form-control" id="email-address-1" name="customer" value="customer" data-rule-required="true"> {% endcomment %}
+
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary" style="margin-top: 74px"> Add</button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+
+<script>
+    function Register(){
+        jQuery.validator.addMethod("noSpace", function(value, element) { 
+            if(value.indexOf(" ")==0){
+                return false;
+            }
+            return true;
+        }, "No space please and don't leave it empty");
+        const productQuantityDetail = {}
+        $.each($('.product-quantity'), function(index, element) {
+            const productId = element.getAttribute('data-product-id')
+            productQuantityDetail[productId] = element.value
+        })
+        $('[name=product_quantity_data]').val(JSON.stringify(productQuantityDetail))
+        $('#register').valid()
+    }
+</script>
+
+<script>
+
+    function datesevendays(){
+        var date = new Date();
+        date.setDate(date.getDate() + 7);
+        $('#return-date')
+        console.log(date);
+    }
+
+    function resetActualPrice() {
+        $('#actual').val('')
+    }
+    function resetEffectivePrice() {
+        $('#effective').val('')
+    }
+    function resetProduct() {
+        $('#example-getting-started').empty("val", "")
+        resetActualPrice()
+    }
+
+    function resetZipcode() {
+        $('#zip-code').val("")
+        $('#zip-code option').eq(0).prop("selected", true)
+    }
+
+    function resetOffer() {
+        $('#offer').val("")
+        $('#offer option').eq(0).prop("selected", true)
+    }
+    function resetDate(){
+        $('#return-date').val('{{seven_days|date:"Y-m-d"}}')
+        $('#delivery-date').val('{{tomorrow|date:"Y-m-d"}}')
+
+    }
+    function resetForUser() {
+        resetProduct()
+        resetZipcode()
+        resetOffer()
+        resetDate()
+    }
+
+    function resetForPincode() {
+        resetOffer()
+        resetProduct()
+        resetDate()
+    }
+
+    function SelectUser(){
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        const user_type=$('#user-type').val()
+        console.log(user_type)
+        resetForUser()
+        
+        $.ajax({
+            type:"POST",
+            url:"{% url 'select_User' %}",
+            headers:{ 'X-CSRFToken': csrftoken },
+            data:{
+                user_type:user_type
+            },
+            success:function(res){
+                 option = ""
+                  if(jQuery.isEmptyObject(res.data)){
+                      option += "<option disabled selected required value=''>No  data Found</option>";
+      
+                  }else{
+                      option += '<option selected disabled >Select User</option>';
+                      res.data.forEach(item => {
+                          option += '<option value='+ item.id +'>' + item.first_name + item.last_name +'</option>';
+                      });
+                  }
+                  $("#user").html(option); 
+               
+              },
+              error:function(res){
+                toastr.error(res.responseJSON.message);
+              }
+        });
+
+    }
+
+    const productQuantityDataOfInput = {}
+    function Products(){
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const product_id=$('#example-getting-started').val()
+        const user_type=$('#user-type').val()
+        const zip_code =$("#zip-code").val()
+
+        resetOffer()
+        resetDate()
+        resetEffectivePrice()
+        resetActualPrice()
+
+        $.ajax({
+            type:"POST",
+            url:"{% url 'select_product' %}",
+            headers:{ 'X-CSRFToken': csrftoken },
+            data:{
+                product_id:product_id,
+                user_type:user_type,
+                zip_code:zip_code,
+                product_data:getProductsData(),
+            },
+            success:function(res){
+                $(document).find('#product-data').remove()
+                option = ""
+            
+                if(jQuery.isEmptyObject(res.data)){
+                    console.log(res.data)
+                    option += "<option disabled selected required value=''>No  data Found</option>";
+
+                }else{
+                    option += '<option selected disabled >Select Offer</option>';
+                    res.data.forEach(item => {
+                        option += '<option value='+ item.code +'>' + item.code  +'</option>';
+                    });
+                }
+
+                $("#offer").html(option); 
+                $("#actual").val(res.response);
+                $("#effective").val(res.response);
+
+                const selectedProducts = $('#example-getting-started option:selected')
+                let inputBox = '<div id="product-data">'
+
+                $.each(selectedProducts, function(index, element) {
+                    inputBox += `<div style="display: flex;">
+                                    <p>${$(element).text()}</p>
+                                    <div>
+                                        <button type="button" class="decrease-quantity">-</button>
+                                        <input type="text" name="textInput${index}" data-product-id=${element.value} value="${productQuantityDataOfInput[element.value] ? productQuantityDataOfInput[element.value]: 1}" class="product-quantity" readonly>
+                                        <button type="button" class="increase-quantity">+</button>
+                                    </div>
+                                </div>`
+                })
+                inputBox += '</div>'
+                $('#example-getting-started').parent().append(inputBox)
+            },
+            error:function(res){
+                toastr.error(res.message);
+            }
+        }); 
+    }
+
+    function getProductsData() {
+        const products = $('.product-quantity')
+        const data = {}
+        $.each(products, (index, element) => {
+            const productId = element.getAttribute('data-product-id')
+            data[productId]=element.value
+            productQuantityDataOfInput[productId] = element.value
+                
+           
+        })
+        return JSON.stringify(data)
+    }
+
+
+    function changeActualPrice() {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const delivery_date=$('#delivery-date').val()
+        const return_date =$("#return-date").val()
+        const user_type=$('#user-type').val()
+        const zip_code =$("#zip-code").val()
+
+        $.ajax({
+            url: "{% url 'change_actual_price' %}",
+            method: "POST",
+            headers:{ 'X-CSRFToken': csrftoken },
+            data: {
+                user_type:user_type,
+                zip_code:zip_code,
+                delivery_date:delivery_date,
+                return_date:return_date,
+                product_data: getProductsData()
+            },
+            success: (response) => {
+                $("#actual").val(response.price); 
+                $("#effective").val(response.price); 
+            }
+        })
+    }
+
+    $(document).on('click', '.decrease-quantity', function() {
+        const productQuantity = $(this).siblings('.product-quantity')
+        let quantity = +(productQuantity.val())
+        if(quantity > 1) {
+            productQuantity.val(--quantity)
+            changeActualPrice()
+            resetOffer()
+        }
+    })
+
+    $(document).on('click', '.increase-quantity', function() {
+        const productQuantity = $(this).siblings('.product-quantity')
+        let quantity = +(productQuantity.val())
+        productQuantity.val(++quantity)
+        changeActualPrice()
+        resetOffer()
+    })
+
+    function PinCodes(){
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const user_type=$('#user-type').val()
+        const zip_code =$("#zip-code").val()
+        $(document).find('#example-getting-started').empty("val", "")
+        resetForPincode()
+
+        $.ajax({
+            type:"POST",
+            url:"{% url 'select_pincode' %}",
+            headers:{ 'X-CSRFToken': csrftoken },
+            data:{
+                user_type:user_type,
+                zip_code:zip_code
+            },
+            success:function(res){
+               
+                option = ""
+                if(jQuery.isEmptyObject(res.data)){
+                    option += "<option disabled selected required value=''>No  data Found</option>";
+    
+                }else{
+                    option += '<option disabled >Select Product</option>';
+                    res.data.forEach(item => {
+                        option += '<option value='+ item.id +'>' + item.name +'</option>';
+                    });
+                }
+                $("#example-getting-started").html(option); 
+                $("#actual").val(res.response); 
+
+                {% comment %} $("#example-getting-started").multiselect('refresh'); {% endcomment %}
+                      
+               
+              },
+              error:function(res){
+                toastr.error(res.responseJSON.message);
+              }
+        });
+       
+    }
+
+    function changeDate(){
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const delivery_date=$('#delivery-date').val()
+        const return_date =$("#return-date").val()
+        const product_id=$('#example-getting-started').val()
+        const user_type=$('#user-type').val()
+        const zip_code =$("#zip-code").val()
+        resetProduct()
+        resetOffer()
+        resetEffectivePrice()
+       
+        $.ajax({
+            type:"POST",
+            url:"{% url 'change_date' %}",
+            headers:{ 'X-CSRFToken': csrftoken },
+            data:{
+                user_type:user_type,
+                zip_code:zip_code,
+                product_id:product_id,
+                delivery_date:delivery_date,
+                return_date:return_date,
+                product_data: getProductsData()
+            },
+            success:function(res){
+                $("#actual").val(res.data);    
+               
+              },
+              error:function(res){
+                toastr.error(res.responseJSON.message);
+              }
+
+        });
+    }
+
+    function Offers(){
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const offer=$('#offer').val() 
+        const actual_price=$("#actual").val();
+        const delivery_date=$('#delivery-date').val()
+        const return_date =$("#return-date").val()
+      
+        const product_id=$('#example-getting-started').val()
+        const user_type=$('#user-type').val()
+        const zip_code =$("#zip-code").val()
+      
+        $.ajax({
+            type:"POST",
+            url:"{% url 'select_offer' %}",
+            headers:{ 'X-CSRFToken': csrftoken },
+            data:{
+                offer:offer,
+                actual_price:actual_price,
+                user_type:user_type,
+                zip_code:zip_code,
+                product_id:product_id,delivery_date:delivery_date,
+                return_date:return_date,
+                product_data:getProductsData(),
+            },
+            success:function(res){
+              
+                $("#effective").val(res.data)
+              },
+              error:function(res){
+                toastr.error(res.responseJSON.message);
+              }
+
+        });
+
+    }
+</script>
+
+
+{% endblock js_content %}  

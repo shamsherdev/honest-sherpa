@@ -1,0 +1,335 @@
+{% load static %}
+<style>
+    .pac-container {
+        z-index: 9999999999 !important;
+    }
+</style>
+<div class="alert alert-danger" role="alert" id="location-alert" style="z-index: 9999; position: sticky; top: 72px; display: none">
+    please allow the location!
+</div>
+<div class="modal fade select-type-modal"  id="login-first" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!--     <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> -->
+                    <div class="modal-body">
+                        <div class="wraper-main">
+                            <div class="login-form-container">
+                                <div class="login-left my-auto">
+                                    <div class="login-left-in">
+                                        <a href="/login/"><img src="{% static 'web/images/logo.svg' %}"></a>
+                                        <h2>Lorem Ipsum is simply dummy text</h2>
+                                        <img src="{% static 'web/images/login-img.svg'%}">
+                                    </div>
+                                </div>
+                                <div class="login-right my-auto">
+                                    <div class="login-right-in">
+                                        <div class="login-right-center">
+                                        <div class="login-head">
+                                            <h4>Login</h4>
+                                            <p>Use your credentials to access your account.</p>
+                                        </div>
+                                        <div class="login-form">
+                                            <form method="POST" action="/login/" id="login_form_id">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <input type="email"  value="{{data.email}}" name="email" data-rule-required="true" class="form-control" id="exampleFormControlInput1" placeholder="Email address">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="password" value="{{data.password}}" name="password" class="form-control" id="exampleFormControlInput2" placeholder="Password" data-rule-required="true">
+                                                </div>
+                                                <div class="d-flex fg-links">
+                                                    <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="remember-me">
+                                                    <label class="form-check-label" for="remember-me">
+                                                    Remember me
+                                                    </label>
+                                                    </div>
+                                                    <a href="/forgot/password/" class="ms-auto">Forgot Password?</a>
+                                                </div>
+                                                <button tye="submit" onclick="login_forms()" class="btn btn-site w-100">Login</button>
+                                                <div class="divi-line">
+                                                    <span>Or Login with</span>
+                                                </div>
+                                                {% comment %} <div class="social-icon">
+                                                    <ul>
+                                                    <li><a class="bg-facebook" href="javascript:;"><i class="ri-facebook-fill"></i><span>Facebook</span></a></li>
+                                                    <li><a class="bg-twitter" href="javascript:;"><i class="ri-twitter-fill"></i><span>Twitter</span></a></li>
+                                                    <li><a class="bg-apple" href="javascript:;"><i class="ri-apple-fill"></i><span>Apple</span></a></li>
+                                                    </ul>
+                                                </div> {% endcomment %}
+                                                <div class="not-account">
+                                                    <p>Don't have an account? <a href="/sign-up/">Sign up</a></p>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+
+  <div class="modal fade select-type-modal" id="exampleselectuser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+         <!--     <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div> -->
+                    <div class="modal-body">
+                        <div class="select-type-row">
+                            <a class="navbar-brand" href="index.php">
+                            <img src="{% static 'web/images/logo.svg'%}">
+                            </a>
+                            <h3>Select User Type</h3>
+                            <form>
+                            <ul class="select-type-check">
+                                <li class="user_type">
+                                    <a href="/login/" >
+                                        <figure><img src="{% static 'web/images/vacationer.svg'%}"></figure>
+                                        <span>Vacationer</span>
+                                    </a>
+                                </li>
+                                <li class="user_type">
+                                    <a href="/login/">
+                                        <figure><img src="{% static 'web/images/homeowner.svg'%}"></figure>
+                                        <span>Homeowner</span>
+                                    </a>
+                                </li>
+                                <li class="user_type">
+                                    <a href="/login/">
+                                        <figure><img src="{% static 'web/images/property-manager.svg'%}"></figure>
+                                        <span>Property Manager</span>
+                                    </a>
+                                </li>
+                            </ul>
+                             <a href="/login/" class="btn">Next</a>
+                        </form>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+       
+
+
+        
+    <!-- -----side menu------ -->
+        <script>
+           $('#menu-button').click(function(e) {
+               e.stopPropagation();
+               $('#hide-menu').toggleClass('show-menu');
+           });
+           $('#hide-menu').click(function(e) {
+               e.stopPropagation();
+           });
+           $('body,html,.closebtn').click(function(e) {
+               $('#hide-menu').removeClass('show-menu');
+           });
+        </script>
+    <!-- -----side menu------ -->
+
+    <script type="text/javascript">
+      $('.home-banners').owlCarousel({
+          loop:true,
+          margin:0,
+          nav:false,
+          dots:true,
+          autoplay:true,
+            autoplayTimeout:1400,
+          responsive:{
+              0:{
+                  items:1
+              },
+              600:{
+                  items:1
+              },
+              1000:{
+                  items:1
+              }
+          }
+      })
+      </script>
+  <script>
+      function like(id){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
+        let is_favourite = $('#is_favourite').val()
+        let is_product = $('#is_product_'+id).val()
+       
+        let user = $('#user').val()
+        $.ajax({
+            type: "POST",
+            url: "/product/favourite/",
+            headers: { 'X-CSRFToken': csrftoken }, 
+            data: 
+            {
+                is_favourite:is_favourite,
+                is_product:is_product,
+                user,user,
+            },
+            
+            success: function(res) {
+              toastr.success(res.message);
+              console.log($(`[data-fav-id='${id}]'`))
+              $(`[data-fav-id='${id}'`).css("color","#00a99d")
+             
+        
+            },error:function(res){
+              $(`[data-fav-id='${id}'`).css("color","")
+              
+              
+
+            } 
+        
+          }); 
+    };
+        
+
+  </script>
+
+
+
+
+  <script>
+    function add_cart(id){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
+        let product_id = $('#is_product_'+id).val()
+        let user = $('#user').val()
+        $.ajax({
+            type: "POST",
+            url: "/add/to/cart/",
+            headers: { 'X-CSRFToken': csrftoken }, 
+            data: 
+            {
+                
+                product_id:product_id,
+                user,user,
+            },
+            
+            success: function(res) {
+            toastr.success(res.message)
+            
+            $(`[data-goto-id='${id}'`).replaceWith('<a href="/cart/items" class="btn black-btn go-to-cart"><i class="ri-shopping-cart-line"></i> Go to cart</a>')
+           
+            
+            
+            
+             
+             
+        
+            },error:function(res){
+                toastr.success(res.message);
+
+            } 
+        
+          });
+        
+    }
+</script>
+ <script>
+   function login_form(){
+       $('#login_form_id').valid() 
+       $.validator.addMethod('emailRegex', function(value, element) {
+        let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+        return emailExp.test(value);
+    }, 'Email format is not valid'); 
+    }
+</script>
+
+<script>
+    function login_popup(){
+        $('#login-first').modal('show')
+    }
+</script>
+<script>
+    function select_user(){
+        $('#exampleselectuser').modal('show')
+    }
+</script>
+{% comment %} <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1rt8OKhZ-8_Fv_OjiSA0n1NC1M6TAN94&callback=initMap&libraries=places&v=weekly" async></script>
+
+<script>
+  
+    function initMap()
+    {
+      
+     
+        var options = {types: ['geocode']};
+
+        var input= document.getElementById('autocom')
+ 
+        
+        
+        autocomplete = new google.maps.places.Autocomplete(input, options);
+       
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+           
+            var place = autocomplete.getPlace();
+            let lat = place.geometry.location.lat()
+            let long = place.geometry.location.lng()
+            $('#lat').val(lat);
+            $('#long').val(long);
+
+        });
+     
+    }
+    
+   
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1rt8OKhZ-8_Fv_OjiSA0n1NC1M6TAN94&callback=initMap1&libraries=places&v=weekly" async></script>
+<script>
+  
+    function initMap1()
+    {
+      
+     
+      var options =     {
+              types: ['geocode']
+              
+          
+          };
+
+        var input= document.getElementById('searchs')
+        
+        
+        autocomplete = new google.maps.places.Autocomplete(input, options);
+       
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+           
+            var place = autocomplete.getPlace();
+            
+            let lat = place.geometry.location.lat()
+            let long = place.geometry.location.lng()
+            console.log(lat,long )
+
+            $('#latitude').val(lat);
+            $('#longitude').val(long);
+        
+         
+       
+         
+
+        });
+     
+    }
+    
+   
+</script> {% endcomment %}
+
+
+
+<style>
+    #login-first{      
+    
+     width :100%;      
+     height : 100%;      
+     position : fixed;      
+    }    
+</style>
+

@@ -1,0 +1,71 @@
+ {% extends 'web/basic/base.html' %}
+
+<html>
+{% load static %}
+{% block title %}Verification{% endblock %}
+
+{% block content %}
+<body>
+    <div class="wraper-main">
+        <div class="login-form-container">
+            <div class="login-left my-auto">
+                <div class="login-left-in">
+                    <a href="javascript:;"><img src="{% static 'web/images/logo.svg'%}"></a>
+                    <h2>Lorem Ipsum is simply dummy text</h2>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,when an unknown printer took a galley of type and scrambled.</p>
+                    <img src="{% static 'web/images/login-img.svg'%}">
+                </div>
+            </div>
+            <div class="login-right my-auto">
+                <div class="login-right-in"> 
+                    <div class="login-right-center"> 
+                        <div class="login-head">
+                            <h4>Verification</h4>
+                            <p>Please enter OTP which you received on you email</p>
+                        </div>
+                        <div class="login-form">
+                            <form method="POST" id="otp_form_id">
+                                {% csrf_token %}
+                                <div class="form-group otp-input-list">
+                                  <input type="tel"  data-rule-required="true" onkeyup="otp_slide()" maxlength="1" id="otp1" name="otp1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control otp" placeholder="">
+                                  <input type="tel" data-rule-required="true" onkeyup="otp_slide()" maxlength="1" id="otp2" name="otp2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control otp" placeholder="">
+                                  <input type="tel" data-rule-required="true" onkeyup="otp_slide()" maxlength="1" id="otp3" name="otp3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control otp" placeholder="">
+                                  <input type="tel" data-rule-required="true"  onkeyup="otp_slide()" maxlength="1" id="otp4" name="otp4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" class="form-control otp" placeholder="">
+                                </div>
+                              
+                                <button type="submit" onclick="otp_form()" class="btn btn-site w-100">Verify</button>
+                                
+                                <div class="not-account pt-5">
+                                    <p>Don't Received OTP? <a href="/sign/up/resend/otp/{{slug}}">Resend</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+</body>
+
+</html>
+<script>
+function otp_slide(){  
+      $('.otp:first').focus()    
+      $(".otp").keyup(function(e){            
+         if(e.keyCode == 8){
+               $(this).prev().focus();    
+         }else{
+               if($(this).val()){
+                  $(this).next().focus();
+               }
+         }            
+      });
+   };
+
+</script>
+<script>
+   function otp_form(){
+       $('#otp_form_id').valid()  
+    }
+</script>
+{% endblock content %}

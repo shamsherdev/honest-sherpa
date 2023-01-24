@@ -1,0 +1,212 @@
+<html>
+    {% extends 'web/basic/base.html' %}
+    {% load static %}
+     {% block title %}Order Details{% endblock %}
+   
+    {% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+        {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+        {% include 'web/basic/inner-header.html' %}
+        {% else %}
+        {% include 'web/basic/header.html' %}
+        {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper pt85 wtvh100">
+
+                 <section class="in-sp5 inner-cart-sec">
+                    <div class="container">
+                        
+                       <div class="order_detail_dec">
+                            <div class="order_detail_in1">
+                                <ul class="history_summry_in order_deliver_sec">
+                                    <li>
+                                      <div class="deliver_to">
+                                          <p>{{order_details.order_created}}</p>
+                                          <h4>#{{order_details.order_id}}</h4>
+                                         
+                                          <p>No Of Items : {{product_count}}</p>
+                                          <div class="order_deliver_to">
+                                            <p>Deliver to:</p>
+                                            <h5>{{order_details.Address}}</h5>
+                                          </div>
+                                      </div>
+                                      <div class="amt_order_rt">
+                                          <h5 class="activer-link" href="javascript:;">{{order_details.order_status}}</h5>
+                                      </div>
+                                    </li>
+                                </ul>
+                                <hr class="normal_line">
+                                <h3 class="total_paid">Total amount paid: ${{order_details.discount_price}}</h3>
+                                <hr class="normal_line">
+                                <h5 class="pick_dt_amt"><span>Delivery date: <strong> {{order_details.delivery}}</strong></span><span>Pick up date: <strong>{{order_details.order_return}}</strong></span></h5>
+                            </div>
+                            <div class="order_detail_in2">
+                                {% comment %} <a href="javascript:;" class="btn_item_more"><i class="ri-add-circle-line"></i> Add More Items</a> {% endcomment %}
+                                <div class="cart_summry">
+                                  <ul class="cart_summry_in">
+                                      {% for i in order_details.product_details %}
+                                     
+                                      <li>
+                                          <div class="cart_to_lt">
+                                              {% for j in product_image %} 
+                                              {% if i.product_id == j.id %}
+                                                <figure><img src="{{j.image.url}}"></figure>
+                                                {% endif %}
+                                                {% endfor %}
+                                              
+                                              
+                                              <figcaption>
+                                                  <h4>{{i.product_name}}</h4>
+                                                  <h5>{{i.product_category}}</h5>
+                                                  {% comment %} <h6>Color : <span class="yellow-ck"></span></h6> {% endcomment %}
+                                                  {% comment %} <div class="size-selector-cart">
+                                                        <div class="btn_select">Size:
+                                                            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                                                              <option selected="">S</option>
+                                                              <option value="1">M</option>
+                                                              <option value="2">L</option>
+                                                              <option value="3">XL</option>
+                                                              <option value="4">XXL</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="btn_select">Qty:
+                                                            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                                                              <option selected="">1</option>
+                                                              <option value="1">2</option>
+                                                              <option value="2">3</option>
+                                                              <option value="3">4</option>
+                                                              <option value="4">5</option>
+                                                            </select>
+                                                        </div>
+                                                  </div> {% endcomment %}
+                                                  <h5>Qty:-{{i.product_quantity}}</h5>
+                                                  <h3>${{i.price}}</h3>
+                                              </figcaption>
+                                             
+                                          </div>
+                                          {% comment %} <div class="cartcheck-bx">
+                                              <button class="btn rounded-btn"><i class="ri-edit-line"></i></button>
+                                          </div> {% endcomment %}
+                                      </li>
+                                      {% comment %} <li>
+                                          <div class="cart_to_lt">
+                                              <figure><img src="images/products-6.png"></figure>
+                                              <figcaption>
+                                                  <h4>Blanca Chair</h4>
+                                                  <h5>Office Chair</h5>
+                                                  <h6>Color : <span class="grey-ck"></span></h6>
+                                                  <div class="size-selector-cart">
+                                                        <div class="btn_select">Size:
+                                                            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                                                              <option selected="">S</option>
+                                                              <option value="1">M</option>
+                                                              <option value="2">L</option>
+                                                              <option value="3">XL</option>
+                                                              <option value="4">XXL</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="btn_select">Qty:
+                                                            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                                                              <option selected="">1</option>
+                                                              <option value="1">2</option>
+                                                              <option value="2">3</option>
+                                                              <option value="3">4</option>
+                                                              <option value="4">5</option>
+                                                            </select>
+                                                        </div>
+                                                  </div>
+                                                  <h3>$50/Day</h3>
+                                              </figcaption>
+                                          </div>
+                                          <div class="cartcheck-bx">
+                                              <button class="btn rounded-btn"><i class="ri-edit-line"></i></button>
+                                          </div>
+                                      </li> {% endcomment %}
+                                      {% endfor %}
+                                  </ul>
+                                </div>
+                                {% comment %} <div class="row req_mthd_fixd">
+                                  <div class="col-sm-6">
+                                        <div class="request_an-item">
+                                            <ul>
+                                                <li>
+                                                    <h4>Request an Item</h4>
+                                                    <button class="btn rounded-btn"><i class="ri-edit-line"></i></button>
+                                                </li>
+                                                <li>
+                                                    <h5>Blanca Chair</h5>
+                                                    <a class="delete_link" href="javascript:;"><i class="ri-delete-bin-4-line"></i></a>
+                                                </li>
+                                                <li>
+                                                    <h5>Folding rollaway bed</h5>
+                                                    <a class="delete_link" href="javascript:;"><i class="ri-delete-bin-4-line"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                  </div>
+                                  <div class="col-sm-6">
+                                    <div class="od_pyment_mthd">
+                                        <h4>Payment Method</h4>
+                                        <img src="images/visa-icon.svg">
+                                        <h5>2354 5234 9635 XXXX</h5>
+                                    </div>
+                                  </div>
+                               </div> {% endcomment %}
+                            </div>
+
+                            <div class="order_detail_in3">
+                                <div class="order-summry-amounts">
+                                    <h4>Order Summary</h4>
+                                    <ul>
+                                        <li><span>Total Items Price</span> <span>${{order_details.actual_price}}</span></li>
+                                        <li><span>Offer Discounts</span> <span>${{discount}}</span></li>
+                                        {% comment %} <li><span>Delivery Fee</span> <span>$00.00</span></li> {% endcomment %}
+                                        <li class="grand_total"><span>Grand Total</span> <span>${{order_details.discount_price}}</span></li>
+                                    </ul>
+                                    <div class="text-center"> <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#staticsure">Cancel Order</button> </div>
+                                </div>
+                            </div>
+                       </div>
+                    
+                    </div>
+                 </section>
+                 
+            </div>
+        <!-- ----------footer section----- ------ -->
+        {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----modal----- -->
+        <!-- Modal 1-->
+        <div class="modal fade top_modal" id="staticsure" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticselectLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="ri-close-line"></i></button>
+                  </div>
+                  <div class="modal-body">
+                     <div class="are_u-sure">
+                        <img src="{% static 'web/images/are-u-sure.svg' %}">
+                        <h2>Are You Sure?</h2>
+                        <p>Do you want to cancel the order?</p>
+                        <div class="text-center">
+                            <a type="button" href="{% url 'order_cancel' order_details.slug %}" class="btn">Yes</a>
+                            <button type="button" class="btn btn-liner">No</button>
+                        </div>
+                     </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    <!-- -----modal----- -->
+
+    <!-- -----java script------ -->
+    {% include 'web/js/helper.html' %}
+    <!-- -----side menu------ -->
+    </body>
+</html>
+{% endblock content %}

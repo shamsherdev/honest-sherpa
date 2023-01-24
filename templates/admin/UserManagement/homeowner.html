@@ -1,0 +1,74 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">Home Owner  Management</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+        {% comment %} {% if perms.superadmin.add_homeowner %}
+        <div "nk-block-head-content" style="text-align: right;padding:1rem 2rem"> 
+            <a  href="{% url 'add_homeowner' %}" class="btn btn-info" ><i class="fa-solid fa-plus"></i></a>
+        </div>
+        {% endif %} {% endcomment %}
+        <div class="card-inner">
+                 {% include 'admin/UserManagement/table-header.html'%} 
+
+            <table class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                          <th>
+                                <div class="custom-control custom-control-sm custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input parent_div" id="com-email">
+                                    <label class="custom-control-label" for="com-email"></label>
+                                </div>
+                            </th>
+                        <th>Sr No</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>Action</th>
+                        {% comment %} <th>Start date</th>
+                        <th>Salary</th> {% endcomment %}
+                    </tr>
+                </thead>
+                <tbody id="table_id">
+                   
+                </tbody>
+            </table>
+        </div>
+    </div><!-- .card-preview -->
+</div> 
+
+<script>
+    function Submit_status(user_id){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        let is_approve = $('#is_approve_'+user_id).val()
+        $.ajax({
+            type: "POST",
+            url: "{% url 'homeowner_verificatoin_admin' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+          {
+            user_id:user_id,
+            is_approve:is_approve
+       },
+        success:function(res){
+            console.log(res.data)
+            toastr.success(res.message);
+
+        }
+    });
+     
+    }
+</script>
+{% endblock content %}

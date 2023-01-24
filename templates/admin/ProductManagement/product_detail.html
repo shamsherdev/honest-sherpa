@@ -1,0 +1,73 @@
+              
+<div class="col-md-12 mt-3">
+    <table class="table">
+        <tr>
+            <th>Zip code</th>
+            <th>Weekly-Wholesale</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            
+
+                        
+                
+                           
+        </tr>
+                         
+                        
+                     
+       
+            {% for i in user%} 
+            {{i.id}}   
+            
+            <tr>
+                           
+            
+                <td>
+                    <div class="form-control-wrap">
+                        
+                        {% comment %} <input hidden name="user_type[{{ i.user_type }}][{{i.pincode_index}}]user_type" id="property_checkbox_user_type" value="{{i.user_type}}" type="text"> {% endcomment %}
+                        
+                        <input type="hidden" name="user[{{ i.user_type }}][{{i.pincode_index}}]user" value="{{i.user_id}}" class="form-control" >
+                        <input type="text"   readonly  name="pincodes[{{i.pincode_index}}]pincode" value="{{i.pin_code}}" class="form-control count" >
+                    </div>
+                </td>
+                       
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="text" data-rule-required="true" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-rule-noSpace="true"  data-price='weeklywholesale' name="weeklywholesale[{{ i.user_type }}][{{i.pincode_index}}]weeklywholesale" class="form-control" value="">
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="date" data-rule-required="true" data-rule-noSpace="true"  data-date='startdate' name="startdate[{{i.pincode_index}}]startdate" class="form-control" value="">
+                        </div>
+                    </td>
+
+             
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="date" data-rule-required="true"  data-rule-noSpace="true"  data-date='enddate' name="enddate[{{i.pincode_index}}]enddate" class="form-control" value="">
+                        </div>
+                    </td>
+
+               
+                    {% comment %} <td>
+                        <div class="form-control-wrap">
+                            <input type="text" data-rule-required="true" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='yearlywholesale' name="yearlywholesale[{{ i.user_type }}][{{i.pincode_index}}]yearlywholesale" class="form-control" value="">
+                        </div>
+                    </td> {% endcomment %}
+
+               
+                           
+                           
+            </tr>
+            {% endfor %}
+       
+                    
+                        
+                  
+                       
+                        
+    </table>
+</div>

@@ -1,0 +1,133 @@
+              
+<div class="col-md-12 mt-3">
+    <table class="table">
+        <tr>
+            <th></th> 
+            <th>0-7 Days</th>
+            <th>Greater Than 7 Days</th>
+          
+            {% for j in user %}
+                {% if j.user_type == "homeowner" or j.user_type == "propertymanager" %}
+                    {% if forloop.counter == 1 %}
+                        <th>0-7 Days Wholesale Price</th>
+                    
+                        <th>Greater Than 7 Days Wholesale Price</th>
+                        
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+                           
+        </tr>
+                         
+                        
+                     
+        {% for i in user %}
+      
+          
+                <tr>
+                            
+                    {% if forloop.counter == 1 %}
+                        {% if i.user_type == "guest"%}
+                                {% comment %} <label  class="form-label" for="full-name-1" style="margin-top: 20px" >Guest Price Table</label> {% endcomment %}
+                        {% elif i.user_type == "homeowner"%} 
+                                <label class="form-label" for="full-name-1" style="margin-top: 20px" >Homeowner Price Table</label>
+                        {% elif  i.user_type == "vacationer"%}
+                                <label class="form-label" for="full-name-1" style="margin-top: 20px" >Vacationer Price Table</label>
+                        {% else %}
+                                <label class="form-label" for="full-name-1" style="margin-top: 20px" >Property manager Price Table</label>
+                        {% endif %}
+                    {% endif %}
+                    <td>
+                        <div class="form-control-wrap">
+                            
+                            <input hidden name="user_type[{{ i.user_type }}][{{i.pincode_index}}]user_type" id="property_checkbox_user_type" value="{{i.user_type}}" type="text">
+                            
+                            <input type="hidden" name="user[{{ i.user_type }}][{{i.pincode_index}}]user" value="{{i.user_id}}" class="form-control" >
+                            <input type="text" hidden   readonly  name="pincodes[{{ i.user_type }}][{{i.pincode_index}}]pincode" value="{{i.pin_code}}" class="form-control count" >
+                        </div>
+                    </td>
+                                
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='daily' name="daily[{{ i.user_type }}][{{i.pincode_index}}]daily" class="form-control" >
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)"  data-rule-required="true" data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='weekly' name="weekly[{{ i.user_type }}][{{i.pincode_index}}]weekly" class="form-control" value="">
+                        </div>
+                    </td>
+                                
+                    {% comment %} <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='twoweekly' name="twoweekly[{{ i.user_type }}][{{i.pincode_index}}]twoweekly" class="form-control" value="">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='monthly' name="monthly[{{ i.user_type }}][{{i.pincode_index}}]monthly" class="form-control" value="">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-control-wrap">
+                            <input type="number"    oninput="validate(this)"data-rule-required="true"  data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='yearly' name="yearly[{{ i.user_type }}][{{i.pincode_index}}]yearly" class="form-control" value="">
+                        </div>
+                    </td> {% endcomment %}
+                    {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %}
+                        <td>
+                            <div class="form-control-wrap">
+                                <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='dailywholesale' name="dailywholesale[{{ i.user_type }}][{{i.pincode_index}}]dailywholesale" class="form-control" value="">
+                            </div>
+                        </td>
+
+                    {% endif %}
+                    {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %}
+                        <td>
+                            <div class="form-control-wrap">
+                                <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='weeklywholesale' name="weeklywholesale[{{ i.user_type }}][{{i.pincode_index}}]weeklywholesale" class="form-control" value="">
+                            </div>
+                        </td>
+
+                    {% endif %}
+                    {% comment %} {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %}
+                        <td>
+                            <div class="form-control-wrap">
+                                <input type="number"    oninput="validate(this)" data-rule-required="true"  data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='twoweeklywholesale' name="twoweeklywholesale[{{ i.user_type }}][{{i.pincode_index}}]twoweeklywholesale" class="form-control" value="">
+                            </div>
+                        </td>
+
+                    {% endif %}
+                    {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %}
+                        <td>
+                            <div class="form-control-wrap">
+                                <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='monthlywholesale' name="monthlywholesale[{{ i.user_type }}][{{i.pincode_index}}]monthlywholesale" class="form-control" value="">
+                            </div>
+                        </td>
+
+                    {% endif %}
+                    {% if  i.user_type == "homeowner"  or i.user_type == "propertymanager" %}
+                        <td>
+                            <div class="form-control-wrap">
+                                <input type="number"    oninput="validate(this)" data-rule-required="true" data-rule-noSpace="true" data-user-type="{{ i.user_type }}" data-price='yearlywholesale' name="yearlywholesale[{{ i.user_type }}][{{i.pincode_index}}]yearlywholesale" class="form-control" value="">
+                            </div>
+                        </td>
+
+
+                                {% endif %}
+                                {% endcomment %}
+
+            
+                            
+
+                            
+                </tr>
+            
+        {% endfor %}
+                    
+                        
+                  
+                       
+                        
+    </table>
+</div>
+

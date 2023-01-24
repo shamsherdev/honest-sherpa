@@ -1,0 +1,317 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+<div class="col-lg-6 col-xxl-12">
+    <div class="row g-gs">
+        <div class="col-sm-3 col-lg-12 col-xxl-3">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Customer</h6>
+                        </div>
+                        <div class="card-tools">
+                        
+                            <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left"  title="Total active subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{customer}}</span>
+                            <span class="sub-title"><span class="change down text-danger"><em class="icon ni ni-arrow-long-down"></em>1.93%</span>since last month</span>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div><!-- .card -->
+        </div><!-- .col -->
+        <div class="col-sm-3 col-lg-12 col-xxl-3">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Homeowners</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Daily Avg. subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{homeowners}}</span>
+                            <span class="sub-title"><span class="change up text-success"><em class="icon ni ni-arrow-long-up"></em>2.45%</span>since last week</span>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-sm-3 col-lg-12 col-xxl-3">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Property Manager</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Daily Avg. subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{propertymanager}}</span>
+                            <span class="sub-title"><span class="change up text-success"><em class="icon ni ni-arrow-long-up"></em>2.45%</span>since last week</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-sm-3 col-lg-12 col-xxl-3">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Subadmin</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Daily Avg. subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{subadmin}}</span>
+                            <span class="sub-title"><span class="change up text-success"><em class="icon ni ni-arrow-long-up"></em>2.45%</span>since last week</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-sm-3 col-lg-12 col-xxl-3">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Franchise</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Daily Avg. subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{franchise}}</span>
+                            <span class="sub-title"><span class="change up text-success"><em class="icon ni ni-arrow-long-up"></em>2.45%</span>since last week</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 col-lg-12 col-xxl-3">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Category</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Daily Avg. subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{category}}</span>
+                            <span class="sub-title"><span class="change up text-success"><em class="icon ni ni-arrow-long-up"></em>2.45%</span>since last week</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 col-lg-12 col-xxl-3">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total Product</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Daily Avg. subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{product}}</span>
+                            <span class="sub-title"><span class="change up text-success"><em class="icon ni ni-arrow-long-up"></em>2.45%</span>since last week</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 col-lg-12 col-xxl-3">
+            <div class="card card-bordered">
+                <div class="card-inner">
+                    <div class="card-title-group align-start mb-2">
+                        <div class="card-title">
+                            <h6 class="title">Total product out of stock</h6>
+                        </div>
+                        <div class="card-tools">
+                            <em class="card-hint icon ni ni-help-fill" data-toggle="tooltip" data-placement="left" title="Daily Avg. subscription"></em>
+                        </div>
+                    </div>
+                    <div class="align-end flex-sm-wrap g-4 flex-md-nowrap">
+                        <div class="nk-sale-data">
+                            <span class="amount">{{out_of_stock}}</span>
+                            <span class="sub-title"><span class="change up text-success"><em class="icon ni ni-arrow-long-up"></em>2.45%</span>since last week</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-preview">
+                <div class="card-inner">
+                    <div class="card-head">
+                        <h6 class="title"> Total User Bar</h6>
+                    </div>
+                    <div class="nk-ck-sm">
+                        <canvas class="bar-chart" id="barChartMultiple"></canvas>
+                    </div>
+                </div>
+            </div><!-- .card-preview -->
+        </div>
+
+         <div class="col-md-6">
+            <div class="card card-preview">
+                <div class="card-inner">
+                    <div class="card-head">
+                        <h6 class="title">Customer total Bar</h6>
+                    </div>
+                    <div class="nk-ck-sm">
+                        <canvas class="bar-chart" id="barChartStacked"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-6">
+            <div class="card card-preview">
+                <div class="card-inner">
+                    <div class="card-head">
+                        <h6 class="title">Homeowners total Bar</h6>
+                    </div>
+                    <div class="nk-ck-sm">
+                        <canvas class="bar-chart" id="barChartStacked2"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-preview">
+                <div class="card-inner">
+                    <div class="card-head">
+                        <h6 class="title">Property Manager total Bar</h6>
+                    </div>
+                    <div class="nk-ck-sm">
+                        <canvas class="bar-chart" id="barChartStacked3"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-preview">
+                <div class="card-inner">
+                    <div class="card-head">
+                        <h6 class="title">Franchise total Bar</h6>
+                    </div>
+                    <div class="nk-ck-sm">
+                        <canvas class="bar-chart" id="barChartStacked4"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+ <script>
+    var barChartStacked = {
+    labels: [{% for i in customer_data %} '{{i.month}}', {% endfor %}],
+    stacked: true,
+    dataUnit: 'count',
+    datasets: [{
+      label: "customer",
+      color: "#9cabff",
+      data: [{% for i in customer_data %} {{i.customer_total}},  {% endfor %}]
+    }, ]
+  };
+ </script>
+  <script>
+    var barChartStacked2 = {
+    labels: [{% for i in customer_data %} '{{i.month}}', {% endfor %}],
+    stacked: true,
+    dataUnit: 'count',
+    datasets: [{
+      label: "homeowner",
+      color: "#f4aaa4",
+      data: [{% for i in customer_data %} {{i.homeowner_total}},  {% endfor %}]
+    },]
+  };
+  
+ </script>
+   <script>
+    var barChartStacked3 = {
+    labels: [{% for i in customer_data %} '{{i.month}}', {% endfor %}],
+    stacked: true,
+    dataUnit: 'count',
+    datasets: [{
+      label: "Property Manager",
+      color: "#8feac5",
+      data: [{% for i in customer_data %} {{i.propertymanager_total}},  {% endfor %}]
+    }]
+  };
+  
+ </script>
+    <script>
+    var barChartStacked4 = {
+    labels: [{% for i in customer_data %} '{{i.month}}', {% endfor %}],
+    stacked: true,
+    dataUnit: 'count',
+    datasets: [{
+      label: "Franchise",
+      color: "#f78c45",
+      data: [{% for i in customer_data %} {{i.franchise_total}},  {% endfor %}]
+    }]
+  };
+  
+ </script>
+ <script>
+     var barChartMultiple = {
+    labels: [{% for i in customer_data %} '{{i.month}}', {% endfor %}],
+    dataUnit: 'count',
+    datasets: [{
+      label: "customer",
+      color: "#9cabff",
+      data: [{% for i in customer_data %} {{i.customer_total}},  {% endfor %}]
+    }, {
+      label: "homeowner",
+      color: "#f4aaa4",
+      data: [{% for i in customer_data %} {{i.homeowner_total}},  {% endfor %}]
+    }
+  , {
+      label: "Property Manager",
+      color: "#8feac5",
+      data: [{% for i in customer_data %} {{i.propertymanager_total}},  {% endfor %}]
+    },
+  {
+      label: "Franchise",
+      color: "#f78c45",
+      data: [{% for i in customer_data %} {{i.franchise_total}},  {% endfor %}]
+    }]
+  };
+ 
+
+ </script>
+{% endblock content %}

@@ -1,0 +1,108 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Reply Email Template</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                {% comment %} <h5 class="card-title">User Create</h5> {% endcomment %}
+            </div>
+            <form method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Email</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="full-name-1" name="email"  data-rule-required="true" value="{{reply_list.email}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Image</label>
+                            
+                            <div class="form-control-wrap">
+                            
+                                <input type="file" class="form-control" id="full-name-2" name="image" data-rule-required="true" accept="image/png, image/gif, image/jpeg">
+                                {% if edit_data.global_image %}
+                                <img src ="{{edit_data.global_image.url}}" style="width: 97px;">
+                                {% endif %}
+                            </div>
+           
+                        </div>
+                    </div> {% endcomment %}
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1">Question</label>
+                            <div class="form-control-wrap">
+                                <input readonly type="text" class="form-control"  id="phone-no-1" name="question" 
+                                 value="{{reply_list.subject}}" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1">Answer</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="text" class="form-control" id="phone-no-1" name="question" data-rule-required="true" 
+                                value="{{reply_list.question}}" readonly > {% endcomment %}
+                                <textarea class="summernote-basic"  value="" name="answer" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Status</label>
+                            <div class="form-control-wrap">
+                                <select class="form-select" id="basicSelect" name="status" required>
+                                    <option value="True" 
+                                    {% if edit_data.is_active %} selected {% endif %}>
+                                        Active
+                                    </option>
+                                    <option value="False" 
+                                    {% if not edit_data.is_active %} selected {% endif %}>
+                                        Deactive
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    
+                    
+                    <div class="col-12">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-lg btn-primary">Reply</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+    function Register(){
+    $('#register').valid()
+    }
+</script>
+{% comment %} <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('answer');
+</script> {% endcomment %}
+{% endblock js_content %}  

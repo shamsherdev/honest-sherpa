@@ -1,0 +1,110 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title"> Blog Detail</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                {% comment %} <h5 class="card-title">User Create</h5> {% endcomment %}
+            </div>
+            <form  method="post" id="register">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Blog Title</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_data.blog_title}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="image"> Blog Image</label>
+                            <div class="form-control-wrap">
+                                <input type="file" class="form-control" value="" disabled>
+                                <img src ="{{view_data.blog_image.url}}" style="width: 97px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1">Blog Content</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="text" class="form-control" value="{{view_detail_data.desgination|safe}}"> {% endcomment %}
+                                <textarea  value ="" name ="blog_content" readonly>{{view_data.blog_content|safe}}</textarea>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Meta Keyword</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_data.meta_keyword}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Meta Title</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_data.meta_title}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1"> Meta Description</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="text" class="form-control" value="{{view_detail_data.decription|safe}}"> {% endcomment %}
+                                <textarea  value ="" name ="meta_description" readonly>{{view_data.meta_description|safe}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Status</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control"value="{% if view_detail_data.is_active == True %} Active {% else %} Deactive {% endif %}" readonly>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    
+                    {% comment %} <div class="col-12">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-lg btn-primary" value="Create Account" onclick="Register()">
+                        </div>
+                    </div> {% endcomment %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+    function Register(){
+    $('#register').valid()
+    }
+</script>
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('blog_content');
+    CKEDITOR.replace('meta_description');
+</script>
+{% endblock js_content %}  

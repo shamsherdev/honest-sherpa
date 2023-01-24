@@ -1,0 +1,233 @@
+<html>
+{% extends 'web/basic/base.html' %}
+{% load static %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<body>
+    <div class="wraper-main">
+        <div class="login-form-container">
+            <div class="login-left my-auto">
+                <div class="login-left-in">
+                    <a href="/"><img src="{% static 'web/images/logo.svg' %}"></a>
+                    <h2>Lorem Ipsum is simply dummy text</h2>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,when an unknown printer took a galley of type and scrambled.</p>
+                    <img src="{% static 'web/images/login-img.svg' %}">
+                </div>
+            </div>
+            <div class="login-right my-auto">
+                <div class="login-right-in"> 
+                    <div class="login-right-center"> 
+                        <div class="login-head">
+                            <h4>Sign Up</h4>
+                            <p>Please enter the details</p>
+                        </div>
+                        <div class="login-form">
+                            <form method="POST" id="sign_up">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="text" hidden value=""  id="propertyManagerType" name="propertyManagerType" class="form-control"  placeholder="Email address">
+                                  <input type="email" value="{{data.email}}" data-rule-required="true" id="email" name="email"
+                                   class="form-control"  placeholder="Email address">
+                                </div>
+                                <div class="form-group">
+                                  <input type="password" value="{{data.password}}" id="password" data-rule-PASSWORD="true"  
+                                  data-rule-required="true" name="password" class="form-control"  placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                  <input type="password" value="{{data.confirm_password}}" data-rule-equalTo="#password" 
+                                  data-msg-equalTo="Password Does Not match" id="confirm_password"  data-rule-PASSWORD="true"  
+                                  data-rule-required="true" name="confirm_password" class="form-control"  placeholder="Confirm password">
+                                </div>
+                                <div class="form-group">
+                                  <select name="user_type" data-rule-required="true" class="form-control" >
+                                      <option disabled selected >Select User Type</option>
+                                      <option  value="homeowner">Homeowner</option>
+                                      <option value="vacationer" >Vacationer</option>
+                                      <option   value="propertymanager">Property Manager</option>
+                                  </select>
+                                </div>
+                       
+                                <button onclick="sign_up_form()" type="button" class="btn btn-site w-100">Submit</button>
+                                <div class="divi-line">
+                                    <span>Or Login with</span>
+                                </div>
+                                {% comment %} <div class="social-icon">
+                                    <ul>
+                                       <li><a class="bg-facebook show-use-type-modal" onclick="socialLoginModal(event, this)" data-href="{% url 'social:begin' 'facebook' %}"><i class="ri-facebook-fill"></i><span>Facebook</span></a></li>
+                                       <li><a class="bg-twitter" onclick="socialLoginModal(event, this)"  data-href="{% url 'social:begin' 'google-oauth2' %}"><i class="ri-google-fill"></i><span>google</span></a></li>
+                                       <li><a class="bg-apple" href="javascript:;"><i class="ri-apple-fill"></i><span>Apple</span></a></li>
+                                    </ul>
+                                </div>  {% endcomment %}
+                                <div class="not-account">
+                                    <p>Already have an account? <a href="/login/">Login</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade select-type-modal" id="exampleselectuser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"> 
+             <!--     <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> -->
+                <div class="modal-body">
+                            <div class="select-type-row">
+                                <a class="navbar-brand" href="index.php">
+                                <img src="{% static 'web/images/logo.svg'%}">
+                                </a>
+                                <h3>Select User Type</h3>
+                                <form>
+                                <input type="radio" name="user_type" hidden />
+                                {% comment %} <input type="text" id="userType" name="userType"  /> {% endcomment %}
+                                <ul class="select-type-check">
+                                    <li class="user_type">
+                                        <a  data-user-type="vacationer">
+                                            <figure><img src="{% static 'web/images/vacationer.svg'%}"></figure>
+                                            <span>Vacationer</span>
+                                        </a>
+                                    </li>
+                                    <li class="user_type">
+                                        <a  data-user-type="homeowner">
+                                            <figure><img src="{% static 'web/images/homeowner.svg'%}"></figure>
+                                            <span>Homeowner</span>
+                                        </a>
+                                    </li>
+                                    <li class="user_type">
+                                        <a data-user-type="propertymanager">
+                                            <figure><img src="{% static 'web/images/property-manager.svg'%}"></figure>
+                                            <span>Property Manager</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                 <a href="" id="social-login-btn" class="btn">Next</a>
+                            </form>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <div class="modal fade select-type-modal" id="selectpropertymanager" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"> 
+             <!--     <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> -->
+                <div class="modal-body">
+                        <div class="select-type-row">
+                                <a class="navbar-brand" href="index.php">
+                                <img src="{% static 'web/images/logo.svg'%}">
+                                </a>
+                                <h3>Select Property Manager</h3>
+                                <form>
+                                    <input type="radio" name="user_type"  />
+                                    {% comment %} <input type="text" id="userType" name="userType"  /> {% endcomment %}
+                                    <ul class="select-type-check">
+                                        <li class="user_type">
+                                            <a onclick="ind()" data-user-type="propertymanager">
+                                                <figure><img  src="{% static 'web/images/vacationer.svg'%}"></figure>
+                                                <span id="Individual">Individual</span>
+                                            </a>
+                                        </li>
+                                        <li class="user_type">
+                                            <a  onclick="com()" data-user-type="propertymanager">
+                                                <figure><img src="{% static 'web/images/homeowner.svg'%}"></figure>
+                                                <span id="Company">Company</span>
+                                            </a>
+                                        </li>
+                                       
+                                    {% comment %} <a href="" id="social-login-btn" class="btn">Next</a> {% endcomment %}
+                                </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</body>
+
+
+<script>
+    function sign_up_form(){
+        $.validator.addMethod('emailRegex', function(value, element) {
+            let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+            return emailExp.test(value);
+        }, 'Email format is not valid');
+        jQuery.validator.addMethod("noSpace", function(value, element) { 
+        if(value.indexOf(" ")==0){
+            return false;
+        }
+        return true;
+        }, "No space please and don't leave it empty");
+        $.validator.addMethod("PASSWORD", function (value, element) {
+                      return /[\@\#\$\%\^\&\*\(\)\_\+\!]/.test(value) && /[a-z]/.test(value) && 
+                      /[0-9]/.test(value) && /[A-Z]/.test(value);
+        },"Passwords are 8-16 characters with uppercase letters, lowercase letters and atleastone number and one special character.");
+
+        if($('#sign_up').valid()) {
+            const userType = $('[name=user_type]').val()
+            if(userType == 'propertymanager') {
+                $('#selectpropertymanager').modal('show')
+               
+                
+
+            } else {
+                $('#sign_up').submit()
+            }
+        }
+            
+    }
+
+    
+</script>
+
+<script>
+    function socialLoginModal(event, element) {
+        console.log(event, element, "-----------")
+         event.preventDefault()
+         $('#exampleselectuser').modal('toggle')
+         $('#social-login-btn').attr('href', $(element).data('href'))
+     }
+
+
+ </script>
+{% endblock content %}
+{% block javascript %}
+<script>
+    $('.user_type a').on('click', function(e) {
+        e.preventDefault()
+        localStorage.setItem('userType', $(this).data('user-type'))
+       
+      
+})
+</script>
+<script>
+    function ind(){
+        let i = $('#Individual').html()
+        if (i=="Individual"){
+            $('#sign_up').submit()
+
+
+        }else{
+            $('#sign_up').submit()
+        }
+    }
+</script>
+<script>
+    function com(){
+        let i = $('#Company').html()
+   
+            $('#propertyManagerType').val(i)
+            $('#sign_up').submit()
+            
+        
+    }
+</script>
+
+{% endblock javascript %}
+
+</html>

@@ -1,0 +1,88 @@
+
+{% extends 'web/basic/base.html' %}
+ {% load static %}
+  {% block title %}About{% endblock %}
+
+ {% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+       {% if request.user.is_authenticated  and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper wtvh100 top_gradient">
+                 <section>
+                     <div class="container">
+                        <div class="inner-title-ab">
+                            <h4>About Us</h4>
+                            <h5>{{aboutData.heading|safe}}</h5>
+                            <p>{{aboutData.sub_heading|safe}}</p>
+                        </div>
+
+                        <div class="about-description">
+                            <p>{{aboutData.description1|safe}}</p>
+                          
+                        </div>
+                     </div>
+                 </section>
+                 <section class="about-store-sec">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-7 insure-first-info">
+                                    <article>
+                                      <div class="headings">
+                                         <h4></h4>
+                                         <p>{{aboutData.description2|safe}}</p>
+
+                                      </div>
+                                    </article>
+                                </div>
+                                <div class="about-img-bx">
+                                    <img src="{{aboutData.image.url}}">
+                                </div>
+                            </div>
+                        </div>
+                 </section>
+                 <div class="container">
+                        <div class="about-description pb-5">
+                            {{aboutData.description3|safe}}
+                        </div>
+                     </div>
+            </div>
+        <!-- ----------footer section----- ------ -->
+               {% include 'web/basic/footer.html' %}
+
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+    {% comment %} <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/owl.carousel.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="https://malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script>
+       $(window).scroll(function(){var body=$('body'),scroll=$(window).scrollTop();if(scroll>=5){body.addClass('fixed');}else{body.removeClass('fixed');}});
+    </script>
+
+    <!-- -----side menu------ -->
+        <script>
+           $('#menu-button').click(function(e) {
+               e.stopPropagation();
+               $('#hide-menu').toggleClass('show-menu');
+           });
+           $('#hide-menu').click(function(e) {
+               e.stopPropagation();
+           });
+           $('body,html,.closebtn').click(function(e) {
+               $('#hide-menu').removeClass('show-menu');
+           });
+        </script> {% endcomment %}
+    <!-- -----side menu------ -->
+    </body>
+{% endblock content %}

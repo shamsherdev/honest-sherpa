@@ -1,0 +1,63 @@
+ {% load static %}
+ 
+ <div id="user-login-wrapper" class="dashboard-left-menu">
+                <div class="side-menu-profile">
+                   <div class="user_photo_in">
+                        {% comment %} <form method="POST" id="form" action="/update_profile_pic/{{request.user.slug}}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if request.user.profile_pic %}
+                        <figure><img src="{{request.user.profile_pic.url}}"></figure>
+                        {% else %}
+                        <figure><img src="{% static 'web/images/member-5.png' %}"></figure>
+                        {% endif %}
+                        <div class="btn edit-btn">
+                            <input onchange="image_change()" type="file" name="image" id="file" accept="image/*" data-rule-accept="image/*,image/gif"  data-msg-accept="Please Select valid image">
+                            <label for="file"><i class="ri-pencil-fill"></i></label>
+                        </div>
+                    </form>  {% endcomment %}
+                    </div>
+                    <h3>{{request.user.first_name}}  {{request.user.last_name}}</h3>
+                    <h5>{{request.user.email}}</h5>
+                </div>
+                <ul class="navbar-nav-dsah">
+                    <li class="nav-item {% if request.path == '/my/profile/{{request.user.slug}}' %} active  {% else %} deactive {% endif %}">
+                        <a class="nav-link" href="/my/profile/{{request.user.slug}}"><span><i class="ri-user-2-line"></i></span> Edit Profile</a>
+                    </li>
+                    <li class="nav-item {% if  request.path == '/change/password/{{request.user.slug}}' %} active {% else %} {% endif %}">
+                        <a class="nav-link" href="/change/password/{{request.user.slug}}"><span><i class="ri-key-2-line"></i></span> Change Password</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_address' %}"><span><i class="ri-map-pin-line"></i></span> My Address</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><span><i class="ri-bank-card-line"></i></span> My Cards</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><span><i class="ri-history-line"></i></span> Transaction History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_order' %}"><span><i class="ri-shopping-cart-2-line"></i></span> My Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><span><i class="ri-price-tag-3-line"></i></span> My Offers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/my/wishlist"><span><i class="ri-heart-line"></i></span> My Wishlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><span><i class="ri-notification-3-line"></i></span> Notification Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout/"><span><i class="ri-login-circle-line"></i></span> Logout</a>
+                    </li>
+                </ul>
+</div>
+<script>
+  function image_change(){
+    $('#form').valid()
+    let image = $('#file').val()
+    if (image != ''){
+        $("#form").submit();
+    }
+  }
+</script>

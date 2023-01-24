@@ -1,0 +1,138 @@
+<html>
+ {% extends 'web/basic/base.html' %}
+ {% load static %}
+  {% block title %}Home{% endblock %}
+
+ {% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+        {% if request.user.is_authenticated   and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper wtvh100">
+                <section class="search-bg-banner">
+                     <div class="container">
+                        <div class="inner-title-ab">
+                            <form class="input_search_bx">
+                                <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Enter zip code/city/state">
+                                <button type="button" class="btn search-btn"><i class="ri-search-line"></i></button>
+                            </form>
+                        </div>
+                     </div>
+                </section>
+
+                 <section class="filter-list-card">
+                    <div class="container">
+                        <div class="row">
+                           {% include 'web/search-result/search-filter.html' %}
+                            <div class="col-md-8">
+                                <div class="title-filter-rt">
+                                    <h5>Search Results ’{{product_count}}’</h5>
+                                    <div class="sort-by">
+                                        <span>Sort by</span>
+                                        <div class="form-group">
+                                            <select class="form-select" aria-label="Default select example">
+                                              <option selected="">Popular</option>
+                                              <option value="1">Popular city</option>
+                                              <option value="2">Popular city</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                  {% for i in product_data %}
+                                    <div class="col-sm-4">
+                                        <div class="card-product">
+                                            <div class="card-product-img">
+                                                <div class="stock-points">
+                                                {% if i.product.avaliable == True %}
+                                                <span class="in_stock">In stock</span>
+                                                {% else %}
+                                                <span class="in_stock">Out of stock</span>
+                                                {% endif %}
+                                                    <a class="click_heart_btn" href="javascript:;"><i class="ri-heart-line"></i></a>
+                                                </div>
+                                                {% if i.product.image %}
+                                                <figure><img src="{{i.product.image.url}}"></figure>
+                                                {% endif %}
+                                            </div>
+                                            <figcaption>
+                                                <h4>{{i.product.name}}</h4>
+                                                <p>{{i.product.category.name}}</p>
+                                                <p>{{i.product.price}}</p>
+                                                <ul class="star-check">
+                                                    <li class="star-active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                    <li class="star-active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                    <li class="star-active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                    <li class="star-active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                    <li class=""><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                </ul>
+                                                {% comment %} <div class="dtr-card">
+                                               {% for j in feature_product_option %}
+                                                 {% if i.id == j.product_id %}
+                                                  <span>{{j.option_value.option_name}}:{{j.option_value.option_value}}</span>
+                                                {% endif %}
+                                                {% endfor %}
+                                                </div>
+                                               {% endcomment %}
+                                                {% for x in product_data %}
+                                                {% if i.product.id == x.product_id %}
+                                                    {% if request.user.roll %}
+                                                    
+                                                        {% if x.product.is_return == 1 %}
+                                                            {% if x.product_id == i.product.id and request.user.roll == "vacationer" %}
+                                                                <span >Price:${{x.zero_seven_days}}</span>
+                                                            {% elif x.product_id == i.product.id and  request.user.roll  == "homeowner" %}
+                                                                <span >Price:${{x.zero_seven_days}}</span>
+                                                            
+                                                            {% elif x.product_id == i.product.id and  request.user.roll  == "propertymanager" %}
+                                                                <span >Price:${{x.zero_seven_days_wholesale}}</span>
+                                                            {% endif %}
+                                                        {% elif x.product_id == i.product.id %}
+                                                            <span >Price:${{x.sale_price}}</span>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if x.product.is_return == 1 %}
+                                                            {% if  x.product_id == i.product.id  and x.user_type == 'vacationer' %}
+                                                        
+                                                                {% comment %} {% if pin_code_price.pin_code %} {% endcomment %}
+                                                            
+                                                                <span >Price:${{x.zero_seven_days}}</span>   
+                                                                {% comment %} {% endif %} {% endcomment %}
+                                                                
+                                                            {% endif %}    
+                                                        {% elif x.product_id == i.product.id  %}
+                                                        <span >Price:${{x.sale_price}}</span>
+                                                        {% endif %} 
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% endfor %}
+                                                <button type="button" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                            </figcaption>
+                                        </div>
+                                    </div>
+                                   {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </section>
+                 
+            </div>
+        <!-- ----------footer section----- ------ -->
+       {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+    
+    <!-- -----side menu------ -->
+    </body>
+</html>
+{% include 'web/js/helper.html' %}
+{% endblock content %}

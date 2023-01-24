@@ -1,0 +1,140 @@
+<html>
+    {% extends 'web/basic/base.html' %}
+    {% load static %}
+    {% block title %}Apply Offer{% endblock %}
+   
+    {% block content %}
+    <body>
+
+        <div class="wraper-main">
+            <!-- ----Header---- -->
+            {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+            <!-- ---End Header--- -->
+                <div class="wraper pt85 wtvh100">
+
+                    <section class="breadcrumb-bg-sec">
+                        <div class="container">
+                            <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item"><a href="/cart/items">Cart</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Apply offer{{a}}</li>
+                            </ol>
+                            </nav>
+                        </div>
+                    </section>
+
+                    <section class="in-sp5 inner-cart-sec">
+                        <div class="container">
+
+                        <div class="apply_offer_lists">
+                            <ul class="cart_summry_in">
+                                {% for i in offer_data %}
+                                <li>
+                                    <div class="cart_to_lt">
+                                        <figure><img src="{{i.offer_image.url}}"></figure>
+                                        <figcaption>
+                                            <h4>{{i.offer_name}}</h4>
+                                            <h5>{{i.category.name}}</h5>
+                                            <h6>{{i.offer_validity}}</h6>
+                                            <h3>{{i.offer_discount}}% OFF{{cart}}</h3>
+                                        </figcaption>
+                                    </div>
+                           
+                                 
+                                    <div class="cartcheck-bx">
+                                     
+                                        {% if i.id in values_data %}
+                                        
+                                        
+                                        <a class="btn apply-link" >Applied</a>
+                                        <a class="close-link" href="{% url 'remove_offer' i.id %}"><i class="ri-close-circle-line"></i></a>
+                                        {% else %}
+                                       
+                                        <a class="btn apply-link" href="{% url 'offer_apply' i.id %}">APPLY</a>
+                                         {% endif %} 
+                                       
+                                        
+                                    </div>
+                                </li>
+                                {% endfor %}
+                                {% comment %} <li>
+                                    <div class="cart_to_lt">
+                                        <figure><img src="images/products-1.png"></figure>
+                                        <figcaption>
+                                            <h4>Lorem Ipsum Blanca Chair</h4>
+                                            <h5>Rollaway Bed</h5>
+                                            <h6>Aug 14,2022 - Sep 5, 2022</h6>
+                                            <h3>20% OFF</h3>
+                                        </figcaption>
+                                    </div>
+                                    <div class="cartcheck-bx">
+                                        <a class="btn apply-link" href="javascript:;">APPLY</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="cart_to_lt">
+                                        <figure><img src="images/products-2.png"></figure>
+                                        <figcaption>
+                                            <h4>Blanca Chair</h4>
+                                            <h5>Rollaway Bed</h5>
+                                            <h6>Aug 14,2022 - Sep 5, 2022</h6>
+                                            <h3>20% OFF</h3>
+                                        </figcaption>
+                                    </div>
+                                    <div class="cartcheck-bx">
+                                        <a class="btn apply-link" href="javascript:;">APPLY</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="cart_to_lt">
+                                        <figure><img src="images/products-4.png"></figure>
+                                        <figcaption>
+                                            <h4>Folding Rollaway Bed</h4>
+                                            <h5>Rollaway Bed</h5>
+                                            <h6>Aug 14,2022 - Sep 5, 2022</h6>
+                                            <h3>20% OFF</h3>
+                                        </figcaption>
+                                    </div>
+                                    <div class="cartcheck-bx">
+                                        <a class="btn apply-link" href="javascript:;">APPLY</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="cart_to_lt">
+                                        <figure><img src="images/products-6.png"></figure>
+                                        <figcaption>
+                                            <h4>Folding Rollaway Bed</h4>
+                                            <h5>Rollaway Bed</h5>
+                                            <h6>Aug 14,2022 - Sep 5, 2022</h6>
+                                            <h3>20% OFF</h3>
+                                        </figcaption>
+                                    </div>
+                                    <div class="cartcheck-bx">
+                                        <a class="btn apply-link" href="javascript:;">APPLY</a>
+                                    </div>
+                                </li> {% endcomment %}
+                            </ul>
+                        </div>
+
+                        </div>
+                    </section>
+                    
+                </div>
+            <!-- ----------footer section----- ------ -->
+            <footer>
+                {% include 'web/basic/footer.html' %}
+            </footer>
+            <!-- ----------footer section----------- -->
+        </div>
+
+        <!-- -----java script------ -->
+        {% include 'web/js/helper.html' %}
+        <!-- -----side menu------ -->
+        </body>
+    {% endblock content %}
+</html>

@@ -1,0 +1,226 @@
+<html>
+ {% extends 'web/basic/base.html' %}
+ {% load static %}
+  {% block title %}Home{% endblock %}
+
+ {% block content %}
+   <body>
+
+    <div class="wraper-main">
+    <input value="{{request.user.id}}" id="user" type="hidden">
+
+        <!-- ----Header---- -->
+        {% if request.user.is_authenticated   and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper wtvh100">
+                <section class="search-bg-banner">
+                     <div class="container">
+                       <h2> Featured Products</h2>
+                     </div>
+                </section>
+
+                 <section class="filter-list-card">
+                    <div class="container">
+                        {% if product %}
+                        <div class="row">
+                           
+                            <div class="col-md-8">
+                                <div class="title-filter-rt">
+                                    <h5>Search Results ’{{product_count}}’</h5>
+                                    <div class="sort-by">
+                                        <span>Sort by</span>
+                                        <div class="form-group">
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected="">Popular</option>
+                                                <option value="1">Popular city</option>
+                                                <option value="2">Popular city</option>
+                                            </select>
+                                        </div>
+
+                                    </div>  
+                                     
+                                </div>
+                            </div>
+                        </div> 
+                        {% endif%}
+                    
+                        {% if product %}
+                            <div class="row">
+                                    {% for i in product %}
+                                    
+                                        <input value="{{i.id}}" id="is_product_{{i.id}}" type="hidden">
+
+                                        <div class="col-sm-4">
+                                            <div class="card-product">
+                                                <div class="card-product-img">
+                                                    <div class="stock-points">
+                                                    {% if i.avaliable == True %}
+                                                    <span class="in_stock">In stock</span>
+                                                    {% else %}
+                                                    <span class="in_stock">Out of stock</span>
+                                                    {% endif %}
+                                                    <form method="POST" id="feature_product">
+                                                        {% csrf_token %}
+                                                        {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                                        {% if i.id in fav_product %}
+                                                        <a class="click_heart_btn" data-fav-id="{{i.id}}" id="fav{{i.id}}" style="color:#00a99d"  onclick="like({{i.id}})"><i class="ri-heart-line"></i></a>
+                                                        
+                                                        {% else %}
+                                                        <a class="click_heart_btn"  data-fav-id="{{i.id}}"  id="fav{{i.id}}"  onclick="like({{i.id}})"><i class="ri-heart-line"></i></a>
+                                                        {% endif %}
+                                                        {% else %}
+                                                        <a class="click_heart_btn"  onclick="login_popup()"><i class="ri-heart-line"></i></a>
+                                                        {% endif %}
+                                                        <input value="1" id="is_favourite" type="hidden">
+                                                        <input value="{{i.id}}" id="is_product_{{i.id}}" type="hidden">
+                                                    </form>
+                                                    </div>
+                                                    {% if i.image %}
+                                                    <a href="/product/details/{{i.slug}}">
+                                                        <figure><img src="{{i.image.url}}"></figure>
+                                                    </a>
+                                                    {% endif %}
+                                                </div>
+                                                <figcaption>
+                                                    <a href="/product/details/{{i.slug}}"><h4>{{i.name}}</h4></a>
+                                                    {% comment %} <h4>{{i.name}}</h4> {% endcomment %}
+                                                    <p>{{i.category.name}}</p>
+                                                    <p>{{i.price}}</p>
+                                                    <ul class="star-check">
+                                                        <li class="{% if i.average_rating >= 1 %}active {% else %}{% endif %}">
+                                                            <a  href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                        </li>
+                                                        <li class="{% if i.average_rating >= 2 %}active{% else %}{% endif %}"  >
+                                                            <a href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                        </li>
+                                                        <li class="{% if i.average_rating >= 3 %}active{% else %}{% endif %}" >
+                                                            <a href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                        </li>
+                                                        <li class="{% if i.average_rating >= 4 %}active{% else %}{% endif %}" >
+                                                            <a href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                        </li>
+                                                        <li class="{% if i.average_rating >= 5 %}active{% else %}{% endif %}" >
+                                                            <a href="javascript:;"><i class="ri-star-fill"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="dtr-card">
+                                                {% for j in option %}
+                                                {% if i.id == j.product_id %}
+                                                <span>{{j.option_value.option_name}}:{{j.option_value.option_value}}</span>
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% comment %} <span>Size: Small</span> {% endcomment %}
+                                            </div>
+                                            {% for x in product_price %} 
+                                                                   
+                                            {% if request.user.roll %}
+                                          
+                                                {% if x.product.is_return == 1 %}
+                                                    {% if x.product_id == i.id and request.user.roll == "vacationer" %}
+                                                        <span >Price:${{x.zero_seven_days}}</span>
+                                                    {% elif x.product_id == i.id and  request.user.roll  == "homeowner" %}
+                                                        <span >Price:${{x.zero_seven_days}}</span>
+                                                    
+                                                    {% elif x.product_id == i.id and  request.user.roll  == "propertymanager" %}
+                                                        <span >Price:${{x.zero_seven_days_wholesale}}</span>
+                                                    {% endif %}
+                                                {% elif x.product_id == i.id %}
+                                                    <span >Price:${{x.sale_price}}</span>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if x.product.is_return == 1 %}
+                                                    {% if  x.product_id == i.id  and x.user_type == 'vacationer' %}
+                                                
+                                                        {% comment %} {% if pin_code_price.pin_code %} {% endcomment %}
+                                                    
+                                                        <span >Price:${{x.zero_seven_days}}</span>   
+                                                        {% comment %} {% endif %} {% endcomment %}
+                                                        
+                                                    {% endif %}    
+                                                {% elif x.product_id == i.id %}
+                                                    <span >Price:${{x.sale_price}}</span>
+                                                {% endif %} 
+                                            {% endif %}
+                                        {% endfor %}
+                                            {% if request.user.is_authenticated and request.user.is_superuser == 0 %}
+                                            {% if i.avaliable == True  %}
+                                            {% if i.id not in add_cart%}
+                                            <button type="button" id="goto{{i.id}}" data-goto-id='{{ i.id }}' onclick="add_cart({{i.id}})" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                            {% else%}
+                                            <a href="/cart/items" class="btn black-btn go-to-cart"><i class="ri-shopping-cart-line"></i> Go to cart</a>
+                                            {% endif %}
+                                            {% else %}
+                                            <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                            {% endif %}
+                                            {% else %}
+                                            {% if i.avaliable == True  %}
+                                            <button type="button" onclick="login_popup()" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                            {% else %}
+                                            <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                            {% endif %}
+                                            {% endif %}
+                                                    {% comment %} <button type="button" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button> {% endcomment %}
+                                                </figcaption>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                        <div class ="row">
+                            <h5>In this Category no products found<h5>
+
+                        </div>
+                        {% endif %}
+                    </div>
+                 </section>
+                 
+            </div>
+        <!-- ----------footer section----- ------ -->
+       {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+    
+    <!-- -----side menu------ -->
+    </body>
+</html>
+{% comment %} <script>
+    function add_cart(id){
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
+        let product_id = $('#is_product_'+id).val()
+        let user = $('#user').val()
+        $.ajax({
+            type: "POST",
+            url: "/add/to/cart/",
+            headers: { 'X-CSRFToken': csrftoken }, 
+            data: 
+            {
+                
+                product_id:product_id,
+                user,user,
+            },
+            
+            success: function(res) {
+              toastr.success(res.message);
+              $(`[data-goto-id='${id}'`).replaceWith('<a href="/cart/items" class="btn black-btn go-to-cart"><i class="ri-shopping-cart-line"></i> Go to cart</a>')
+              
+             
+        
+            },error:function(res){
+                toastr.success(res.message);
+
+            } 
+        
+          });
+        
+    }
+</script> {% endcomment %}
+{% include 'web/js/helper.html' %}
+{% endblock content %}

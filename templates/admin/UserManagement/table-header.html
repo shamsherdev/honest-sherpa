@@ -1,0 +1,70 @@
+     {% load static %}
+     
+     <div class="mb-4 top-bar-head d-flex">
+                    <div class="dropdown mr-3">
+                        <a class="btn btn-primary dropdown-toggle" href="javascript:;" type="button" data-toggle="dropdown">Action<em class="icon ni ni-chevron-down"></em></a>
+                        <div class="dropdown-menu">    
+                            <ul class="link-list-opt">          
+                                <li><a onclick="userAction(1)" ><span >Active</span></a></li>          
+                                <li><a onclick="userAction(2)"><span>Deactive</span></a></li>          
+                                <li><a onclick="userAction(3)" ></em><span>Delete</span></a></li>          
+                                <li><a onclick="userAction(4)" ></em><span>Emails</span></a></li>        
+                            </ul>      
+                        </div>    
+                    </div>  
+                    <div class="form-group mb-0 mr-3">
+                        <div class="form-control-wrap">
+                            <div class="form-icon form-icon-left">
+                                <em class="icon ni ni-search"></em>
+                            </div>
+                            <input type="text" class="form-control form-control-lg" id="default-03" placeholder="Input placeholder">
+                        </div>
+                    </div>
+                    <div class="dropdown mr-3">
+                        <a class="btn btn-outline-secondary" href="javascript:;" type="button" data-toggle="dropdown">filter<em class="icon ni ni-chevron-down"></em></a>
+                        <div class="dropdown-menu">    
+                            <ul class="link-list-opt">    
+                                <form method="POST">    
+                                    {% csrf_token %}  
+                                <li><a onclick="userFilter('subadmin')"><span>Sub admin</span></a></li>   
+                                <li><a onclick="userFilter('vacationer')"><span>Vacationer</span></a></li>          
+                                <li><a onclick="userFilter('homeowner')"><span>Homeowner</span></a></li>          
+                                <li><a onclick="userFilter('propertymanager')"></em><span>PropertyManager</span></a></li>          
+                                <li><a onclick="userFilter('franchise')" ></em><span>Franchise</span></a></li> 
+                                <li><a onclick="userFilter('0')" ></em><span>Deactivate</span></a></li>
+                                </form>       
+                            </ul>      
+                        </div>    
+                    </div> 
+                    {% comment %} <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>   {% endcomment %}
+                     {% if perms.superadmin.add_user %} 
+                    <button  type="button"  onclick="useradd()"   data-toggle="modal" class="btn btn-icon btn-lg btn-primary ml-auto" ><em class="icon ni ni-plus"></em></button>  
+                {% endif %}
+                </div>
+
+            <div class="modal fade" id="myModal" role="dialog"  style="background: rgba(0,0,0,.5);">
+                    <div class="modal-dialog">
+                    
+                      <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h4 class="modal-title">Please Select The User's </h4>
+                            </div>
+                            <div class="modal-body">
+                                <li style="align:center;">
+                                    <a href="{% url 'add_subadmin' %}">1.Staff User</a><hr>
+                                    <a href="{% url 'add_franchise' %}">2. Franchise</a><hr>
+                                    <a href="{% url 'add_propertymanager' %}">3. PropertyManager</a><hr>
+                                    <a href="{% url 'add_homeowner' %}">4. Homeowner</a><hr>
+                                    <a href="{% url 'customer_registration' %}">5. Vacationer</a><hr>
+                                  
+                                </li>
+                            </div>
+                            <div class="modal-footer">
+                                 <a type="submit"  href="/admin/customer-view/"class="btn btn-default" data-dismiss="modal">Close</a>
+                            </div>
+                        </div>
+                      
+                    </div>
+            </div>
+               

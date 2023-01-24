@@ -1,0 +1,119 @@
+                        
+{% comment %}
+Note: all data append in homeowner.html in table ID
+{% endcomment %}
+              <thead>
+                        {% if view_data %}
+                        <tr>
+                            <th class="stopSorting">
+                                <div class="custom-control custom-control-sm custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="com-email">
+                                    <label class="custom-control-label" for="com-email"></label>
+                                </div>
+                            </th>
+                              {% if not HideShow.sr %}
+                                <th class="sr_th">Sr No </th>
+                              {% endif %}
+                            
+                            {% if not HideShow.name %}
+                            <th class="name_th">Name  </th>
+                            {% endif %}
+                            {% if not HideShow.email %}
+                            <th class="email_th">Email</th>
+                            {% endif %}
+                             {% if not HideShow.role %}
+                            <th class="roll_th">Role</th>
+                            {% endif %}
+                            {% if not HideShow.role %}
+                            <th class="roll_th">Status</th>
+                            {% endif %}
+
+                            {% comment %} <th class="mobile_th">Contact No</th> {% endcomment %}
+                            {% comment %} <th>Status</th> {% endcomment %}
+                            {% if not HideShow.action %}
+                            <th class="action_th">Action</th>
+                            {% endif %}
+                            {% comment %} <th>Start date</th>
+                            <th>Salary</th> {% endcomment %}
+                        </tr>
+                    </thead>
+                        <tbody>
+                            {% for i  in view_data %}
+                            <tr>
+                                <td class="remove-sorting">
+                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <input type="checkbox" name="child_div" value="{{i.id}}" class="custom-control-input child_div" id="com-email_{{i.id}}">
+                                            <label class="custom-control-label" for="com-email_{{i.id}}"></label>
+                                        <form>
+                                    </div>
+                                </td>
+                                {% if not HideShow.sr %}
+                                <td class="sr_td" >{{ forloop.counter }}</td>
+                                {% endif %}
+                                {% if not HideShow.name %}
+                                <td class="name_td"><a href="{% url 'details' i.slug %}">{{i.first_name|truncatechars:30}} {{i.last_name|truncatechars:30}}</a></td>
+                                {% endif %}
+                                {% if not HideShow.email %}
+
+                                <td class="email_td">{{i.email}}</td>
+                                {% endif %}
+                                {% if not HideShow.role %}
+
+                                    <td  class="roll_td" >{{i.roll}}</td> 
+                                    {% endif %}
+                                {% if not HideShow.role %}
+                                    {% if i.is_active == 1 %}
+
+                                        <td  class="roll_td" >Active</td> 
+                                    {% else %}
+                                        <td  class="roll_td" >Deactive</td> 
+                                    {% endif %}
+                                {% endif %}
+                                {% comment %} <td> <div class="form-group">
+                                <div class="form-control-wrap">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <select onchange="Submit_status({{customer.id}})" class="form-control"  data-rule-required="true"   id="is_approve_{{customer.id}}" name="is_approve" required>
+                                    <option  selected >Select Status</option>  
+                                    <option {% if customer.is_active == True %} selected {% endif %} value="True">Approved</option>  
+                                    <option {% if customer.is_active == False %} selected {% endif %}  value="False">Rejected </option>  
+                                
+                                    </select> 
+                                </form>   
+                                </div>
+                            </div>
+                        </td> {% endcomment %}
+                                {% if not HideShow.action %}
+
+                                <td class="action_td">
+                                    {% if perms.superadmin.view_customer %}
+                                    <a href="{% url 'details' i.slug %}" class="btn btn-lg btn-primary"><i class="fa-solid fa-info"></i></a>
+                                {% endif %}
+                                    {% comment %} {% if perms.superadmin.change_customer %}
+                                    <a href="{% url 'customer_edit' i.slug %}" class="btn btn-lg btn-info"><i class="fas fa-edit"></i></a>
+                                {% endif %}
+                                {% if perms.superadmin.delete_customer %}
+                                    <a href="{% url 'customer_delete' i.id %}" onclick="return confirm('Are you sure you want to delete this item')"  class="btn btn-lg btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+                                    {% endif %} {% endcomment %}
+                                </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %} 
+                        </tbody>
+                
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            <strong style="font-size: 1.5em;">No Records</strong>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+<script>
+$("#com-email").click(function(e){
+  console.log($(document).find('[name=child_div]'))
+    $(document).find('[name=child_div]').not(this).prop('checked', this.checked);
+});
+</script>

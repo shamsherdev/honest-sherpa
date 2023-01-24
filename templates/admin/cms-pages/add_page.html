@@ -1,0 +1,131 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Edit Pages</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-12" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row column" >
+                    
+                    {% if data.slug == "Home-banner-page1" or data.slug == "Home-banner-page2" or data.slug == "Home-banner-page3" or  data.slug == 'Home-About-Us' or data.slug == "Home-how-it-works"%}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Title</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <textarea type="text"  value="" class="form-control summernote-basic" id="full-name-1" maxlength="30" name="title" data-rule-required="true" data-rule-noSpace="true">{{data.title}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Image</label>
+                            <div class="form-control-wrap">
+                                <input type="file" class="form-control"  value="{{data.image.url}}" id="image" name="image"  data-msg-accept="Please enter valid image file"  accept="image/*" >
+                                <img width="30%" height="30%"src="{{data.image.url}}"></img>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if data.slug == "Home-how-it-works" %}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Content</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <textarea type="text" value="" class="form-control summernote-basic" id="full-name-1"  name="content"  data-rule-noSpace="true">{{data.content}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if data.slug == "Home-About-Us" or data.slug == "Home-how-it-works" %}
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Text1</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <textarea type="text"  value="{{data.text1}}" class="form-control summernote-basic" id="full-name-1"  name="text1"  data-rule-noSpace="true">{{data.text1}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Text2</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <textarea type="text" value="{{data.text2}}" class="form-control summernote-basic" id="full-name-1" name="text2"  data-rule-noSpace="true">{{data.text2}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Text3</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                <textarea type="text" value="{{data.text3}}" class="form-control summernote-basic" id="full-name-1" name="text3"  data-rule-noSpace="true">{{data.text3}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                     {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >slug</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="hidden" class="form-control" id="full-name-1" value="superadmin" name="superadmin" data-rule-required="true"> {% endcomment %}
+                                {% comment %} <input type="text"  class="form-control" id="full-name-1"  name="slug"  data-rule-noSpace="true">
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                   
+                     <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary" style="margin-top: 74px"> Add</button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                    </div>     
+                    </div>        
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+}
+</script>
+{% comment %} <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('descrip');
+</script> {% endcomment %}
+{% endblock js_content %}  

@@ -1,0 +1,178 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">User Data</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+     <form method="GET" action="{% url 'report' %}">
+        
+
+    <div class="card card-preview">
+      
+        <div class="d-flex justify-content-end " style="text-align: right;padding:1rem 2em">
+            <div class="col-md-2">
+            <input type="date" class="form-control" name="start_date">
+            </div>
+            <div class="col-md-2">
+            <input type="date" class="form-control" name="end_date">
+            </div>
+            <label class="d-none d-sm-inline-block" for="status" style="margin-top: 6px;padding-right:10px;" >Select User Role</label>
+            <div class="form-control-wrap d-flex">
+           
+                <div class="col-md-8">
+                <select class="form-control" id="basicSelect" name="user_id" required>
+                    <option disabled selected value="">Select User</option> 
+                     <option  value="all">All User</option>
+                    <option  value="subadmin">Subadmin</option>
+                    <option  value="franchise">Franchise</option>
+                    <option value="vacationer">Vacationer</option>
+                    <option value="homeowner">Homeowner</option>
+                    <option value="propertymanager">Property Manager</option>
+                </select> 
+                 </div> 
+                 <div class="col-md-1">
+                <button class="btn btn-success" type="submit">Submit</button>
+            {% comment %} <a href="{% url 'generate_pdf'%}"  class="btn btn-lg btn-primary"><i class="fa-solid fa-info"></i></a> {% endcomment %}
+
+           </div> 
+            </div>
+          
+        </div>
+      
+       
+        <div class="card-inner">
+            <table id="example" class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th> First Name</th>
+                        <th> Last Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th> User Role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                
+                <tbody id='userdata'>
+                    {% for i in data %}
+                    <tr >
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{i.first_name|truncatechars:10}}</td>
+                        <td>{{i.last_name|truncatechars:10}}</td>
+                        <td>{{i.email}}</td>
+                        <td>{{i.mobile_number}}</td>
+                        <td>{{i.roll}}</td>
+                        <td>
+                            {% if perms.superadmin.can_view_reports%} 
+                            <a href="{% url 'generate_pdf' i.slug%}"  class="btn btn-lg btn-primary"><i class="fa-solid fa-info"></i></a>
+                            {% endif %}
+                            {% if perms.superadmin.can_download_reports%} 
+                            <a href="{% url 'user_data_pdf' i.slug %}" id="pdf"  class="btn btn-lg btn-primary"><i class="fas fa-download"></i></a> 
+                            {% endif %}
+                        </td> 
+                    </tr>
+                    {% endfor %}
+
+            </tbody>
+            </table>
+        </div>
+       
+    </div>
+     </form>
+    <!-- .card-preview -->
+</div> 
+{% endblock content %}
+{% block js_content %}
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css" />
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" defer></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js" defer></script> {% endcomment %}
+
+
+<script>
+    function userchange(){
+      
+        let user_id = $('#basicSelect').val()
+        alert(user_id)
+        $.ajax({
+            type: "GET",
+            url: "{% url 'report' %}",
+            data:
+          {
+            user_id:user_id
+       },
+        success:function(res){
+       
+            const user_data=res.data
+            let user_htmsl=''
+            let count=1
+            $.each(JSON.parse(user_data), function(index, value) {
+               console.log(value.fields) 
+               
+                user_htmsl+= `<div class="card-inner"> <table  id="example" class="datatable-init nowrap table"> <tr><td>${count}</td>
+                    <td >${value.fields.first_name}</td>
+               <td>${value.fields.last_name}</td>
+               <td>${value.fields.email}</td>
+              
+               <td>${value.fields.mobile_number}</td>
+               <td>${value.fields.roll}</td>
+               
+          
+              <td>
+                   
+                <a href="/admin/generate-pdf/${value.fields.slug}/"  class="btn btn-lg btn-primary"><i class="fa-solid fa-info"></i></a>
+        
+                <a href="/admin/user_data_pdf/${value.fields.slug}/" id="pdf"  class="btn btn-lg btn-primary"><i class="fas fa-download"></i></a>  
+           
+
+                </td> 
+     
+               
+                </tr>
+            </table>
+        </div>`
+                count++
+               
+              
+               
+              });
+              console.log(user_htmsl,'------')
+              $('#userdata').html(user_htmsl)
+             
+              
+                
+             },
+          error:function(res){
+            toastr.error(res.responseJSON.message);
+          }
+    });
+
+    }
+    
+</script>
+
+
+{% endblock js_content %}
+
+
+
+
+
+
+
+
+
+
+
+

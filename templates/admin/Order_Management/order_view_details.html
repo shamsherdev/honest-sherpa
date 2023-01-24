@@ -1,0 +1,221 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+
+
+{% comment %} {% if perms.superadmin.add_customer %}
+{% url 'customer_registration' as customer_registration %}
+{% include "admin/basic/section.html" with page_title="Customer Managment" btn_url=customer_registration btn_text="Add Customer"  %}
+{% endif %} {% endcomment %}
+
+<div class="card card-bordered">
+    <div class="card-inner">
+
+        <ul class="nav nav-tabs">
+           <li class="nav-item">        
+                <a class="nav-link active" data-toggle="tab" href="#tabItem1">
+                    <em class="icon ni ni-user"></em>
+                    <span>Order Details</span>
+                </a>    
+            </li>
+           {% comment %} <li class="nav-item">        
+                <a class="nav-link" data-toggle="tab" href="#tabItem2">
+                    <em class="icon ni ni-user"></em>
+                    <span> Order Details</span>
+                </a>    
+            </li> {% endcomment %}
+            {% comment %} <li class="nav-item">        
+                <a class="nav-link" data-toggle="tab" href="#tabItem3">
+                    <em class="icon ni ni-user"></em>
+                    <span>Address Book</span>
+                </a> 
+                
+            </li>  {% endcomment %}
+           {% comment %} <li class="nav-item">        
+                <a class="nav-link" data-toggle="tab" href="#tabItem4">
+                    <em class="icon ni ni-user"></em>
+                    <span>Details</span>
+                </a>    
+            </li> {% endcomment %}
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tabItem1">
+                <div class="row">
+                    <div class="col-md-6">
+                        {% comment %} {% for cat in  category %}
+                        {% if product.category.id == cat.id %} {% endcomment %}
+                        <div class="row">
+                        
+                            <div class="col-md-4">
+                                <p><b>Order ID </b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{order_details.order_id}}</p>
+                            </div>
+                        </div>
+                        {% comment %} {% endif %}
+                        {% endfor %} {% endcomment %}
+                    </div>
+                    <div class="col-md-6">
+                        {% comment %} {% for sub in  subcategory %}
+                        {% if product.subcategory.id == sub.id %} {% endcomment %}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Order Created_by</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{order_details.order_created_by}}</p>
+                            </div>
+                        </div>
+                        {% comment %} {% endif %}
+                        {% endfor %} {% endcomment %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Total Product</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{product_count}}</p>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Delivery Date</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{order_details.delivery}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Return Date</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{order_details.order_return}}</p>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Actual Price</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{order_details.actual_price}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Discount(%)</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{order_details.offer.code}}({{order_details.offer.offer_discount}}%)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Discount Price</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{order_details.discount_price}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Address</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{order_details.Address}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                {% comment %} <p><b>Status</b></p> {% endcomment %}
+                            </div>
+                            <div class="col-md-8">
+                                {% comment %} {% if product.is_active == 1 %}
+                                <p>Active</p>
+                                {% else %}
+                                <p>Deactive</p>
+                                {% endif %} {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+               
+                </div>
+            </div>
+            {% comment %} <div class="tab-pane" id="tabItem2">
+                <h5>Comming Soon</h5>
+            </div> {% endcomment %}
+          
+           <div class="tab-pane" id="tabItem3">
+           </div>
+           <div class="tab-pane" id="tabItem4">
+              <p>4</p>
+           </div>
+        </div>
+        {% for i in order_details.product_details %}
+            <div class="user-card mb-3">
+                <div class="user-avatar sq xl">
+                    {% for j in product_detail %}
+                        {% if j.id == i.product_id %}
+                
+                            <img src="{{j.image.url}}"> 
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="user-info"> 
+                    <p style="color:black">Name:- {{i.product_name}}</p> 
+                    <p style="color:black">Price:- ${{i.price}}</p>
+                    <p style="color:black">Qty:- {{i.product_quantity}}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% comment %} <div class="modal" tabindex="-1" id="status">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Status</h5>
+                    <a type="button" href="#" class="btn btn-secondary" data-dismiss="modal"  aria-label="Close">X</a>
+                </div>
+                <form method ="POST" action="/admin/product_status_change_detail/{{product.slug}}" >
+                    {% csrf_token %} 
+                  
+                    <div class="modal-body">
+                        <h5 style="color: red;">Are You Sure To Want Change Status?</h5>
+                        <input type ="hidden" value="{{product.is_active}}" id="status" name="status">
+                    </div>
+                    <div class="modal-footer">
+                        <a type="button" href="#" class="btn btn-secondary" data-dismiss="modal">NO</a>
+                        <button type="submit" class="btn btn-primary">YES</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> {% endcomment %}
+</div>
+
+<script>
+    function statuschange(){
+        $('#status').show()
+    }
+</script>
+
+{% endblock content %}

@@ -1,0 +1,98 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+        <h4 class="title nk-block-title">Superadmin Registration </h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-12" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="POST" id="register">
+                {% csrf_token %}
+                <div class="row column" >
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >First Name*</label>
+                            <div class="form-control-wrap">
+                                <input type="hidden" class="form-control" id="full-name" name="superadmin"  value="superadmin" data-rule-required="true">
+                                <input data-rule-noSpace="true"  data-rule-required="true" type="text" class="form-control" id="full-name-1" name="firstname" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Last Name*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true"  data-rule-required="true" type="text" class="form-control" id="full-name-2" name="lastname" data-rule-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Email address*</label>
+                            <div class="form-control-wrap">
+                                <input data-rule-noSpace="true" data-rule-emailRegex="true" data-rule-required="true" type="email" class="form-control" id="email-address-1" name="email" data-rule-required="true">
+                              
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1" style="margin-top: 20px" >Contact No*</label>
+                            <div class="form-control-wrap">
+                                <input type="text" data-rule-noSpace="true"  data-rule-required="true" class="form-control" id="phone-no-1" name="contactnumber" data-rule-required="true"
+                                onkeypress='return event.charCode >= 48 && event.charCode <= 57' >
+                            </div>
+                        </div>
+                    </div> 
+                  
+                    
+                    </div>
+                 
+                    
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary" style="margin-top: 74px"> Add</button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+function Register(){
+
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+
+}
+</script>
+{% endblock js_content %}  

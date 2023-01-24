@@ -1,0 +1,114 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title"> User Detail</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered py-3">
+        <div class="card-inner">
+            <div class="card-head">
+                {% comment %} <h5 class="card-title">User Create</h5> {% endcomment %}
+            </div>
+            <div id="register">
+                
+                <table>
+                    <tr>
+                      <td>
+                          Sr No: &nbsp;&nbsp;{{view_detail_data.id }}</td>
+                    </tr>
+                    <tr>
+                      <td>First Name: &nbsp;&nbsp;{{view_detail_data.first_name}}</td>
+                    </tr>
+                    <tr>
+                      <td>Last Name: &nbsp;&nbsp;{{view_detail_data.last_name}}</td>
+                    </tr>
+                    <tr>
+                      <td>Email: &nbsp;&nbsp;{{view_detail_data.email}}</td>
+                    </tr>
+                    <tr>
+                      <td>Mobile Number: &nbsp;&nbsp;{{view_detail_data.mobile_number}}</td>
+                    </tr>
+                </table>
+
+                {% comment %} <div class="row g-4"> {% endcomment %}
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group" >
+                            <label class="form-label" for="full-name-1">First Name: </label>
+                                {{view_detail_data.first_name}}
+                        </div>
+                    </div> {% endcomment %}
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Last Name: </label>
+                                {{view_detail_data.last_name}}
+                        </div>
+                    </div> {% endcomment %}
+                    
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1">Contact No: </label>
+                                {{view_detail_data.mobile_number}}
+                        </div>
+                    </div> {% endcomment %}
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Email address: </label>
+                                {{view_detail_data.email}}
+                        </div>
+                    </div>
+                     {% endcomment %}
+                    
+                        <div class="form-group" id="pdf"></div>
+                            {% comment %} <input type="submit" class="btn btn-lg btn-primary" value="Create Account" onclick="Register()"> {% endcomment %}
+                    {% comment %} </div>  {% endcomment %}
+                {% comment %} </div> {% endcomment %}
+            </div>
+            <div class="col-12">
+                <button id="cmd" class="btn btn-lg btn-primary">Generate PDF</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+{% comment %} <script>
+    function Register(){
+    $('#register').valid()
+    }
+</script> {% endcomment %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>
+<script>
+
+var doc = new jsPDF();
+var specialElementHandlers = {
+    '#pdf': function (element, renderer) {
+        return true;
+    }
+};
+
+{% comment %} console.log($('#register').html(), "===========") {% endcomment %}
+
+$('#cmd').click(function () {
+    doc.fromHTML($('#register').html(), 15, 15, {
+        'width': 170,
+            'elementHandlers': specialElementHandlers
+    });
+
+
+    {% comment %} doc.text(pdfContent, 10, 10) {% endcomment %}
+    doc.save('sample-file.pdf');
+});
+
+</script>
+{% endblock js_content %}  

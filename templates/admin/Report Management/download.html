@@ -1,0 +1,83 @@
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">User Data</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+       
+        <div class="card-inner">
+            <table style="width:100%" class="table-responsive">
+                <tr>
+                  <th >Sr No:</th>
+                  <td>{{value.id }}</td>
+                </tr>
+                <tr>
+                  <th>First Name:</th>
+                  <td>{{value.first_name}}</td>
+                </tr>
+                <tr>
+                  <th>Last Name:</th>
+                  <td>{{value.last_name}}</td>
+                </tr>
+                <tr>
+                  <th>Email:</th>
+                  <td>{{value.email}}</td>
+                </tr>
+                <tr>
+                  <th>Mobile Number:</th>
+                  <td>{{value.mobile_number}}</td>
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</div> 
+
+
+{% endblock content %}
+{% block js_content %}
+<script>
+    function userchange(){
+       
+        let user_id = $('#basicSelect').val()
+        $.ajax({
+            type: "GET",
+            url: "{% url 'report' %}",
+            data:
+          {
+            user_id:user_id
+       },
+        success:function(res){
+            const user_data=res.data
+            let user_htmsl=''
+            let count=1
+        }
+    });
+
+    }
+</script>
+
+
+
+{% endblock js_content %}
+
+
+
+
+
+
+
+
+
+
+

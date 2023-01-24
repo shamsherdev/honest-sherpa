@@ -1,0 +1,93 @@
+<html>
+    {% extends 'web/basic/base.html' %}
+    {% load static %}
+    {% block content %}
+    <body>
+
+        <div class="wraper-main">
+            <!-- ----Header---- -->
+            {% if request.user.is_authenticated   and request.user.is_superuser == 0 %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+            <!-- ---End Header--- -->
+                <div class="wraper wtvh100">
+
+                    <section class="inner-blog-dtl">
+                        <div class="container">
+                            <div class="blog-dtl-info">
+                                <h2>{{data.blog_title|safe}}</h2>
+                               
+                                
+                                <video id="video" controls="controls" preload="none" autoplay  poster="https://assets.codepen.io/32795/poster.png" width="100%">
+                                    <source id="mp4" src="{{data.blog_video.url}}" type="video/mp4"> 
+                                    {% comment %} <source id="mp4" src="{{data.blog_video }}" type="video/mp4">
+                                    <source id="webm" src="{{data.blog_video}}" type="video/webm">
+                                    <source id="ogv" src="{{data.blog_video}}" type="video/ogg"> {% endcomment %}
+                                    {% comment %} <source id="mp4" src="{{https://media.w3.org/2010/05/sintel/trailer.mp4}}" type="video/mp4">
+                                    <source id="webm" src="https://media.w3.org/2010/05/sintel/trailer.webm" type="video/webm">
+                                    <source id="ogv" src="https://media.w3.org/2010/05/sintel/trailer.ogv" type="video/ogg">  {% endcomment %}
+                                    <!--
+                                        Track to be used for accessibility using the VTT standard. 
+
+                                        See https://www.html5rocks.com/en/tutorials/track/basics/ for more information on how to use text tracks
+                                        -->
+                                    <track kind="subtitles" label="English subtitles" src="subtitles_en.vtt" srclang="en" default="">
+                                    
+                                    <!-- 
+                                        We can also add more than one text track and let the user choose which one to play. There is now way to 
+                                        currently do this with the built in controls so it'll have to be scripted -->
+                                    <track kind="subtitles" label="Deutsche Untertitel" src="subtitles_de.vtt" srclang="de">
+                                    
+
+                                    <!-- 
+                                        We're not using Flash as a fallback option. It should be coverage enough to 
+                                        -->
+                                    <p>Your user agent does not support the HTML5 Video element.</p>
+                                </video>
+                                <ul class="nav_blg_date">
+                                    <li><i class="ri-user-3-line"></i> <span>{{user.first_name}} {{user.last_name}}</span></li>
+                                    <li><i class="ri-calendar-line"></i> <span>{{data.created_at|date:'Y-m-d'}}</span></li>
+                                </ul>
+
+                                <p>{{data.meta_description|safe}}</p>
+                                <figure class="mb-4"><img src="{{data.blog_image.url}}" style="width:100%; height:70%;"></figure>
+{% comment %} 
+                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+
+                                <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                <div class="trms-minbg">
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, </p>
+
+                                    <p>more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. </p>
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, </p>
+
+                                    <p>more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. </p>
+                                </div>
+
+                                <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h3>
+                                <figure class="mb-4"><img src="images/blog-dtl1.png"></figure>
+
+                                <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. </p>
+
+                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p> {% endcomment %}
+                            </div>
+                        </div>
+                    </section>
+                    
+                </div>
+            <!-- ----------footer section----- ------ -->
+            <footer>
+                {% include 'web/basic/footer.html' %}
+            </footer>
+            <!-- ----------footer section----------- -->
+        </div>
+
+    <!-- -----java script------ -->
+    {% include 'web/js/helper.html' %}
+    <!-- -----side menu------ -->
+    </body>
+    {% endblock %}
+</html>

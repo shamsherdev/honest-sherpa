@@ -1,0 +1,75 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            
+            <h4 class="nk-block-title">Sub Category Management</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>Using the most basic table markup, here’s how <code class="code-class">.table</code> based tables look by default.</p> {% endcomment %}
+            </div>
+        </div>
+       
+    </div>
+    <div class="card card-preview">
+        {% if perms.superadmin.add_productsubcategory %} 
+        <div "nk-block-head-content" style="text-align: right;padding:1rem 2rem"> 
+            <a  href="{% url 'add_subcategory' %}" class="btn btn-info" ><i class="fa-solid fa-plus"></i></a>
+        </div>
+       {% endif %} 
+        <div class="card-inner">
+            <table class="datatable-init nowrap table">
+                <thead>
+                    <tr>
+                        <th>Sr No</th>
+                        <th>Category Name</th>
+                        <th>Sub-Category Name</th>
+                        <th>Image</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                   
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in subcategory %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{i.category.name}}</td>
+                        <td>{{i.name|safe|truncatechars:30}}</td>
+                        {% if i.subcategory_image%}
+                        <td>
+                            <img src ="{{i.subcategory_image.url}}" alt="{{i.name}}" style="width: 40px; height: 50px; border-radius: 50%;">
+                        </td>
+                        {% endif %}
+                  
+                       
+                       
+                       
+                        {% if i.is_active %}
+                        <td>Active</td>
+
+                        {% else %}
+                        <td>Deactive</td>
+                        {% endif %}
+                        <td>
+                             {% if perms.superadmin.view_productsubcategory %} 
+                            <a href="{% url 'view_subcategory' i.slug %}" class="btn btn-lg btn-primary"><i class="fa-solid fa-info"></i></a> 
+                            {% endif %} 
+                            {% if perms.superadmin.change_productsubcategory %}
+                            <a href="{% url 'edit_subcategory' i.slug %}" class="btn btn-lg btn-success"><i class="fas fa-edit"></i></a>
+                             {% endif %} 
+                           {% if perms.superadmin.delete_productsubcategory %}
+                            <a href="{% url 'delete_subcategory' i.id %}" onclick="return confirm('Are you sure you want to delete this item')" class="btn btn-lg btn-danger"><i class="fa-solid fa-trash-can"></i></a> 
+                            {% endif %} 
+                        </td>         
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><!-- .card-preview -->
+</div> 
+{% endblock content %}

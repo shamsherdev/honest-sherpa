@@ -1,0 +1,845 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Edit Product</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered ">
+        <div class="col-12" >
+            <div class="card-head">
+                <h5 class="card-title"></h5>
+            </div>
+            <form  method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row column" >
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Category</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="cat" onchange="categories()" name="category" required>
+                                    {% for i in category %}
+                                    <option {% if product.category.id == i.id %} selected {% endif %} value="{{i.id}}">{{i.name}}</option>  
+                                    {% endfor %}
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Sub Category</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="subcategory" name="subcategory" required>
+                                    {% for j in subcategory %}                                    
+                                    <option  {% if product.subcategory.id == j.id %}selected {% endif %} value="{{j.id}}">{{j.name}}</option>  
+                                    {% endfor %}
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Name</label>
+                            <div class="form-control-wrap">
+                                <input type="text"  data-rule-noSpace="true" value="{{product.name}}" class="form-control"  id="name" name="name" data-rule-required="true">
+                                <input type="hidden" value="{{
+                                    
+                                }}" class="form-control" id="options_count" name="options_count" data-rule-required="true">
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > One Day Price</label>
+                            <div class="form-control-wrap">
+                                <input type="hidden"  data-rule-noSpace="true" id="product_id" value="{{product.id}}"   >
+                                <input type="number"   oninput="validate(this)"  data-rule-noSpace="true" value="{{product.oneday_price}}"  maxlength="7"  step="0.01" class="form-control" id="onedayprice" name="onedayprice" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > Week Price</label>
+                            <div class="form-control-wrap">
+                                <input type="number"   oninput="validate(this)" data-rule-noSpace="true" value="{{product.week_price}}"  maxlength="7"  step="0.01" class="form-control" id="weekprice" name="weekprice" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >  Two Week Price</label>
+                            <div class="form-control-wrap">
+                                <input type="number"  oninput="validate(this)"   data-rule-noSpace="true" value="{{product.two_week_price}}"  maxlength="7"  step="0.01" class="form-control" id="twoweekprice" name="twoweekprice" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" > Month Price</label>
+                            <div class="form-control-wrap">
+                                <input type="number"  oninput="validate(this)"  data-rule-noSpace="true" value="{{product.month_price}}"  maxlength="7"  step="0.01" class="form-control" id="monthprice" name="monthprice" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px">Annual Price</label>
+                            <div class="form-control-wrap">
+                                <input type="number"  oninput="validate(this)"   data-rule-noSpace="true" value="{{product.annual_price}}"  maxlength="7"  step="0.01" class="form-control" id="annualprice" name="annualprice" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Quantity</label>
+                            <div class="form-control-wrap">
+                                <input type="text"  data-rule-noSpace="true" value="{{product.quantity}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onpaste="return false" class="form-control" id="quantity" name="quantity" data-rule-required="true"  >
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Image</label>
+                            {% comment %} <div class="form-control-wrap">
+                                <input type="file" class="form-control" id="image" name="image" data-rule-required="true"  accept="image/*" >
+                            </div> {% endcomment %}
+                            <div class="d-flex photo_of_events" id="image">
+                                {% if product.image %}
+                                <div class="imgPic">
+                                    <span> Photo of Event</span> 
+                                    <div class="form-group">
+                                        <div class="dz-message" data-dz-message>
+                                            <div class="upload-profile"> 
+                                                <figure>
+                                                    {% if product.image %}
+                                                        <img class="frame" width="10%" height="10%" src="{{product.image.url}}"  /> 
+
+                                                        {% else %}
+                                                        <img class="frame" width="10%" height="10%" src="{% static 'admin/images/avatar.png' %}" /> 
+
+                                                    {% endif %}
+                                                </figure> 
+                                            </div> 
+                                            <input type="file" name="image" class="image_id mb-3" onchange="loading(this);" accept="image/png, image/jpeg" data-rule-accept="image/jpg,image/jpeg,image/png,image/gif"  data-msg-accept="Upload image only" >   
+        
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if product.image1 %}
+                                <div class="imgPic">
+                                    <span> Photo of Event</span> 
+                                    <div class="form-group">
+                                        <div class="dz-message" data-dz-message>
+                                            <div class="upload-profile"> 
+                                                <figure>
+                                                 {% if product.image1 %}
+                                                        <img class="frame" width="10%" height="10%" src="{{product.image1.url}}"  /> 
+
+                                                        {% else %}
+                                                        <img class="frame" width="10%" height="10%" src="{% static 'admin/images/avatar.png' %}" /> 
+
+                                                    {% endif %}
+                                                </figure> 
+                                            </div> 
+                                            <input type="file" name="image1" class="image_id mb-3" onchange="loading(this);" accept="image/png, image/jpeg" data-rule-accept="image/jpg,image/jpeg,image/png,image/gif"  data-msg-accept="Upload image only" >   
+        
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if product.image2 %}
+                                <div class="imgPic">
+                                    <span> Photo of Event</span> 
+                                    <div class="form-group">
+                                        <div class="dz-message" data-dz-message>
+                                            <div class="upload-profile"> 
+                                                <figure>
+                                                {% if product.image2 %}
+                                                <img class="frame" width="10%" height="10%" src="{{product.image2.url}}"  /> 
+                                                {% else %}
+                                                <img class="frame" width="10%" height="10%" src="{% static 'admin/images/avatar.png' %}" /> 
+                                                {% endif %}
+                                                </figure> 
+                                            </div> 
+                                            <input type="file" name="image2" class="image_id mb-3" onchange="loading(this);" accept="image/png, image/jpeg" data-rule-accept="image/jpg,image/jpeg,image/png,image/gif"  data-msg-accept="Upload image only" >   
+        
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if product.image3 %}
+                                <div class="imgPic">
+                                    <span> Photo of Event</span> 
+                                    <div class="form-group">
+                                        <div class="dz-message" data-dz-message>
+                                            <div class="upload-profile"> 
+                                                <figure>
+                                                {% if product.image3 %}
+                                                <img class="frame" width="10%" height="10%" src="{{product.image3.url}}"  /> 
+                                                {% else %}
+                                                <img class="frame" width="10%" height="10%" src="{% static 'admin/images/avatar.png' %}" /> 
+                                                {% endif %}
+                                                </figure> 
+                                            </div> 
+                                            <input type="file" name="image3" class="image_id mb-3" onchange="loading(this);" accept="image/png, image/jpeg" data-rule-accept="image/jpg,image/jpeg,image/png,image/gif"  data-msg-accept="Upload image only" >   
+        
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if product.image4 %}
+                                <div class="imgPic">
+                                    <span> Photo of Event</span> 
+                                    <div class="form-group">
+                                        <div class="dz-message" data-dz-message>
+                                            <div class="upload-profile"> 
+                                                <figure>
+                                                {% if product.image4 %}
+                                                <img class="frame" width="10%" height="10%" src="{{product.image4.url}}"  /> 
+                                                {% else %}
+                                                <img class="frame" width="10%" height="10%" src="{% static 'admin/images/avatar.png' %}" /> 
+                                                {% endif %}
+                                                </figure> 
+                                            </div> 
+                                            <input type="file" name="image4" class="image_id mb-3" onchange="loading(this);" accept="image/png, image/jpeg" data-rule-accept="image/jpg,image/jpeg,image/png,image/gif"  data-msg-accept="Upload image only" >   
+        
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <button type="button" id="addImgCutton" class="btn btn-lg btn-primary mb-3" onclick="img_copy()" >Add More</button>
+                        </div>
+                    </div>
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Description</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="url" class="form-control" id="url" name="url" data-rule-required="true">
+                                 {% endcomment %}
+                                <textarea value="" name="content" class="summernote-basic" required>{{product.description}}</textarea>
+                                  <input type="hidden" class="form-control" value="{{product.latitude}}" id="lat" name="lat" data-rule-required="true" data-rule-noSpace="true">
+                                 <input type="hidden" class="form-control" value="{{product.longitude}}" id="long" name="long" data-rule-required="true" data-rule-noSpace="true">
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >SKU Code</label>
+                            <div class="form-control-wrap">
+                                <input type="text"  data-rule-noSpace="true" value="{{product.sku_code}}" class="form-control" id="skucode" name="skucode" data-rule-required="true">
+                                {% comment %} <input type="hidden" value="{{options_count}}" class="form-control" id="options_count" name="options_count" data-rule-required="true"> {% endcomment %}
+
+                                
+                            {% comment %} </div>
+                        </div>
+                    </div>  {% endcomment %} 
+                     <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Address</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="autocom"  value="{{product.address}}" name="autocom" data-rule-required="true" data-rule-noSpace="true">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Feature</label>
+                            <div class="form-control-wrap">
+                                <select class="form-select" id="feature" name="feature" required>
+                                    <option {% if product.is_feature == True %} selected {% endif %} value="True"> Yes </option>
+                                    <option {% if product.is_feature == False %} selected {% endif %}  value="False" >No</option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div> 
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Available</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="available" name="available" required>
+                                    <option {% if product.avaliable == True %} selected {% endif %} value="True">In Stock</option>
+                                    <option {% if product.avaliable == False %} selected {% endif %}  value="False" >Out Of Stock</option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Return</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="return" name="return" required>
+                                    <option {% if product.is_return == True %} selected {% endif %} value="True"> Yes</option>
+                                    <option {% if product.is_return == False %} selected {% endif %} value="False">No</option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="status" style="margin-top: 20px" >Status</label>
+                            <div class="form-control-wrap">
+                                <select class="form-control" id="basicSelect" name="status" required>
+                                    <option {% if product.is_active == True %} selected {% endif %} value="True"> Active
+                                    </option>
+                                    <option {% if product.is_active == False %} selected {% endif %} value="False" >
+                                    {% comment %} {% if not is_active %} selected {% endif %}> {% if is_active %} selected {% endif %} {% endcomment %}
+                                        Deactive
+                                    </option>
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    
+                <div class="col-lg-12">  
+                     {% for i in options %}
+                    <div class="option" id="option_div_{{forloop.counter0}}"> 
+                         <div class="form-group row" id="div_section_{{forloop.counter0}}">   
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" > Options</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control" id="options_{{forloop.counter0}}" onchange="select_option({{forloop.counter0}})" name="option[{{forloop.counter0}}]name" required> 
+                                            {% for j in option %}
+                                            <option  {% if i.option.id == j.id %} selected {% endif %} value="{{j.id}}">{{j.name}}</option> 
+                                            {% endfor %}
+                                           
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select image</label>
+                                    <div class="form-control-wrap">
+                                    <input type="file" value="{{i.Productoptions_image}}" class="form-control" id="image" name="option[{{forloop.counter0}}]image"  accept="image/png, image/gif, image/jpeg" >
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options Key</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control" id="option_key_{{forloop.counter0}}"  onchange="select_option_key({{forloop.counter0}})" name="option[{{forloop.counter0}}]key" required>
+                                            <option value="{{i.option_value.id}}">{{i.option_value.option_name}}</option>  
+                                            
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" > Options Value</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control"  id="option_value_{{forloop.counter0}}" name="option[{{forloop.counter0}}]value" required>
+                                            <option value="{{i.option_value.id}}">{{i.option_value.option_value}}</option>  
+                                           
+                                            
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Price</label>
+                                    <div class="form-control-wrap">
+                                    <input type="text"   data-rule-noSpace="true" value="{{i.price}}" name="option[{{forloop.counter0}}]price" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" id="price" name="price" data-rule-required="true"  >
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Quantity</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text"  data-rule-noSpace="true" value="{{i.quantity}}" name="option[{{forloop.counter0}}]quantity" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" id="quantity" name="quantity" data-rule-required="true"  >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                {% if forloop.counter0 == 0 %}
+                                <button id="add_more_0" type="button" onclick="vaccination()" class="btn btn-lg btn-primary" style="margin-top: 44px"> Add</button>
+                                {% else %}
+                                 <button type="button" id="remove_{{forloop.counter0}}" onclick="remove(this,{{forloop.counter0}})"  class="btn btn-danger" style="margin-top: 44px"> Remove </button>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     {% endfor %}
+                </div>
+                <div class="col-lg-12 row" id="option_div">
+
+                </div> 
+                <div class="col-md-12 mt-3">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="form-label">Choose Franchise</label>
+                                <div class="form-control-wrap">
+                                     <form method="POST">
+                                        {% csrf_token %}
+                                    <select name="franchise-user[]" data-rule-required="true"  onchange="show_user_type()"  id="example-getting-started" multiple="multiple" class="form-control w-100">
+                                        {% for i in franchise_user %}
+                                        <option {% for j in fetch_franchise_price %}{% if i.id == j.user_id %} selected {% endif %}{% endfor %} value="{{i.id}}">{{i.first_name}} {{i.last_name}}</option>
+                                        {% endfor%}
+                                    </form>
+                                        {% comment %} <option value="tomatoes">Tomatoes</option>
+                                        <option value="mozarella">Mozzarella</option>
+                                        <option value="mushrooms">Mushrooms</option>
+                                        <option value="pepperoni">Pepperoni</option>
+                                        <option value="onions">Onions</option> {% endcomment %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-3" id="user_type">
+                    <label class="form-label" for="status" style="margin-top: 20px" >Choose User Type </label>
+                    <div class="row">
+                        {% comment %} <div class="col">
+                            <img src="{% static 'admin/images/checked.png' %}">
+                            <input onchange="ddd(this)" hidden name="frenchsy" value="guest" type="checkbox">
+                            <label class="form-label" for="status" style="margin-top: 20px">Guest User </label>
+                        </div> {% endcomment %}
+                        <div class="col">
+                            <img src="{% static 'admin/images/checked.png' %}">
+                            <input onchange="ddd(this)"  hidden name="frenchsy"  value="homeowner" type="checkbox">
+                            <label class="form-label" for="status" style="margin-top: 20px">Homeowner </label>
+                        </div>
+                        <div class="col">
+                            <img src="{% static 'admin/images/checked.png' %}">
+                            <input onchange="ddd(this)"  hidden name="frenchsy"  value="vacationer" type="checkbox">
+                            <label class="form-label" for="status" style="margin-top: 20px">vacationer </label>
+                        </div>
+                        <div class="col">
+                            <img src="{% static 'admin/images/checked.png' %}">
+                            <input onchange="ddd(this)" hidden  name="frenchsy"  value="propertymanager" type="checkbox">
+                            <label class="form-label" for="status" style="margin-top: 20px">Property manager </label>
+                        </div>
+                        <input type="hidden" id="price_count" name="price_count" value="" class="form-control" >
+                    </div>
+                </div>
+              
+                 <div class="col-lg-12 row" id="user_div">
+                    
+                </div>
+               
+                <div class="col-lg-12 row" id="user1_div">
+
+
+                </div> 
+                <div class="col-lg-12 row" id="user2_div">
+
+
+                </div> 
+                <div class="col-lg-12 row" id="user3_div">
+     
+
+                </div> 
+                
+            
+            </div>
+                  
+                    
+            </div>
+                    {% comment %} <input type="hidden" class="form-control" id="email-address-1" name="customer" value="customer" data-rule-required="true"> {% endcomment %}
+
+                    <div class="col-12 mb-3" >
+                        <div class="form-group">
+                            <button type="submit" onclick="Register()" class="btn btn-lg btn-primary" style="margin-top: 74px"> Add</button>
+                            {% comment %} <button class="btn btn-lg btn-primary" style="margin-top: 74px"> Back</button> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+}
+</script>
+{% comment %} <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('content');
+</script> {% endcomment %}
+<script>
+  let i = {{options_count}}
+  function vaccination(){
+  $('#option_div:last').append(`
+                <div class="col-lg-12">  
+                    <div class="option" id="option_div_${i}"> 
+                         <div class="form-group row" id="div_section_${i}">   
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control" id="options_${i}" onchange="select_option(${i})" name="option[${i}]name" required>
+                                            <option disabled selected> Select Option</option>
+                                            {% for i in option %}
+                                            <option value="{{i.id}}">{{i.name}}</option>  
+                                            {% endfor %}
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select image</label>
+                                    <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="image" name="option[${i}]image" accept="image/png, image/gif, image/jpeg" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options Key</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control" id="option_key_${i}"  onchange="select_option_key(${i})" name="option[${i}]key" required>
+                                            <option disabled selected> Select Option Key</option>  
+
+                                            <option value=""></option>  
+                                            
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Options Value</label>
+                                    <div class="form-control-wrap">
+                                        <select id="option_value_${i}"  name="option[${i}]value"  class="form-control" required>
+                                            <option disabled selected> Select Option Value</option>  
+                                            <option value=""></option>  
+                                            
+                                        </select> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Price</label>
+                                    <div class="form-control-wrap">
+                                    <input type="text"  data-rule-noSpace="true" name="option[${i}]price"  onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" id="price" name="price" data-rule-required="true"  >
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name-1" style="margin-top: 20px" >Quantity</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text"  data-rule-noSpace="true" name="option[${i}]quantity"  onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control" id="quantity" name="quantity" data-rule-required="true"  >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                <button type="button" id="remove_${i}" onclick="remove(this,${i})"  class="btn btn-danger" style="margin-top: 44px"> Remove </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                   
+
+  `)
+  i++
+    $('#options_count').val(i)
+    console.log($('#options_count').val(i))
+    
+}
+
+function remove(e,id){   
+        $('#option_div_'+id).remove();
+        i--
+        $('#options_count').val(i)
+    }
+function select_option(id){
+    let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let option_id = $('#options_'+id).val()
+    $.ajax({
+          type: "POST",
+          url: "{% url 'fetch_product_option' %}",
+          headers: { 'X-CSRFToken': csrftoken },
+          data:
+        {
+         option_id:option_id
+     },
+      success:function(res){
+          console.log(res.data)
+          option = ""
+            if(jQuery.isEmptyObject(res.data)){
+                option += "<option required value='0'>No  data Found</option>";
+
+            }else{
+                option += '<option selected disabled >Select Option</option>';
+                res.data.forEach(item => {
+                    option += '<option {{option}} value='+ item.id +'>' + item.option_name + '</option>';
+                });
+            }
+            $("#option_key_"+id).html(option);
+                
+          
+        },
+        error:function(res){
+          toastr.error(res.responseJSON.message);
+        }
+  });
+}
+function select_option_key(id){
+    let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let option_value = $('#option_key_'+id).val()
+    $.ajax({
+          type: "POST",
+          url: "{% url 'fetch_product_option_value' %}",
+          headers: { 'X-CSRFToken': csrftoken },
+          data:
+        {
+         option_value:option_value
+     },
+      success:function(res){
+          console.log(res.data)
+          option = ""
+            if(jQuery.isEmptyObject(res.data)){
+                option += "<option required value='0'>No  data Found</option>";
+
+            }else{
+                option += '<option selected disabled >Select Option</option>';
+                res.data.forEach(item => {
+                    option += '<option value='+ item.id +'>' + item.option_value + '</option>';
+                });
+            }
+            $("#option_value_"+id).html(option);
+                
+         
+        },
+        error:function(res){
+          toastr.error(res.responseJSON.message);
+        }
+  });
+   
+}
+</script>
+
+{% comment %} For Displaying Subcategory  data Name Acccording to category selected  {% endcomment %}
+<script>
+    function categories(){
+    let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let category_id = $('#cat').val()
+   
+    $.ajax({
+        type: "POST",
+        url: "{% url 'select_subcategory' %}",
+        headers: { 'X-CSRFToken': csrftoken },
+        data:
+      {
+        category_id:category_id
+   },
+    success:function(res){
+        console.log(res.data)
+        option = ""
+          if(jQuery.isEmptyObject(res.data)){
+              option += "<option required value='0'>No  data Found</option>";
+
+          }else{
+              option += '<option selected disabled >Select Sub Category</option>';
+              res.data.forEach(item => {
+                  option += '<option value='+ item.id +'>' + item.name + '</option>';
+              });
+          }
+          $("#subcategory").html(option);
+              
+       
+      },
+      error:function(res){
+        toastr.error(res.responseJSON.message);
+      }
+});
+ 
+    }
+</script>
+<script>
+    {% comment %} var  x = 1; {% endcomment %}
+    function loading(e){        
+        let files = e.files,
+        filesLength = files.length;
+        for (let i = 0; i < filesLength; i++) {
+            let f = files[i]
+            const fileReader = new FileReader();
+            fileReader.onload = (function (event) {
+                $(e).siblings('.upload-profile').children('.frame')[0].src = event.target.result
+            });
+            fileReader.readAsDataURL(f);
+      }
+    }
+      function img_copy() {
+            let num = 0
+            alert(num)
+            if(num==0){
+                h = num + $('.image_id').length
+                if(h<=4){
+
+                let img= $(".imgPic").clone().find("input:file").val("").end()
+                $(img[0]).find('.frame').attr('src', "{% static 'admin/images/avatar.png' %}")
+                $(img[0]).find('.image_id').attr('name', "image"+(h))
+                
+               
+                $(img[0]).appendTo("#image");
+            }else{
+                $('#addImgCutton').hide();
+            }
+            }
+            
+      }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1rt8OKhZ-8_Fv_OjiSA0n1NC1M6TAN94&callback=initMap&libraries=places&v=weekly" async></script>
+
+<script>
+    function initMap()
+    {
+      var input = document.getElementById('autocom');
+      var options =     {
+              types: ['geocode']
+              
+          
+          };
+        var input= document.getElementById('autocom')
+        autocomplete = new google.maps.places.Autocomplete(input, options);
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        var place = autocomplete.getPlace();
+        
+        let lat = place.geometry.location.lat()
+        let long = place.geometry.location.lng()
+        console.log(lat,long )
+        $('#lat').val(lat);
+        $('#long').val(long);
+       
+      
+            //alert("This function is working!");
+            //alert(place.name);
+           // alert(place.address_components[0].long_name);
+
+        });
+       //var place = autocomplete.getPlace();
+        //console.log(autocomplete ,'dddddd')
+        //document.getElementById('autocom').value = place.geometry.location.lat();
+
+    }
+    
+   
+</script>
+<script>
+   $('[name=frenchsy]').prop('checked', true)
+    function show_user_type(){
+        $('#user_type').css("display","block")
+        $('.count').remove()
+        $('[name=frenchsy]:checked').trigger('change', this)
+   }
+    $('#user_div').hide()  
+    $('#user1_div').hide()   
+    $('#user2_div').hide()    
+    $('#user3_div').hide() 
+
+   function ddd(e){
+        const user = $('#example-getting-started').val()
+        const product_id = $('#product_id').val()
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'edit_product_ajax' %}",
+            headers: { 'X-CSRFToken': csrftoken },
+            data:
+            {
+                info_user:user,
+                input_count: $('.count').length,
+                user_type:e.value,
+                product_id:product_id
+            },
+            success:function(res){
+                switch(e.value) {
+                    {% comment %} case "guest":
+                        $('#user_div').html(res)  
+                        if ($(e).is(':checked')) {
+                            $('#user_div').show()
+                        } else {
+                            $('#user_div').hide()
+                        }
+                        break {% endcomment %}
+                    case "homeowner":
+                        $('#user1_div').html(res)
+                        if ($(e).is(':checked')) {
+                            $('#user1_div').show()
+                        } else {
+                            $('#user1_div').hide()
+                        }
+                        break
+                    case "vacationer":
+                        $('#user2_div').html(res)
+                        if ($(e).is(':checked')) {
+                            $('#user2_div').show()
+                        } else {
+                            $('#user2_div').hide()
+                        }
+                        break
+                    case "propertymanager":
+                        $('#user3_div').html(res)
+                        if ($(e).is(':checked')) {
+                            $('#user3_div').show()
+                        } else {
+                            $('#user3_div').hide()
+                        }
+                        break
+                }
+                let price_input_count = $('[value=homeowner]').length;
+                $('#price_count').val(price_input_count)
+            }
+                
+        }); 
+    }
+    $('[name=frenchsy]:checked').trigger('change', this)
+        {% comment %} console.log($('[name=frenchsy]:checked')) {% endcomment %}
+</script>
+<link rel="stylesheet" type="text/css" href="https://davidstutz.github.io/bootstrap-multiselect/dist/css/bootstrap-multiselect.css">
+<script type="text/javascript" src="https://davidstutz.github.io/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#example-getting-started').multiselect();
+    });
+</script>
+
+{% endblock js_content %}  

@@ -1,0 +1,251 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+
+
+{% comment %} {% if perms.superadmin.add_customer %}
+{% url 'customer_registration' as customer_registration %}
+{% include "admin/basic/section.html" with page_title="Customer Managment" btn_url=customer_registration btn_text="Add Customer"  %}
+{% endif %} {% endcomment %}
+
+<div class="card card-bordered">
+    <div class="card-inner">
+        <div class="user-card mb-3">
+            <div class="user-avatar sq xl">
+                {% if product.image %}
+                <img src="{{product.image.url}}">
+                {% endif %}
+              
+                {% comment %} <img src="https://images.unsplash.com/photo-1668499755630-930be926f0f5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt=""> {% endcomment %}
+               
+            </div>
+            <div class="user-info">
+                <h4>{{product.name}}</h4> 
+                                
+                    {% if product.is_active == 1 %}
+                        <h6 style="color:green">Active</h6> 
+                    {% else %}
+                        <h6 style="color:red"> Deactive</h6>
+                    {% endif %} 
+                <div class="list">
+                    <div class="row">
+                        <div class="col-md-2 mr-5">
+                           
+                            <a href="{% url 'edit_product' product.slug %}"class="btn btn-outline-primary"><em class="icon ni ni-edit-alt mr-1"></em> Edit</a>
+                               
+                         
+                          
+                        </div>
+                      
+                        <div class="col-md-7 mr-5">
+                            
+                                
+                                <button type="submit" onclick="statuschange()" class="btn btn-outline-primary"><em class="icon ni ni-stop-circle mr-1"></em>   
+                                
+                                    {% if product.is_active == 1 %}
+                                        Mark as Deactive 
+                                    {% else %}
+                                        Mark  as Active
+                                    {% endif %}
+                                </button> 
+                           
+                            {% comment %} </form> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+           <li class="nav-item">        
+                <a class="nav-link active" data-toggle="tab" href="#tabItem1">
+                    <em class="icon ni ni-user"></em>
+                    <span>Product Details</span>
+                </a>    
+            </li>
+           <li class="nav-item">        
+                <a class="nav-link" data-toggle="tab" href="#tabItem2">
+                    <em class="icon ni ni-user"></em>
+                    <span> Order Details</span>
+                </a>    
+            </li>
+            {% comment %} <li class="nav-item">        
+                <a class="nav-link" data-toggle="tab" href="#tabItem3">
+                    <em class="icon ni ni-user"></em>
+                    <span>Address Book</span>
+                </a> 
+                
+            </li>  {% endcomment %}
+           {% comment %} <li class="nav-item">        
+                <a class="nav-link" data-toggle="tab" href="#tabItem4">
+                    <em class="icon ni ni-user"></em>
+                    <span>Details</span>
+                </a>    
+            </li> {% endcomment %}
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tabItem1">
+                <div class="row">
+                    <div class="col-md-6">
+                        {% for cat in  category %}
+                        {% if product.category.id == cat.id %}
+                        <div class="row">
+                        
+                            <div class="col-md-4">
+                                <p><b>Category </b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{cat.name}}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        {% for sub in  subcategory %}
+                        {% if product.subcategory.id == sub.id %}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Sub Category</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{sub.name}}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Product Name</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{product.name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>One Day Price</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{product.oneday_price}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Week Price</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{product.week_price}}</p>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Month Price</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{product.month_price}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Quantity</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{product.quantity}}</p>
+                            </div>
+                        </div>
+                    </div>
+               
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>SKU-Code</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{product.sku_code}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Description</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                <p>{{product.description|cut:"</p>"|cut:"<p>"}}</p>
+                            </div>
+                        </div>
+                    </div>
+             
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><b>Status</b></p>
+                            </div>
+                            <div class="col-md-8">
+                                {% if product.is_active == 1 %}
+                                <p>Active</p>
+                                {% else %}
+                                <p>Deactive</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+               
+                </div>
+            </div>
+            <div class="tab-pane" id="tabItem2">
+                <h5>Comming Soon</h5>
+            </div>
+          
+           <div class="tab-pane" id="tabItem3">
+           </div>
+           <div class="tab-pane" id="tabItem4">
+              <p>4</p>
+           </div>
+        </div>
+
+    </div>
+    <div class="modal" tabindex="-1" id="status">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Status</h5>
+                    <a type="button" href="{% url 'view_product' product.slug %}" class="btn btn-secondary" data-dismiss="modal"  aria-label="Close">X</a>
+                </div>
+                <form method ="POST" action="/admin/product_status_change_detail/{{product.slug}}" >
+                    {% csrf_token %} 
+                  
+                    <div class="modal-body">
+                        <h5 style="color: red;">Are You Sure To Want Change Status?</h5>
+                        <input type ="hidden" value="{{product.is_active}}" id="status" name="status">
+                    </div>
+                    <div class="modal-footer">
+                        <a type="button" href="{% url 'view_product' product.slug %}" class="btn btn-secondary" data-dismiss="modal">NO</a>
+                        <button type="submit" class="btn btn-primary">YES</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    function statuschange(){
+        $('#status').show()
+    }
+</script>
+
+{% endblock content %}

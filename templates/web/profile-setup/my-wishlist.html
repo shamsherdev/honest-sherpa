@@ -1,0 +1,170 @@
+<html>
+  {% extends 'web/basic/base.html' %}
+ {% load static %}
+  {% block title %}My Wishlist{% endblock %}
+
+ {% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+        {% if request.user.is_authenticated  and request.user.is_superuser == 0  %}
+            {% include 'web/basic/inner-header.html' %}
+            {% else %}
+            {% include 'web/basic/header.html' %}
+            {% endif %}
+        <!-- ---End Header--- -->
+            <div class="wraper pt85 wtvh100">
+
+                <section class="breadcrumb-bg-sec">
+                    <div class="container">
+                        <nav aria-label="breadcrumb">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/my/profile/{{request.user.slug}}">My Profile</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">My Wishlist</li>
+                          </ol>
+                        </nav>
+                    </div>
+                </section>
+
+                 <section class="in-sp5 dashboard-us-sec">
+
+                        <div class="container">
+                            <div class="row inner-dash-bord">
+                                <div class="col-md-3 dash_left">
+                                    <!-- -------left-menu-------- -->
+                                    {% include 'web/profile-setup/my-profile-sidebar.html' %}
+                                    <!-- -------left-menu-------- -->
+                                </div>
+                                <div class="col-md-9 dash_right">
+                                    <div class="dashboard-right-body">
+                                        <!-- -------dashboard Heading-------- -->
+                                        <div class="head-dash-board">
+                                            <div class="row">
+                                                <div class="col-md-6 head-dash-title">
+                                                    <h2>My Wishlist</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- -------dashboard Heading-------- -->
+
+                                        <!-- -------dashboard body-------- -->
+                                        <div class="dashboard-body">
+                                            <div class="equal-spacing30">
+                                                <div class="wish-list-bx">
+                                                    <ul class="cart_summry_in">
+                                                        {% if fav_list %}
+                                                       {% for i in fav_list%}
+                                                        <li>
+                                                          <div class="cart_to_lt">
+                                                              {% if i.product.image %}
+                                                              <figure><img src="{{i.product.image.url}}"></figure>
+                                                              {% endif %}
+                                                              <figcaption>
+                                                                  <h4>{{i.product.name}}</h4>
+                                                                  <h5>{{i.product.category.name}}</h5>
+                                                                  <ul class="nav_star">
+                                                                    <li class="star-active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                                    <li class="star-active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                                    <li class="star-active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                                    <li class="star-active"><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                                    <li class=""><a href="javascript:;"><i class="ri-star-fill"></i></a></li>
+                                                                  </ul>
+                                                                  <div class="dtr-card">
+                                                                      {% for j in product_option %}
+                                                                        {% if i.product.id == j.product_id %}
+                                                                        {% if j.option_value.option_name == "Color" %}
+                                                                        <span>Color: {{j.option_value.option_value}}</span>
+                                                                        {% endif %}
+                                                                        {% if j.option_value.option_name == "Size" %}
+                                                                        <span>Size: {{j.option_value.option_value}} </span>
+                                                                        {% endif %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+
+                                                                  </div>
+                                                                  {% for x in price %}                                                
+                                                                  {% if request.user.roll %}
+                                                                  
+                                                                      {% if x.product_id == i.id and request.user.roll == "vacationer" %}
+                                                                          <span >Price:${{x.zero_seven_days}}</span>
+                                                                      {% elif x.product_id == i.id and  request.user.roll  == "homeowner" %}
+                                                                          <span >Price:${{x.zero_seven_days}}</span>
+                                                                      
+                                                                      {% elif x.product_id == i.id and  request.user.roll  == "propertymanager" %}
+                                                                          <span >Price:${{x.zero_seven_days_wholesale}}</span>
+                                                                      {% endif %}
+                                                                  {% else %}
+                                                                      {% if  x.product_id == i.id  and x.user_type == 'vacationer' %}
+                                                                         
+                                                                          <span >Price:${{x.zero_seven_days}}</span>   
+                                                                        
+                                                                      {% endif %}
+                                                                  {% endif %}
+                                                                  {% endfor %}
+                                                                  {% if i.product.avaliable == True %}
+                                                                    <span class="in_stock">In stock</span>
+                                                                    {% else %}
+                                                                    <span class="in_stock">Out of stock</span>
+                                                                    {% endif %}
+                                                              </figcaption>
+                                                          </div>
+                                                          <input value="1" id="is_favourite" type="hidden">
+                                                           <input value="{{request.user.id}}" id="user"  type="hidden">
+                                                            <input value="{{i.product_id}}" id="is_product_{{i.product_id}}" type="hidden">
+                                                          <div class="vertical-cartcheck-bx">
+                                                              <a class="btn-of-close" href="/delete/wishlist/{{i.id}}"><i class="ri-close-line"></i></a>
+                                                              {% if request.user.is_authenticated %}
+                                                                {% if i.product.avaliable == True  %}
+                                                                {% if i.product_id not in add_cart%} 
+                                                                <button type="button" id="goto{{i.product_id}}" data-goto-id='{{i.product_id}}' onclick="add_cart({{i.product_id}})" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                                                {% else%}
+                                                                <a  href="/cart/items"  class="btn black-btn"><i class="ri-shopping-cart-line"></i> Go to cart</a>
+                                                                {% endif %}
+                                                                {% else %}
+                                                                <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                                                {% endif %}
+                                                                {% else %}
+                                                                {% if i.avaliable == True  %}
+                                                                <button type="button" onclick="login_popup()" class="btn black-btn"><i class="ri-shopping-cart-line"></i> Add to cart</button>
+                                                                {% else %}
+                                                                <button disabled type="button" class="btn black-btn"><i class=""></i> Out of stock</button>
+                                                                {% endif %}
+                                                                {% endif %}
+                                                                
+                                                          </div>
+                                                        </li>
+                                                       {% endfor %}
+                                                       {% else %}
+                                                       <li>
+                                                         <h4>No product Found</h4>
+                                                        </li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- -------dashboard body-------- -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                 </section>
+                 
+            </div>
+        <!-- ----------footer section----- ------ -->
+        <footer>
+            {% include 'web/basic/footer.html' %}
+        </footer>
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+    
+    <!-- -----side menu------ -->
+    </body>
+{% include 'web/js/helper.html' %}
+{% endblock content %}
+</html>

@@ -1,0 +1,134 @@
+
+ {% extends 'web/basic/base.html' %}
+ {% load static %}
+ {% block title %}Profile Setup{% endblock %}
+
+ {% block content %}
+   <body>
+
+    <div class="wraper-main">
+        <!-- ----Header---- -->
+      {% include 'web/basic/header.html' %}
+        <!-- ---End Header--- -->
+            <div class="wraper pt85 wtvh100">
+                 <div class="container account_my_out">
+
+                     <h4 class="titleh4">Profile Setup</h4>
+                     <form class="row" method="POST" id="profile_setup_form" enctype="multipart/form-data">
+                        {% csrf_token %}
+                     <div class="cover_my_account">
+
+                            {% comment %} <div class="user_photo_in">
+                                <figure><img src="{% static 'web/images/profile-default.png'%}"></figure>
+                                <div class="btn edit-btn">
+                                    <input data-rule-required="true" accept="image/*" data-rule-accept="image/*,image/gif"  data-msg-accept="Please Select valid image"  type="file" name="image" id="file">
+                                    <label for="file"><i class="ri-upload-fill"></i></label>
+                                </div>
+                            </div> {% endcomment %}
+                        
+                            <div class="cover_form_in">
+                                
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input type="text" data-rule-noSpace="true" value="{{data.first_name}}" data-rule-required="true" id="first_name" name="first_name" class="form-control" placeholder="First name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input type="text"  data-rule-noSpace="true" data-rule-required="true" name="last_name" class="form-control" placeholder="Last name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input type="email" readonly disabled value="{{user.email}}" name="email" class="form-control" placeholder="Enter email address">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input type="text" data-rule-noSpace="true" data-rule-required="true" 
+                                         onpaste="return false"onkeypress="return event.charCode >= 48 && event.charCode <= 57" minlength="10" maxlength="12" data-msg-minlength="Please enter valid mobile number" name="mobile_number" class="form-control" placeholder="Enter phone number">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 title-ved-info mt-2"><h6>Billing Address</h6></div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <select name="city"  class="form-select" aria-label="Default select example">
+                                            <option disabled selected="">City</option>
+                                            <option value="sacramento">Sacramento </option>
+                                            <option value="denver">Denver</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <select  name="state"  class="form-select" aria-label="Default select example">
+                                            <option disabled selected="">State</option>
+                                            <option value="california">California</option>
+                                            <option value="colorado">Colorado</option>
+
+                                            
+                                            
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="inner-icon-input">
+                                            <input data-rule-noSpace="true" min="0" maxlength="5" onpaste="return false"onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                            data-rule-maxlength="Please enter valid pincode " data-msg-min="Please enter valid pincode " data-msg-integer="Please enter valid pincode " data-rule-integer="true" name="zip_code" type="text" class="form-control" placeholder="Zip code">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 pt-2 text-center">
+                                    <button onclick="profile_setup()" class="btn btn-secondary" type="submit">Submit</button>
+                                </div>
+                                
+                            </div>
+                       
+                     </div>
+                      </form>
+                 </div>
+            </div>
+        <!-- ----------footer section----- ------ -->
+       {% include 'web/basic/footer.html' %}
+        <!-- ----------footer section----------- -->
+    </div>
+
+    <!-- -----java script------ -->
+    {% include 'web/js/helper.html' %}
+    <!-- -----side menu------ -->
+    </body>
+    
+<script>
+    function profile_setup(){
+        $('#profile_setup_form').valid()
+        
+         $.validator.addMethod('emailRegex', function(value, element) {
+        let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+        return emailExp.test(value);
+    }, 'Email format is not valid');
+      jQuery.validator.addMethod("noSpace", function(value, element) { 
+            if(value.indexOf(" ")==0){
+                return false;
+            }
+            return true;
+            }, "No space please and don't leave it empty");
+    
+    
+    } 
+    
+    </script>
+<script>
+  function image_change(){
+    $('#profile_setup_form').valid()
+    let image = $('#file').val()
+    if (image != ''){
+       console.log("ddddd")
+    }
+  }
+</script>
+{% endblock content %}
+

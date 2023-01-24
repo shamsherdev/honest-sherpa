@@ -1,0 +1,82 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Update FAQ</h4> 
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                {% comment %} <h5 class="card-title">User Create</h5> {% endcomment %}
+            </div>
+            <form method="post" id="register" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Question</label>
+                            <div class="form-control-wrap">
+                                <textarea class="summernote-basic" type="text" data-rule-required="true" data-rule-noSpace="true" class="form-control" id="full-name-1" name="question"  data-rule-required="true" value="">{{edit_data.question}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                  
+                   
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1">Answer</label>
+                            <div class="form-control-wrap">
+                                {% comment %} <input type="text" class="form-control" id="phone-no-1" name="desgination" data-rule-required="true" 
+                                value="{{edit_data.description|safe}}" > {% endcomment %}
+                                <textarea value=""  class="summernote-basic" data-rule-required="true" data-rule-noSpace="true" name="answer" required>{{edit_data.answer|safe}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+   
+                    
+                    
+                    <div class="col-12">
+                        <div class="form-group">
+                            <button onclick="Register()" type="submit" class="btn btn-lg btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+function Register(){
+  jQuery.validator.addMethod("noSpace", function(value, element) { 
+    if(value.indexOf(" ")==0){
+        return false;
+    }
+    return true;
+}, "No space please and don't leave it empty");
+$.validator.addMethod('emailRegex', function(value, element) {
+let emailExp = new RegExp(/^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i);
+return emailExp.test(value);
+}, 'Email format is not valid');  
+$('#register').valid()
+}
+</script>
+</script>
+{% comment %} <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('answer');
+</script> {% endcomment %}
+
+{% endblock js_content %}  

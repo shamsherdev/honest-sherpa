@@ -1,0 +1,148 @@
+{% extends "admin/basic/base.html" %}
+{% load static %} 
+
+{% block content %}
+
+<div class="nk-block nk-block-lg">
+    <div class="nk-block-head">
+        <div class="nk-block-head-content">
+            <h4 class="title nk-block-title">Franchise Detail</h4>
+            <div class="nk-block-des">
+                {% comment %} <p>You can alow display form in column as example below.</p> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="card card-bordered">
+        <div class="card-inner">
+            <div class="card-head">
+                {% comment %} <h5 class="card-title">User Create</h5> {% endcomment %}
+            </div>
+            <form  method="post" id="register">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">First Name</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.first_name}}"readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1">Last Name</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.last_name}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone-no-1">Contact No</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.mobile_number}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Email address</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.email}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">License</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.license_number}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">ID-Number</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.id_number}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Company Name</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.company_name}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Country</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.country}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">State</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.state}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">City</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.city}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Company Name</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.company_address}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Pin Code</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" value="{{view_detail_data.pin_code}}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1">Status</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control"value="{% if view_detail_data.is_active == True %} Active {% else %} Deactive {% endif %}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-12">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-lg btn-primary" value="Create Account" onclick="Register()">
+                        </div>
+                    </div> {% endcomment %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block js_content %}
+<script>
+    function Register(){
+    $('#register').valid()
+    }
+</script>
+{% endblock js_content %}  
