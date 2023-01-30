@@ -393,7 +393,7 @@ class Options(models.Model):
 
 
 class Product(models.Model):
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE,null=True, blank=True)
     subcategory = models.ForeignKey(ProductSubCategory, on_delete=models.CASCADE,null=True, blank=True)
     option = models.ForeignKey(Options, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=250)
@@ -673,6 +673,30 @@ class FranchisePinCodesPrice(models.Model):
     # yearly_wholesale_price = models.CharField(null=True, blank=True, max_length=10)
 
 
+class FranchisePrice(models.Model):
+    # pin_code = models.CharField(null=True, blank=True, max_length=10)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    # zip_code = models.ForeignKey(FranchisePinCodes, on_delete=models.CASCADE, null=True, blank=True)
+    user_type = models.CharField(null=True, blank=True, max_length=10)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, null=True, blank=True
+    )
+    zero_seven_days = models.CharField(null=True, blank=True, max_length=10)
+    greaterthan_seven = models.CharField(null=True, blank=True, max_length=10)
+    zero_seven_days_wholesale = models.CharField(null=True, blank=True, max_length=10)
+    greaterthan_seven_wholesale = models.CharField(null=True, blank=True, max_length=10)
+    sale_price = models.CharField(null=True, blank=True, max_length=10)
+    created = models.DateTimeField(auto_now_add=True)
+
+    # yearly_price = models.CharField(null=True, blank=True, max_length=10)
+    # two_weekly_price = models.CharField(null=True, blank=True, max_length=10)
+    # monthly_price = models.CharField(null=True, blank=True, max_length=10)
+
+    # twoweekly_wholesale_price = models.CharField(null=True, blank=True, max_length=10)
+    # monthly_wholesale_price = models.CharField(null=True, blank=True, max_length=10)
+    # yearly_wholesale_price = models.CharField(null=True, blank=True, max_length=10)
+
+
 class AppBanner(models.Model):
     video = models.FileField(
         upload_to="deploy/appbanner/videos/%Y/%m/%d/", null=True, verbose_name=""
@@ -784,7 +808,9 @@ class OfferUsed(models.Model):
 
 class OrderManagement(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    company=models.ForeignKey(PropertyManagerMember, on_delete=models.CASCADE, null=True, blank=True)
     pin_code = models.CharField(null=True, blank=True, max_length=10)
+    user_type = models.CharField(null=True, blank=True, max_length=10)
     offer = models.ForeignKey(OfferManagement, on_delete=models.CASCADE, null=True, blank=True)
     addtocart = models.ForeignKey(AddToCart, on_delete=models.CASCADE, null=True, blank=True)
     order_id = models.CharField(max_length=50, unique=True, null=True, blank=True)
@@ -794,12 +820,17 @@ class OrderManagement(models.Model):
     order_return = models.DateField(null=True, blank=True)
     order_created_by = models.CharField(max_length=50, null=True, blank=True)
     actual_price=models.CharField(max_length=50, null=True, blank=True)
-    discount_price=models.CharField(max_length=50, null=True, blank=True)
+    discount_price=models.FloatField(default=0)
     Address = models.CharField(max_length=250, null=True, blank=True)
     payment_status=models.BooleanField(default=False)
     product_details = JSONField()
     order_status=models.CharField(max_length=50,
         choices=choices.Order_Status)
+    gate=models.CharField(max_length=50, null=True, blank=True)
+    doorcode=models.CharField(max_length=50, null=True, blank=True)
+    subdivision=models.CharField(max_length=50, null=True, blank=True)
+    reservationnumber=models.CharField(max_length=50, null=True, blank=True)
+    notes=models.TextField(null=True, blank=True)
     slug = models.CharField(max_length=50, unique=True, default=uuid.uuid4)
 
 

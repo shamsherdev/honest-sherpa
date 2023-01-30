@@ -238,11 +238,19 @@
                                                 <span>${{ord.total_price}}</span>
                                             </li>
                                             {% if ord.offer_id %}
+<<<<<<< HEAD
+                                            {% if forloop.counter == 1 %}
+                                                 <input type="hidden" id='offer_id' name='offer_id' value="{{ord.offer_id}}">
+                                                <input type="hidden" id='discount_value' name='discount_value' value="{{value_in_dic}}">
+                                                <li><span>Offer Discounts</span> <span>${{value_in_dic}}</span></i>
+                                                    {% endif %}
+=======
                                            
                                                  <input type="hidden" id='offer_id' name='offer_id' value="{{ord.offer_id}}">
                                                 <input type="hidden" id='discount_value' name='discount_value' value="{{value_in_dic}}">
                                                 <li><span>Offer Discounts</span> <span>${{value_in_dic}}</span></i>
                                            
+>>>>>>> f533768efa27dcc40255e01f87a5431eaf00f0a0
                                             {% elif offer_id == None %}
 
                                             {% endif %}

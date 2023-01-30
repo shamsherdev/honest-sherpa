@@ -1,0 +1,17 @@
+{% load  static %} 
+<div class="dropdown">
+    <a class="btn btn-primary dropdown-toggle" href="#" type="button" data-toggle="dropdown">Filter</a>
+    <form method ="POST">
+        {% csrf_token %}
+        <div class="dropdown-menu">
+            <ul class="link-list-opt">
+                <li><a onclick="userfilter('all')"><span>All </span></a></li>
+                <li><a onclick="userfilter('vacationer')"><span>Vacationer</span></a></li>
+                <li><a onclick="userfilter('homeowner')"><span>Homeowner</span></a></li>
+                <li><a onclick="userfilter('propertymanager')"></em><span>Property Manager</span></a></li>
+                <li><a onclick="userfilter('high')"></em><span>Price - High To Low</span></a></li>
+                <li><a onclick="userfilter('low')"></em><span>Price - Low To High</span></a></li>
+            </ul>
+        </div>
+    </form>
+  </div>

@@ -35,6 +35,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6" style="display:none" id="company_id">
+                        <div class="form-group">
+                            <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Company</label>
+                            <div class="form-control-wrap">
+                                <select data-rule-required="true" class="form-control" id="user-type" name="user-company"  required>
+                                    <option disabled selected >Company Name</option>  
+                                    {% for com in company %}
+                                    <option value="{{com.id}}">{{com.companyname}}</option>
+                                    {% endfor %}
+                                    {% comment %} <option value="homeowner">Homeowner</option>  
+                                    <option value="propertymanager">PropertyManager</option>    
+                                    {% endcomment %}
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select User</label>
@@ -163,6 +179,51 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Gate*</label>
+                            <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="gate" name="gate" data-rule-required="true">  
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Door Code*</label>
+                            <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="door_code" name="door_code" data-rule-required="true">  
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Reservation Number*</label>
+                            <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="reservation_number" name="reservation_number" data-rule-required="true">  
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Subdivision*</label>
+                            <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="subdivision" name="subdivision" data-rule-required="true">  
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" >Notes*</label>
+                            <div class="form-control-wrap">
+                            <textarea type="text"  id="notes" name="notes" data-rule-required="true" required>  
+                            </textarea>      
+                            </div>
+                        </div>
+                    </div>
                     {% comment %} <div class="col-lg-6">
                         <div class="form-group">
                             <label class="form-label" for="status" style="margin-top: 20px" >Status*</label>
@@ -254,6 +315,16 @@
         $('#delivery-date').val('{{tomorrow|date:"Y-m-d"}}')
 
     }
+
+    function resetUser() {
+        $('#user').val("")
+        $('#user option').eq(0).prop("selected", true)
+    }
+
+    function resetProductData() {
+        $('#product-data').remove()
+    }
+
     function resetForUser() {
         resetProduct()
         resetZipcode()
@@ -272,7 +343,9 @@
 
         const user_type=$('#user-type').val()
         console.log(user_type)
+       
         resetForUser()
+        resetProductData()
         
         $.ajax({
             type:"POST",
@@ -292,15 +365,42 @@
                           option += '<option value='+ item.id +'>' + item.first_name + item.last_name +'</option>';
                       });
                   }
-                  $("#user").html(option); 
+                  $("#user").html(option);
+                  console.log(user_type)
+                  if(user_type == 'propertymanager') {
+                      $('#company_id').show()
+                  } else {
+                    $('#company_id').hide()
+                  }
                
               },
               error:function(res){
                 toastr.error(res.responseJSON.message);
               }
         });
-
+       
     }
+
+    $(document).on('change', '#user',function() {
+        resetProductData()
+        resetOffer()
+        resetDate()
+        resetEffectivePrice()
+        resetActualPrice()
+        resetZipcode()
+        resetProduct()
+    })
+
+    $(document).on('change', '#user-type', () => {
+        resetProductData()
+        resetOffer()
+        resetDate()
+        resetEffectivePrice()
+        resetActualPrice()
+        resetZipcode()
+        resetProduct()
+        resetUser()
+    })
 
     const productQuantityDataOfInput = {}
     function Products(){
@@ -347,9 +447,9 @@
                 let inputBox = '<div id="product-data">'
 
                 $.each(selectedProducts, function(index, element) {
-                    inputBox += `<div style="display: flex;">
-                                    <p>${$(element).text()}</p>
-                                    <div>
+                    inputBox += `<div class="product-qty-box">
+                                    <label class="form-label">${$(element).text()}</label>
+                                    <div class="qty-box">
                                         <button type="button" class="decrease-quantity">-</button>
                                         <input type="text" name="textInput${index}" data-product-id=${element.value} value="${productQuantityDataOfInput[element.value] ? productQuantityDataOfInput[element.value]: 1}" class="product-quantity" readonly>
                                         <button type="button" class="increase-quantity">+</button>
@@ -428,6 +528,7 @@
         const zip_code =$("#zip-code").val()
         $(document).find('#example-getting-started').empty("val", "")
         resetForPincode()
+        resetProductData()
 
         $.ajax({
             type:"POST",
@@ -466,11 +567,12 @@
     function changeDate(){
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         const delivery_date=$('#delivery-date').val()
+        console.log(delivery_date,'-i090=-i909090')
         const return_date =$("#return-date").val()
         const product_id=$('#example-getting-started').val()
         const user_type=$('#user-type').val()
         const zip_code =$("#zip-code").val()
-        resetProduct()
+        {% comment %} resetProduct() {% endcomment %}
         resetOffer()
         resetEffectivePrice()
        
@@ -487,7 +589,9 @@
                 product_data: getProductsData()
             },
             success:function(res){
+                
                 $("#actual").val(res.data);    
+                $("#effective").val(res.data);  
                
               },
               error:function(res){

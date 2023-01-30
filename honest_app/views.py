@@ -2215,26 +2215,55 @@ def orderCreate(request):
         return_date=request.POST.get("return_date1")
         discount_value=request.POST.get("discount_value")
         actual_value=request.POST.get("actual_value")
-        offer_id=request.POST.get("offer_id")    
+        offer_id=request.POST.get("offer_id")  
+        
         details=AddToCart.objects.filter(user_id=request.user.id)
         order_id=createorderid()
         data=[]
-        if offer_id:
-            deta=OrderManagement.objects.filter(user_id=request.user.id,offer_id=int(offer_id)).values_list('offer_id', flat=True)
-            for i in deta: 
-                a=int(offer_id)
-                if a == i:
-                    messages.error(request, "You have already used this offer")
-                    return redirect("/cart/items")
+        if return_date:
+            if offer_id:
+                deta=OrderManagement.objects.filter(user_id=request.user.id,offer_id=int(offer_id)).values_list('offer_id', flat=True)
+                if not  deta !=[]:
+                    for i in deta:
+                        a=int(offer_id)
+                        if a == i:
+                            messages.error(request, "You have already used this offer")
+                            return redirect("/cart/items")
+                        else:
+                            print('3543t5y54y65u')
+                            for d in details:
+                                data.append({
+                                        "product_id": d.product_id,
+                                        "product_name":d.product.name,
+                                        "product_category":d.product.category.name,
+                                        "price": d.product_total_price,
+                                        "product_return":d.product.is_return,
+                                        "product_quantity": d.quantity
+                                    })
+                            if discount_value != None:
+                                discount_price=round(float(actual_value)-float(discount_value),2)
+                                ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, discount_price=discount_price, order_created_by=request.user.roll, order_status="pending", order_return=return_date, delivery=delivery, product_details=data)
+                                if ordercreate:
+                                    AddToCart.objects.filter(user_id=request.user.id).delete()
+                            else:
+                                ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, discount_price=actual_value, order_created_by=request.user.roll, order_return=return_date, order_status="pending", delivery=delivery, product_details=data)
+                                if ordercreate:
+                                    AddToCart.objects.filter(user_id=request.user.id).delete()
+                            
+                            subject = " Welcome to   Honest Sherpa world"
+                            message = f"Hi {request.user.first_name} {request.user.last_name}, Thank you for  Order the product  on Honest Sherpa . Your order id is {order_id} and Your paymemt status is Pending "
+                            recipient_list = [request.user.email]
+                            sendMail(subject, message,recipient_list)
+                            return render(request, template_name) 
                 else:
                     for d in details:
-                        data.append({
-                                "product_id": d.product_id,
-                                "product_name":d.product.name,
-                                "product_category":d.product.category.name,
-                                "price": d.product_total_price,
-                                "product_return":d.product.is_return,
-                                "product_quantity": d.quantity
+                            data.append({
+                                    "product_id": d.product_id,
+                                    "product_name":d.product.name,
+                                    "product_category":d.product.category.name,
+                                    "price": d.product_total_price,
+                                    "product_return":d.product.is_return,
+                                    "product_quantity": d.quantity
                             })
                     if discount_value != None:
                         discount_price=round(float(actual_value)-float(discount_value),2)
@@ -2245,37 +2274,138 @@ def orderCreate(request):
                         ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, discount_price=actual_value, order_created_by=request.user.roll, order_return=return_date, order_status="pending", delivery=delivery, product_details=data)
                         if ordercreate:
                             AddToCart.objects.filter(user_id=request.user.id).delete()
+                    
+                    subject = " Welcome to   Honest Sherpa world"
+                    message = f"Hi {request.user.first_name} {request.user.last_name}, Thank you for  Order the product  on Honest Sherpa . Your order id is {order_id} and Your paymemt status is Pending "
+                    recipient_list = [request.user.email]
+                    sendMail(subject, message,recipient_list)
+                    return render(request, template_name)  
+                 
+            else:
+                for d in details:
+                    data.append({
+                            "product_id": d.product_id,
+                            "product_name":d.product.name,
+                            "product_category":d.product.category.name,
+                            "price": d.product_total_price,
+                            "product_return":d.product.is_return,
+                            "product_quantity": d.quantity
+                        })
+                if discount_value != None:
+                    discount_price=round(float(actual_value)-float(discount_value),2)
+                    ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, discount_price=discount_price, order_status="pending", order_created_by=request.user.roll, order_return=return_date, delivery=delivery, product_details=data)
+                    
+                    if ordercreate:
+                        AddToCart.objects.filter(user_id=request.user.id).delete()
+                else:
+                    ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, discount_price=actual_value, order_created_by=request.user.roll, order_status="pending", order_return=return_date, delivery=delivery, product_details=data)
+                    if ordercreate:
+                        AddToCart.objects.filter(user_id=request.user.id).delete()
+                subject = " Welcome to   Honest Sherpa world"
+                message = f"Hi {request.user.first_name} {request.user.last_name}, Thank you for  Order the product  on Honest Sherpa . Your order id is {order_id} and Your paymemt status is Pending "
+                recipient_list = [request.user.email]
+                sendMail(subject, message,recipient_list)            
+                return render(request, template_name)
+        else:
+            if offer_id:
+                
+                deta=OrderManagement.objects.filter(user_id=request.user.id,offer_id=int(offer_id)).values_list('offer_id', flat=True)
+              
+                if not deta != []:
+                    
+                    for i in deta: 
+                        a=int(offer_id)
+                        if a == i:
+                            messages.error(request, "You have already used this offer")
+                            return redirect("/cart/items")
+                        else:
+                            for d in details:
+                                data.append({
+                                        "product_id": d.product_id,
+                                        "product_name":d.product.name,
+                                        "product_category":d.product.category.name,
+                                        "price": d.product_total_price,
+                                        "product_return":d.product.is_return,
+                                        "product_quantity": d.quantity
+                                    })
+                            if discount_value != None:
+                                discount_price=round(float(actual_value)-float(discount_value),2)
+                                ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, discount_price=discount_price, order_created_by=request.user.roll, order_status="pending", order_return=return_date, delivery=delivery, product_details=data)
+                                if ordercreate:
+                                    AddToCart.objects.filter(user_id=request.user.id).delete()
+                            else:
+                                ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, discount_price=actual_value, order_created_by=request.user.roll, order_return=return_date, order_status="pending", delivery=delivery, product_details=data)
+                                if ordercreate:
+                                    AddToCart.objects.filter(user_id=request.user.id).delete()
+
+                            subject = " Welcome to   Honest Sherpa world"
+                            message = f"Hi {request.user.first_name} {request.user.last_name}, Thank you for  Order the product  on Honest Sherpa . Your order id is {order_id} and Your paymemt status is Pending "
+                            recipient_list = [request.user.email]
+                            sendMail(subject, message,recipient_list)
+                            return render(request, template_name)    
+                else:
+                   
+                    for d in details:
+                            data.append({
+                                    "product_id": d.product_id,
+                                    "product_name":d.product.name,
+                                    "product_category":d.product.category.name,
+                                    "price": d.product_total_price,
+                                    "product_return":d.product.is_return,
+                                    "product_quantity": d.quantity
+                                })
+                    if discount_value != None:
+                        discount_price=round(float(actual_value)-float(discount_value),2)
+                        ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, 
+                        pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, 
+                        discount_price=discount_price, order_created_by=request.user.roll, order_status="pending", 
+                         delivery=delivery, product_details=data)
+                        if ordercreate:
+                            AddToCart.objects.filter(user_id=request.user.id).delete()
+                    else:
+                        ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id,
+                         pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, 
+                         discount_price=actual_value, order_created_by=request.user.roll, order_status="pending", delivery=delivery, product_details=data)
+                        if ordercreate:
+                            AddToCart.objects.filter(user_id=request.user.id).delete()
 
                     subject = " Welcome to   Honest Sherpa world"
                     message = f"Hi {request.user.first_name} {request.user.last_name}, Thank you for  Order the product  on Honest Sherpa . Your order id is {order_id} and Your paymemt status is Pending "
                     recipient_list = [request.user.email]
                     sendMail(subject, message,recipient_list)
-                    return render(request, template_name)    
-        else:
-            for d in details:
-                data.append({
-                        "product_id": d.product_id,
-                        "product_name":d.product.name,
-                        "product_category":d.product.category.name,
-                        "price": d.product_total_price,
-                        "product_return":d.product.is_return,
-                        "product_quantity": d.quantity
-                    })
-            if discount_value != None:
-                discount_price=round(float(actual_value)-float(discount_value),2)
-                ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, discount_price=discount_price, order_status="pending", order_created_by=request.user.roll, order_return=return_date, delivery=delivery, product_details=data)
-                
-                if ordercreate:
-                    AddToCart.objects.filter(user_id=request.user.id).delete()
+                    return render(request, template_name)
+        
             else:
-                ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, discount_price=actual_value, order_created_by=request.user.roll, order_status="pending", order_return=return_date, delivery=delivery, product_details=data)
-                if ordercreate:
-                    AddToCart.objects.filter(user_id=request.user.id).delete()
-            subject = " Welcome to   Honest Sherpa world"
-            message = f"Hi {request.user.first_name} {request.user.last_name}, Thank you for  Order the product  on Honest Sherpa . Your order id is {order_id} and Your paymemt status is Pending "
-            recipient_list = [request.user.email]
-            sendMail(subject, message,recipient_list)            
-            return render(request, template_name)
+                for d in details:
+                    data.append({
+                            "product_id": d.product_id,
+                            "product_name":d.product.name,
+                            "product_category":d.product.category.name,
+                            "price": d.product_total_price,
+                            "product_return":d.product.is_return,
+                            "product_quantity": d.quantity
+                        })
+                if discount_value != None:
+                    discount_price=round(float(actual_value)-float(discount_value),2)
+                    ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, 
+                    pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, 
+                    discount_price=discount_price, order_status="pending", order_created_by=request.user.roll, 
+                     delivery=delivery, product_details=data)
+                    
+                    if ordercreate:
+                        AddToCart.objects.filter(user_id=request.user.id).delete()
+                else:
+                    ordercreate=OrderManagement.objects.create(order_id=order_id, user_id=request.user.id, 
+                    pin_code=pincode, offer_id=offer_id, Address=address , actual_price=actual_value, 
+                    discount_price=actual_value, order_created_by=request.user.roll, order_status="pending", 
+                    delivery=delivery, product_details=data)
+                    if ordercreate:
+                        AddToCart.objects.filter(user_id=request.user.id).delete()
+                subject = " Welcome to   Honest Sherpa world"
+                message = f"Hi {request.user.first_name} {request.user.last_name}, Thank you for  Order the product  on Honest Sherpa . Your order id is {order_id} and Your paymemt status is Pending "
+                recipient_list = [request.user.email]
+                sendMail(subject, message,recipient_list)            
+                return render(request, template_name)
     except:
         messages.error(request, "something went wrong")
         return render(request, template_name)

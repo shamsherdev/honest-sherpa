@@ -33,6 +33,24 @@
                             </div>
                         </div>
                     </div>
+                    {% if orderedit.user_type == 'propertymanager'%}
+                        <div class="col-lg-6" style="display:block" id="company_id">
+                            <div class="form-group">
+                                <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select Company</label>
+                                <div class="form-control-wrap">
+                                    <select data-rule-required="true" class="form-control" id="user-type" name="user-company"  required>
+                                        <option disabled selected >Company Name</option>  
+                                        {% for com in company %}
+                                        <option {% if orderedit.company_id == com.id %} selected {% endif %}value="{{com.id}}">{{com.companyname}}</option>
+                                        {% endfor %}
+                                        {% comment %} <option value="homeowner">Homeowner</option>  
+                                        <option value="propertymanager">PropertyManager</option>    
+                                        {% endcomment %}
+                                    </select> 
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label class="form-label" for="full-name-1" style="margin-top: 20px" >Select User</label>
@@ -70,12 +88,12 @@
                                         <option {% if product.id in selected_product_ids %} selected {% endif %} value="{{ product.id }}" >{{product.name}}</option>
                                     {% endfor %}
                                 </select>
-                               
+                                
                                 <div id="product-data">
                                     {% for product_detail in orderedit.product_details %}
-                                    <div style="display: flex;">
-                                        <p>{{ product_detail.product_name }}</p>
-                                        <div>
+                                    <div class="product-qty-box">
+                                        <label class="form-label">{{ product_detail.product_name }}</label>
+                                        <div class="qty-box">
                                             <button type="button" class="decrease-quantity">-</button>
                                             <input type="text" name="textInput{{ forloop.counter }}" data-product-id="{{ product_detail.product_id  }}" value="{{ product_detail.product_quantity }}" class="product-quantity" readonly>
                                             <button type="button" class="increase-quantity">+</button>
@@ -142,6 +160,52 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Gate*</label>
+                            <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="gate" name="gate" Value="{{orderedit.gate}}" data-rule-required="true">  
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Door Code*</label>
+                            <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="door_code" name="door_code" value="{{orderedit.doorcode}}" data-rule-required="true">  
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Reservation Number*</label>
+                            <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="reservation_number" name="reservation_number" value="{{orderedit.reservationnumber}}" data-rule-required="true">  
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Subdivision*</label>
+                            <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="subdivision" name="subdivision" value="{{orderedit.subdivision}}" data-rule-required="true">  
+                                 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="form-label" for="email-address-1" style="margin-top: 20px" >Notes*</label>
+                            <div class="form-control-wrap">
+                            <textarea type="text" class="form-control" id="notes" name="notes" data-rule-required="true">{{orderedit.notes}}  
+                            </textarea>      
+                            </div>
+                        </div>
+                    </div>
+
                     </div>
                     <div class="col-12 mb-3">
                         <div class="form-group">
@@ -211,6 +275,16 @@
         $('#delivery-date').val('{{tomorrow|date:"Y-m-d"}}')
 
     }
+
+    function resetUser() {
+        $('#user').val("")
+        $('#user option').eq(0).prop("selected", true)
+    }
+
+    function resetProductData() {
+        $('#product-data').remove()
+    }
+
     function resetForUser() {
         resetProduct()
         resetZipcode()
@@ -224,13 +298,14 @@
         resetDate()
     }
     
-    {% comment %} function SelectUser(){
+    function SelectUser(){
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
         const user_type=$('#user-type').val()
         console.log(user_type)
         resetForUser()
-        
+        resetProductData()
+
         $.ajax({
             type:"POST",
             url:"{% url 'select_User' %}",
@@ -250,14 +325,40 @@
                       });
                   }
                   $("#user").html(option); 
-               
+                  if(user_type == 'propertymanager') {
+                    $('#company_id').show()
+                } else {
+                  $('#company_id').hide()
+                }
+
               },
               error:function(res){
                 toastr.error(res.responseJSON.message);
               }
         });
 
-    } {% endcomment %}
+    } 
+
+    $(document).on('change', '#user',function() {
+        resetProductData()
+        resetOffer()
+        resetDate()
+        resetEffectivePrice()
+        resetActualPrice()
+        resetZipcode()
+        resetProduct()
+    })
+
+    $(document).on('change', '#user-type', () => {
+        resetProductData()
+        resetOffer()
+        resetDate()
+        resetEffectivePrice()
+        resetActualPrice()
+        resetZipcode()
+        resetProduct()
+        resetUser()
+    })
 
     const productQuantityDataOfInput = {}
     function Products(){
@@ -266,10 +367,10 @@
         const user_type=$('#user-type').val()
         const zip_code =$("#zip-code").val()
         console.log(user_type,'jbjjjjjjjjjjjjjjjjjjjjjjjjj')
-        {% comment %} resetOffer()
+        resetOffer()
         resetDate()
         resetEffectivePrice()
-        resetActualPrice() {% endcomment %}
+        resetActualPrice()
 
         $.ajax({
             type:"POST",
@@ -305,9 +406,9 @@
                 let inputBox = '<div id="product-data">'
 
                 $.each(selectedProducts, function(index, element) {
-                    inputBox += `<div style="display: flex;">
-                                    <p>${$(element).text()}</p>
-                                    <div>
+                    inputBox += `<div class="product-qty-box">
+                                    <label class="form-label">${$(element).text()}</label>
+                                    <div class="qty-box">
                                         <button type="button" class="decrease-quantity">-</button>
                                         <input type="text" name="textInput${index}" data-product-id=${element.value} value="${productQuantityDataOfInput[element.value] ? productQuantityDataOfInput[element.value]: 1}" class="product-quantity" readonly>
                                         <button type="button" class="increase-quantity">+</button>
@@ -386,7 +487,7 @@
         const zip_code =$("#zip-code").val()
         $(document).find('#example-getting-started').empty("val", "")
         resetForPincode()
-        
+        resetProductData()
 
         $.ajax({
             type:"POST",
@@ -445,6 +546,7 @@
             },
             success:function(res){
                 $("#actual").val(res.data);    
+                $('#effective').val(res.data)
                
               },
               error:function(res){

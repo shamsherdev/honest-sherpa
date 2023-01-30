@@ -1,5 +1,3 @@
-from bdb import effective
-from email import message
 import math
 import random
 from unittest import result
@@ -69,6 +67,332 @@ def generate_sku_code(request, product_name):
     return SKU_CODE
 
 
+# def calculate_order_price(zip_code,product,user_type, **kwargs):
+#     data = {}
+#     products=Product.objects.filter(id__in=product).values_list("is_return" , flat=True)
+#     pin_price_code=FranchisePinCodesPrice.objects.filter(pin_code=zip_code,product_id__in=product,
+#     user_type=user_type)
+#     result=[]
+#     product_data = kwargs['product_data']
+   
+#     if 'offer' in kwargs :
+#         offer_discount=kwargs['offer']
+#         offer_price=OfferManagement.objects.get(code=offer_discount)
+#         pin_code_price=FranchisePinCodesPrice.objects.filter(pin_code=zip_code,product_id__in=product,
+#         user_type=user_type,product__category_id=offer_price.category_id)
+#         if 'days_diffrence' in kwargs:
+#             days_diffrence_default=7
+#             days_diffrence=kwargs['days_diffrence']
+#             if days_diffrence >= days_diffrence_default:
+#                 for i in products:
+#                     if user_type=="vacationer" or user_type == "homeowner":
+#                         if i == True: 
+#                             data = pin_code_price.values('product_id', 'zero_seven_days',"greaterthan_seven",'sale_price')
+#                         else:
+#                             data = pin_code_price.values('product_id', 'zero_seven_days','sale_price',"greaterthan_seven")
+#                     else:
+#                         if i == True: 
+#                             data = pin_code_price.values('product_id', 'zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
+#                         else:
+#                             data = pin_code_price.values('product_id', 'zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
+#                 days_count=days_diffrence-days_diffrence_default
+#                 weekly=(days_diffrence+1)%7
+#                 floor_division=(days_diffrence+1)//7
+#                 print(floor_division,'hhhhhhhhhhhhhhhhhhhhh')
+#                 print(weekly, 'llllllllllllllllllll')
+#                 # weeekly=days_count/7
+#                 # print(weeekly, 'llllllllllllllllllll')
+#                 if weekly == 0:
+#                     for i in data:
+#                         quantity = product_data.get(str(i.get('product_id')), 1)
+#                         if i.get('zero_seven_days') != None:
+#                             result.append(float(i.get('zero_seven_days'))*float(quantity)*float(floor_division))
+#                         # if i.get('greaterthan_seven') != None:
+#                         #     if days_count != 0:
+#                         #         greaterthan_sevens=float(i.get('greaterthan_seven'))*float(days_count+1)*float(quantity)
+#                         #         result.append(greaterthan_sevens)
+#                         #     else:
+#                         #         greaterthan_sevens=float(i.get('greaterthan_seven'))*float(quantity)
+#                         #         result.append(greaterthan_sevens)
+#                         if i.get('zero_seven_days_wholesale') != None:
+#                             result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity)*float(floor_division))
+#                         # if i.get('greaterthan_seven_wholesale') != None:
+#                         #     if days_count != 0:
+#                         #         greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(days_count+1)*float(quantity)
+#                         #         result.append(greaterthan_seven_wholesales)
+#                         #     else:
+#                         #         greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(quantity)
+#                         #         result.append(greaterthan_seven_wholesales)
+#                         if i.get('sale_price') != None:
+#                             result.append(float(i.get('sale_price'))*float(quantity))                              
+#                     discount_price=float(offer_price.offer_discount)
+#                     effective_price=float(sum(result))*(discount_price/100)
+                    
+#                     return round(effective_price,2)
+#                 else:
+#                     for i in data:
+#                         quantity = product_data.get(str(i.get('product_id')), 1)
+#                         if i.get('zero_seven_days') != None:
+#                             result.append(float(i.get('zero_seven_days'))*float(quantity)*float(floor_division))
+#                         if i.get('greaterthan_seven') != None:
+#                         #     if days_count != 0:
+#                                 greaterthan_sevens=float(i.get('greaterthan_seven'))*float(weekly)*float(quantity)
+#                                 result.append(greaterthan_sevens)
+#                         #     else:
+#                         #         greaterthan_sevens=float(i.get('greaterthan_seven'))*float(quantity)
+#                         #         result.append(greaterthan_sevens)
+#                         if i.get('zero_seven_days_wholesale') != None:
+#                             result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity)*float(floor_division))
+#                         if i.get('greaterthan_seven_wholesale') != None:
+#                         #     if days_count != 0:
+#                                 greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(weekly)*float(quantity)
+#                                 result.append(greaterthan_seven_wholesales)
+#                         #     else:
+#                         #         greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(quantity)
+#                         #         result.append(greaterthan_seven_wholesales)
+#                         if i.get('sale_price') != None:
+#                             result.append(float(i.get('sale_price'))*float(quantity))                              
+#                     discount_price=float(offer_price.offer_discount)
+#                     effective_price=float(sum(result))*(discount_price/100)
+                    
+#                     return round(effective_price,2)
+#             else: 
+#                 for i in products:
+#                     if user_type=="vacationer" or user_type == "homeowner":
+#                         if i == True: 
+#                             data = pin_code_price.values('product_id','zero_seven_days','sale_price')
+#                         else:
+#                             data = pin_code_price.values('product_id','zero_seven_days','sale_price')
+#                     else:
+#                         if i == True: 
+#                             data = pin_code_price.values('product_id','zero_seven_days_wholesale')
+#                         else:
+#                             data = pin_code_price.values('product_id','zero_seven_days_wholesale','sale_price')
+#                 for  i in data:
+#                     quantity = product_data.get(str(i.get('product_id')), 1)
+                  
+#                     if i.get('zero_seven_days') != None:
+#                         result.append(float(i.get('zero_seven_days'))*float(quantity))
+#                     if i.get('zero_seven_days_wholesale') != None:
+#                         result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity))
+#                     if i.get('sale_price') != None:
+#                         result.append(float(i.get('sale_price'))*float(quantity))
+              
+#                 discount_price=float(offer_price.offer_discount)
+#                 effective_price=float(sum(result))*(discount_price/100)
+                
+#                 return round(effective_price,2)
+#         else: 
+#             for i in products:
+#                 if user_type=="vacationer" or user_type == "homeowner":    
+#                     if i == True: 
+#                         data = pin_code_price.values('product_id', 'zero_seven_days', 'sale_price')
+#                     else:
+#                         data = pin_code_price.values('product_id', 'zero_seven_days','sale_price')
+#                 else:
+#                     if i == True: 
+#                         data = pin_code_price.values('product_id', 'zero_seven_days_wholesale', 'sale_price')
+#                     else:
+#                         data = pin_code_price.values('product_id', 'zero_seven_days_wholesale','sale_price')
+#             for  i in data:
+#                 quantity = product_data.get(str(i.get('product_id')), 1)
+#                 if i.get('zero_seven_days') != None:
+#                     result.append(float(i.get('zero_seven_days'))*(quantity))
+#                 if i.get('zero_seven_days_wholesale') != None:
+#                     result.append(float(i.get('zero_seven_days_wholesale'))*(quantity))
+#                 if i.get('sale_price') != None:
+#                     result.append(float(i.get('sale_price'))*(quantity))
+#             discount_price=float(offer_price.offer_discount)
+#             effective_price=(sum(result))*(discount_price/100)
+#             return round(effective_price,2)
+#     else:
+#         if 'days_diffrence' in kwargs:
+#             days_diffrence_default=7
+#             days_diffrence=kwargs['days_diffrence']
+           
+#             if days_diffrence >= days_diffrence_default:
+#                 for i in products:
+#                     if user_type=="vacationer" or user_type == "homeowner":
+#                         if i == True: 
+#                             data = pin_price_code.values('product_id', 'zero_seven_days',"greaterthan_seven",'sale_price')
+#                         else:
+#                             data = pin_price_code.values('product_id', 'zero_seven_days','sale_price',"greaterthan_seven")
+#                     else:
+#                         if i == True: 
+#                             data = pin_price_code.values('product_id','zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
+#                         else:
+#                             data = pin_price_code.values('product_id','zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
+#                 days_count=days_diffrence-days_diffrence_default 
+#                 print(days_diffrence,'ggggggggggggggggggggg')
+#                 # print(days_count,'ffffffffffffffffffffffff')
+#                 weekly=(days_diffrence+1)%7
+#                 floor_division=(days_diffrence+1)//7
+#                 print(floor_division,'hhhhhhhhhhhhhhhhhhhhh')
+#                 print(weekly, 'llllllllllllllllllll')
+#                 if weekly == 0:
+#                     # division=(days_count+1)/7
+#                     # print(division,'jjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+                    
+#                     for  i in data:
+#                         quantity = product_data.get(str(i.get('product_id')), 1)
+#                         total=float(quantity)*float(floor_division)
+#                         print(total,'uuuuuuuuuuuuuuuuuuuuuuuuuuuu')
+#                         if i.get('zero_seven_days') != None:
+#                             result.append(float(i.get('zero_seven_days'))*float(quantity)*float(floor_division))
+#                         # if i.get('greaterthan_seven') != None:
+#                         #     if days_count != 0:
+                                
+#                         #         greaterthan_sevens=float(i.get('greaterthan_seven'))*float(days_count+1)*float(quantity)
+#                         #         result.append(greaterthan_sevens)
+#                         #     else:
+#                         #         print('2334354656547')
+#                         #         greaterthan_sevens=float(i.get('greaterthan_seven'))*float(quantity)
+#                         #         result.append(greaterthan_sevens)
+#                         if i.get('zero_seven_days_wholesale') != None:
+#                             result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity)*float(floor_division))
+#                         # if i.get('greaterthan_seven_wholesale') != None:
+#                         #     if days_count != 0:
+#                         #         greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(days_count)*float(quantity)
+#                         #         result.append(greaterthan_seven_wholesales)
+#                         #     else:
+#                         #         greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(quantity)
+#                         #         result.append(greaterthan_seven_wholesales)
+#                         if i.get('sale_price') != None:
+#                             result.append(float(i.get('sale_price'))*float(quantity))
+#                     print(result,'88898989898')
+#                     return round(sum(result),2)
+#                 else:
+#                     for  i in data:
+#                         quantity = product_data.get(str(i.get('product_id')), 1)
+#                         if i.get('zero_seven_days') != None:
+#                             result.append(float(i.get('zero_seven_days'))*float(quantity)*float(floor_division))
+#                         if i.get('greaterthan_seven') != None:
+#                             # if days_count != 0:
+#                                 print('kkkkkkkkkkkkkkkk')
+#                                 greaterthan_sevens=float(i.get('greaterthan_seven'))*float(quantity)*float(weekly)
+#                                 result.append(greaterthan_sevens)
+#                             # else:
+#                             #     print('2334354656547')
+#                             #     greaterthan_sevens=float(i.get('greaterthan_seven'))*float(quantity)*float(weekly)
+#                             #     result.append(greaterthan_sevens)
+#                         if i.get('zero_seven_days_wholesale') != None:
+#                             result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity))
+#                         if i.get('greaterthan_seven_wholesale') != None:
+#                             # if days_count != 0:
+#                                 greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(quantity)*float(weekly)
+#                                 result.append(greaterthan_seven_wholesales)
+#                             # else:
+#                             #     greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(quantity)
+#                             #     result.append(greaterthan_seven_wholesales)
+#                         if i.get('sale_price') != None:
+#                             result.append(float(i.get('sale_price'))*float(quantity))
+#                     print(result,'88898989898')
+#                     return round(sum(result),2)
+#         else:
+#             for i in products:
+#                 if user_type=="vacationer" or user_type == "homeowner":
+#                     if i == True: 
+#                         data = pin_price_code.values('zero_seven_days', 'sale_price', 'product_id')
+#                     else:
+#                         data = pin_price_code.values('zero_seven_days','sale_price', 'product_id')
+#                 else:
+#                     if i == True: 
+#                         data = pin_price_code.values('zero_seven_days_wholesale', 'sale_price', 'product_id')
+#                     else:
+#                         data = pin_price_code.values('zero_seven_days_wholesale','sale_price', 'product_id')
+#             for  i in data:
+#                 quantity = product_data.get(str(i.get('product_id')), 1)
+#                 if i.get('zero_seven_days'):
+#                     result.append(float(i.get('zero_seven_days'))*float(quantity))
+#                 if i.get('zero_seven_days_wholesale'):
+#                     result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity))
+#                 if i.get('sale_price'):
+#                     result.append(float(i.get('sale_price'))*float(quantity))
+#             return round(sum(result),2)
+
+
+def createorderid():
+    if OrderManagement.objects.all().exists():
+            obj = OrderManagement.objects.last()
+            a=obj.order_id
+            b=int(a[3:len(a)])+1
+            order_id=str("ord")+str(b)
+    else:
+        order_id='ord1'
+    return order_id
+
+# def ProductPrice(user_type,pin_code,product_id,delivery_date,return_date):
+#     pincodeprice=FranchisePinCodesPrice.objects.filter(user_type=user_type,pin_code=pin_code,product_id__in=product_id)
+#     delivery_convert_date = datetime.datetime.strptime(delivery_date, '%Y-%m-%d').date()
+#     return_convert_date = datetime.datetime.strptime(return_date, '%Y-%m-%d').date()
+#     days_diffrence=return_convert_date-delivery_convert_date
+#     days_diffrence_count=int('{}'.format(days_diffrence.days))
+#     print(days_diffrence_count, 'ddddddddddddddddddddddddddddddd')
+#     days_diffrence_default=7
+#     data={}
+#     reuslt=[]
+#     Sums=[]
+#     weekly=int(days_diffrence_count+1)%7
+#     floor_division=int(days_diffrence_count+1)//7
+#     print(floor_division,'hhhhhhhhhhhhhhhhhhhhh')
+#     print(weekly, 'llllllllllllllllllll')
+            
+#     if days_diffrence_count>=days_diffrence_default:
+#         days_count=days_diffrence_count-days_diffrence_default
+#         if user_type=="vacationer" or user_type == "homeowner":
+#             data=pincodeprice.values('zero_seven_days','greaterthan_seven','sale_price')
+#             print(data,'111111111111111111111111')
+#         else:
+#             data=pincodeprice.values('zero_seven_days_wholesale', 'greaterthan_seven_wholesale', 'sale_price')       
+#             print(data,'2222222222222222222')
+        
+#         for i in data:
+#             if i.get('zero_seven_days') != None:
+#                 Sums.append(float(i.get('zero_seven_days'))*float(floor_division))
+#                 print(i.get('zero_seven_days'),'ggggggggggggggggggggggg')
+#             if i.get('greaterthan_seven') != None:
+#                 # if days_count == 0:
+#                     a=float(i.get('greaterthan_seven'))*float(weekly)
+#                     Sums.append(a)
+#                     print(i.get('greaterthan_seven'), '4444444444444444444444444444444')
+#                     print(days_count,'55555555555555555555')
+#                 # else:
+#                 #     a=float(i.get('greaterthan_seven'))*float(weekly)
+#                 #     Sums.append(a)
+#                 #     print(i.get('greaterthan_seven'), '66666666666666666')
+#                 #     print(days_count+1,'55555555555555555555')
+#             if i.get('zero_seven_days_wholesale') != None:
+#                 Sums.append(float(i.get('zero_seven_days_wholesale')))
+#                 if i.get('greaterthan_seven_wholesale') != None:
+#                     if days_count == 0:
+#                         a=float(i.get('greaterthan_seven_wholesale'))*float(days_count)
+#                         Sums.append(a)
+#                     else:
+#                         a=float(i.get('greaterthan_seven_wholesale'))*float(days_count+1)
+#                         Sums.append(a)
+#         reuslt.append(dict(zero_seven_days=sum(Sums)))
+#         for j in data:                
+#             if j.get('sale_price') != None:
+#                 reuslt.append(dict(sale_price=j.get('sale_price'))) 
+#         print(reuslt,'------------------')
+#         return reuslt
+#     else:
+#         if user_type=="vacationer" or user_type == "homeowner":
+#             data=pincodeprice.values('zero_seven_days','sale_price')
+#         else:
+#             data=pincodeprice.values('zero_seven_days_wholesale','sale_price')
+#         for i in data:
+#             if i.get('zero_seven_days') != None:
+#                 reuslt.append(dict(zero_seven_days=i.get('zero_seven_days')))
+#             if i.get('zero_seven_days_wholesale') != None:
+#                 reuslt.append(dict(zero_seven_days_wholesale=i.get('zero_seven_days_wholesale')))
+#             if i.get('sale_price') != None:
+#                 reuslt.append(dict(sale_price=i.get('sale_price'))) 
+#         print(reuslt,'!!!!!!!!!!!!!!!!!!!!!')
+#         return reuslt
+
+
+
 def calculate_order_price(zip_code,product,user_type, **kwargs):
     data = {}
     products=Product.objects.filter(id__in=product).values_list("is_return" , flat=True)
@@ -76,7 +400,6 @@ def calculate_order_price(zip_code,product,user_type, **kwargs):
     user_type=user_type)
     result=[]
     product_data = kwargs['product_data']
-   
     if 'offer' in kwargs :
         offer_discount=kwargs['offer']
         offer_price=OfferManagement.objects.get(code=offer_discount)
@@ -85,70 +408,50 @@ def calculate_order_price(zip_code,product,user_type, **kwargs):
         if 'days_diffrence' in kwargs:
             days_diffrence_default=7
             days_diffrence=kwargs['days_diffrence']
-            if days_diffrence >= days_diffrence_default:
-                for i in products:
-                    if user_type=="vacationer" or user_type == "homeowner":
-                        if i == True: 
-                            data = pin_code_price.values('product_id', 'zero_seven_days',"greaterthan_seven",'sale_price')
-                        else:
-                            data = pin_code_price.values('product_id', 'zero_seven_days','sale_price',"greaterthan_seven")
+            for i in products:
+                if user_type=="vacationer" or user_type == "homeowner":
+                    if i == True: 
+                        data = pin_code_price.values('product_id', 'zero_seven_days',"greaterthan_seven",'sale_price')
                     else:
-                        if i == True: 
-                            data = pin_code_price.values('product_id', 'zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
-                        else:
-                            data = pin_code_price.values('product_id', 'zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
-                days_count=days_diffrence-days_diffrence_default
+                        data = pin_code_price.values('product_id', 'zero_seven_days','sale_price',"greaterthan_seven")
+                else:
+                    if i == True: 
+                        data = pin_code_price.values('product_id', 'zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
+                    else:
+                        data = pin_code_price.values('product_id', 'zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
+            days_count=days_diffrence-days_diffrence_default
+            weekly=(days_diffrence+1)%7
+            floor_division=(days_diffrence+1)//7
+            if weekly == 0:
                 for i in data:
                     quantity = product_data.get(str(i.get('product_id')), 1)
-                    if i.get('zero_seven_days') != None:
-                        result.append(float(i.get('zero_seven_days'))*float(quantity))
-                    if i.get('greaterthan_seven') != None:
-                        if days_count != 0:
-                            greaterthan_sevens=float(i.get('greaterthan_seven'))*float(days_count+1)*float(quantity)
-                            result.append(greaterthan_sevens)
-                        else:
-                            greaterthan_sevens=float(i.get('greaterthan_seven'))*float(quantity)
-                            result.append(greaterthan_sevens)
-                    if i.get('zero_seven_days_wholesale') != None:
-                        result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity))
-                    if i.get('greaterthan_seven_wholesale') != None:
-                        if days_count != 0:
-                            greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(days_count+1)*float(quantity)
-                            result.append(greaterthan_seven_wholesales)
-                        else:
-                            greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(quantity)
-                            result.append(greaterthan_seven_wholesales)
-                    if i.get('sale_price') != None:
+                    
+                    if i.get('zero_seven_days') != None and i.get('zero_seven_days') != "" :
+                        result.append(float(i.get('zero_seven_days'))*float(quantity)*float(floor_division))
+                    if i.get('zero_seven_days_wholesale') != None and i.get('zero_seven_days_wholesale') != "":
+                        result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity)*float(floor_division))
+                    if i.get('sale_price') != None and i.get('sale_price') != "":
                         result.append(float(i.get('sale_price'))*float(quantity))                              
                 discount_price=float(offer_price.offer_discount)
                 effective_price=float(sum(result))*(discount_price/100)
-                
                 return round(effective_price,2)
-            else: 
-                for i in products:
-                    if user_type=="vacationer" or user_type == "homeowner":
-                        if i == True: 
-                            data = pin_code_price.values('product_id','zero_seven_days','sale_price')
-                        else:
-                            data = pin_code_price.values('product_id','zero_seven_days','sale_price')
-                    else:
-                        if i == True: 
-                            data = pin_code_price.values('product_id','zero_seven_days_wholesale')
-                        else:
-                            data = pin_code_price.values('product_id','zero_seven_days_wholesale','sale_price')
-                for  i in data:
+            else:
+                for i in data:
                     quantity = product_data.get(str(i.get('product_id')), 1)
-                  
-                    if i.get('zero_seven_days') != None:
-                        result.append(float(i.get('zero_seven_days'))*float(quantity))
-                    if i.get('zero_seven_days_wholesale') != None:
-                        result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity))
-                    if i.get('sale_price') != None:
-                        result.append(float(i.get('sale_price'))*float(quantity))
-              
+                    if i.get('zero_seven_days') != None and i.get('zero_seven_days') != "":
+                        result.append(float(i.get('zero_seven_days'))*float(quantity)*float(floor_division))
+                    if i.get('greaterthan_seven') != None and i.get('greaterthan_seven') != "":
+                            greaterthan_sevens=float(i.get('greaterthan_seven'))*float(weekly)*float(quantity)
+                            result.append(greaterthan_sevens)
+                    if i.get('zero_seven_days_wholesale') != None and i.get('zero_seven_days_wholesale') != "":
+                        result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity)*float(floor_division))
+                    if i.get('greaterthan_seven_wholesale') != None and i.get('greaterthan_seven_wholesale') != "":
+                            greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(weekly)*float(quantity)
+                            result.append(greaterthan_seven_wholesales)
+                    if i.get('sale_price') != None and i.get('sale_price') != "":
+                        result.append(float(i.get('sale_price'))*float(quantity))                              
                 discount_price=float(offer_price.offer_discount)
                 effective_price=float(sum(result))*(discount_price/100)
-                
                 return round(effective_price,2)
         else: 
             for i in products:
@@ -164,14 +467,14 @@ def calculate_order_price(zip_code,product,user_type, **kwargs):
                         data = pin_code_price.values('product_id', 'zero_seven_days_wholesale','sale_price')
             for  i in data:
                 quantity = product_data.get(str(i.get('product_id')), 1)
-                if i.get('zero_seven_days') != None:
-                    result.append(float(i.get('zero_seven_days'))*(quantity))
-                if i.get('zero_seven_days_wholesale') != None:
-                    result.append(float(i.get('zero_seven_days_wholesale'))*(quantity))
-                if i.get('sale_price') != None:
-                    result.append(float(i.get('sale_price'))*(quantity))
+                if i.get('zero_seven_days') != None and i.get('zero_seven_days') != "":
+                    result.append(float(i.get('zero_seven_days'))*float(quantity))
+                if i.get('zero_seven_days_wholesale') != None and i.get('zero_seven_days_wholesale') != "":
+                    result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity))
+                if i.get('sale_price') != None and i.get('sale_price') != "":
+                    result.append(float(i.get('sale_price'))*float(quantity))
             discount_price=float(offer_price.offer_discount)
-            effective_price=(sum(result))*(discount_price/100)
+            effective_price=float(sum(result))*float(discount_price/100)
             return round(effective_price,2)
     else:
         if 'days_diffrence' in kwargs:
@@ -190,34 +493,61 @@ def calculate_order_price(zip_code,product,user_type, **kwargs):
                             data = pin_price_code.values('product_id','zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
                         else:
                             data = pin_price_code.values('product_id','zero_seven_days_wholesale', 'greaterthan_seven_wholesale','sale_price')
-                days_count=days_diffrence-days_diffrence_default  
-             
+                days_count=days_diffrence-days_diffrence_default 
+                weekly=(days_diffrence+1)%7
+               
+                floor_division=(days_diffrence+1)//7
+               
+                if weekly == 0:
+                    for  i in data:
+                        quantity = product_data.get(str(i.get('product_id')), 1)
+                        total=float(quantity)*float(floor_division)
+                        if i.get('zero_seven_days') != None and i.get('zero_seven_days') != "":
+                            result.append(float(i.get('zero_seven_days'))*float(quantity)*float(floor_division))
+                        if i.get('zero_seven_days_wholesale') != None and i.get('zero_seven_days_wholesale') != "":
+                            result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity)*float(floor_division))
+                        if i.get('sale_price') != None and i.get('sale_price') != "":
+                            result.append(float(i.get('sale_price'))*float(quantity))
+                    return round(sum(result),2)
+                else:
+                    for  i in data:
+                        quantity = product_data.get(str(i.get('product_id')), 1)
+                        if i.get('zero_seven_days') != None and i.get('zero_seven_days') != "":
+                            result.append(float(i.get('zero_seven_days'))*float(quantity)*float(floor_division))
+                        if i.get('greaterthan_seven') != None and i.get('greaterthan_seven') != "":
+                                greaterthan_sevens=float(i.get('greaterthan_seven'))*float(quantity)*float(weekly)
+                                result.append(greaterthan_sevens)
+                        if i.get('zero_seven_days_wholesale') != None and i.get('zero_seven_days_wholesale') != "":
+                            result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity)*float(floor_division))
+                        if i.get('greaterthan_seven_wholesale') != None and i.get('greaterthan_seven_wholesale') != "":
+                                greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(quantity)*float(weekly)
+                                result.append(greaterthan_seven_wholesales)
+                        if i.get('sale_price') != None and i.get('sale_price') != "":
+                            result.append(float(i.get('sale_price'))*float(quantity))
+                    return round(sum(result),2)
+            else:
+                for i in products:
+                    if user_type=="vacationer" or user_type == "homeowner":
+                        if i == True: 
+                            data = pin_price_code.values('zero_seven_days', 'sale_price', 'product_id')
+                        else:
+                            data = pin_price_code.values('zero_seven_days','sale_price', 'product_id')
+                    else:
+                        if i == True: 
+                            data = pin_price_code.values('zero_seven_days_wholesale', 'sale_price', 'product_id')
+                        else:
+                            data = pin_price_code.values('zero_seven_days_wholesale','sale_price', 'product_id')
                 for  i in data:
                     quantity = product_data.get(str(i.get('product_id')), 1)
-                    if i.get('zero_seven_days') != None:
+                    if i.get('zero_seven_days'):
                         result.append(float(i.get('zero_seven_days'))*float(quantity))
-                    if i.get('greaterthan_seven') != None:
-                        if days_count != 0:
-                          
-                            greaterthan_sevens=float(i.get('greaterthan_seven'))*float(days_count+1)*float(quantity)
-                            result.append(greaterthan_sevens)
-                        else:
-                            print('2334354656547')
-                            greaterthan_sevens=float(i.get('greaterthan_seven'))*float(quantity)
-                            result.append(greaterthan_sevens)
-                    if i.get('zero_seven_days_wholesale') != None:
+                    if i.get('zero_seven_days_wholesale'):
                         result.append(float(i.get('zero_seven_days_wholesale'))*float(quantity))
-                    if i.get('greaterthan_seven_wholesale') != None:
-                        if days_count != 0:
-                            greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(days_count)*float(quantity)
-                            result.append(greaterthan_seven_wholesales)
-                        else:
-                            greaterthan_seven_wholesales=float(i.get('greaterthan_seven_wholesale'))*float(quantity)
-                            result.append(greaterthan_seven_wholesales)
-                    if i.get('sale_price') != None:
+                    if i.get('sale_price'):
                         result.append(float(i.get('sale_price'))*float(quantity))
-                print(result,'88898989898')
                 return round(sum(result),2)
+
+               
         else:
             for i in products:
                 if user_type=="vacationer" or user_type == "homeowner":
@@ -241,16 +571,6 @@ def calculate_order_price(zip_code,product,user_type, **kwargs):
             return round(sum(result),2)
 
 
-def createorderid():
-    if OrderManagement.objects.all().exists():
-            obj = OrderManagement.objects.last()
-            a=obj.order_id
-            b=int(a[3:len(a)])+1
-            order_id=str("ord")+str(b)
-    else:
-        order_id='ord1'
-    return order_id
-
 def ProductPrice(user_type,pin_code,product_id,delivery_date,return_date):
     pincodeprice=FranchisePinCodesPrice.objects.filter(user_type=user_type,pin_code=pin_code,product_id__in=product_id)
     delivery_convert_date = datetime.datetime.strptime(delivery_date, '%Y-%m-%d').date()
@@ -261,36 +581,48 @@ def ProductPrice(user_type,pin_code,product_id,delivery_date,return_date):
     data={}
     reuslt=[]
     Sums=[]
+    weekly=int(days_diffrence_count+1)%7
+    floor_division=int(days_diffrence_count+1)//7
     if days_diffrence_count>=days_diffrence_default:
         days_count=days_diffrence_count-days_diffrence_default
         if user_type=="vacationer" or user_type == "homeowner":
             data=pincodeprice.values('zero_seven_days','greaterthan_seven','sale_price')
         else:
             data=pincodeprice.values('zero_seven_days_wholesale', 'greaterthan_seven_wholesale', 'sale_price')       
-        for i in data:
-            if i.get('zero_seven_days') != None:
-                    Sums.append(float(i.get('zero_seven_days')))
-            if i.get('greaterthan_seven') != None:
-                    if days_count == 0:
-                        a=float(i.get('greaterthan_seven'))*float(days_count)
+        if weekly == 0:        
+            for i in data:
+                if i.get('zero_seven_days') != None:
+                    Sums.append(float(i.get('zero_seven_days'))*float(floor_division))
+                if i.get('greaterthan_seven') != None:
+                    a=float(i.get('greaterthan_seven'))*float(weekly)
+                    Sums.append(a)
+                if i.get('zero_seven_days_wholesale') != None:
+                    Sums.append(float(i.get('zero_seven_days_wholesale'))*float(floor_division))
+                    if i.get('greaterthan_seven_wholesale') != None:
+                        a=float(i.get('greaterthan_seven_wholesale'))*float(weekly)
                         Sums.append(a)
-                    else:
-                        a=float(i.get('greaterthan_seven'))*float(days_count+1)
+            reuslt.append(dict(zero_seven_days=sum(Sums)))
+            for j in data:                
+                if j.get('sale_price') != None:
+                    reuslt.append(dict(sale_price=j.get('sale_price'))) 
+            return reuslt
+        else:
+            for i in data:
+                if i.get('zero_seven_days') != None:
+                    Sums.append(float(i.get('zero_seven_days'))*float(floor_division))
+                if i.get('greaterthan_seven') != None:
+                    a=float(i.get('greaterthan_seven'))*float(weekly)
+                    Sums.append(a)
+                if i.get('zero_seven_days_wholesale') != None:
+                    Sums.append(float(i.get('zero_seven_days_wholesale')))
+                    if i.get('greaterthan_seven_wholesale') != None:
+                        a=float(i.get('greaterthan_seven_wholesale'))*float(weekly)
                         Sums.append(a)
-            if i.get('zero_seven_days_wholesale') != None:
-                Sums.append(float(i.get('zero_seven_days_wholesale')))
-                if i.get('greaterthan_seven_wholesale') != None:
-                    if days_count == 0:
-                        a=float(i.get('greaterthan_seven_wholesale'))*float(days_count)
-                        Sums.append(a)
-                    else:
-                        a=float(i.get('greaterthan_seven_wholesale'))*float(days_count+1)
-                        Sums.append(a)
-        reuslt.append(dict(zero_seven_days=sum(Sums)))
-        for j in data:                
-            if j.get('sale_price') != None:
-                reuslt.append(dict(sale_price=j.get('sale_price'))) 
-        return reuslt
+            reuslt.append(dict(zero_seven_days=sum(Sums)))
+            for j in data:                
+                if j.get('sale_price') != None:
+                    reuslt.append(dict(sale_price=j.get('sale_price'))) 
+            return reuslt
     else:
         if user_type=="vacationer" or user_type == "homeowner":
             data=pincodeprice.values('zero_seven_days','sale_price')
@@ -304,3 +636,10 @@ def ProductPrice(user_type,pin_code,product_id,delivery_date,return_date):
             if i.get('sale_price') != None:
                 reuslt.append(dict(sale_price=i.get('sale_price'))) 
         return reuslt
+
+
+
+
+
+
+

@@ -303,6 +303,8 @@ urlpatterns = [
     path("change-actual-price/", views.changeActualPrice, name="change_actual_price"),
     path("order-delete/<str:slug>", views.orderDelete, name="order_delete"),
     path("order-edit/<str:slug>", views.orderEdit, name="order_edit"),
+    path("order_filter_ajax/", views.order_filter_ajax, name="order_filter_ajax"),
+
 
 
 

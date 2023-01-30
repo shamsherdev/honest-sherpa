@@ -1,18 +1,5 @@
-from cmath import pi
-from curses.ascii import isspace
-from email import message
-from email.headerregistry import Address
-from faulthandler import disable
-from math import prod
 import re
-
-
-from unicodedata import digit
 import geopandas
-from reprlib import recursive_repr
-from urllib.parse import uses_params
-from venv import create
-from django.dispatch import receiver
 from django.http import HttpResponse, JsonResponse, request
 from django.shortcuts import render, redirect
 from django.shortcuts import get_list_or_404, get_object_or_404
@@ -1110,7 +1097,6 @@ def UserShowHideAjax(request):
 #         colomnType = request.POST.get('arr')
 #         JsonColomnType = json.loads(colomnType)
 #         for i in JsonColomnType:
-#             print(i.get('name'),i.get('checked'),"rrrrrrrrrrrrrrrrrrrrrrr")
 #             data = UserDataHideShow.objects.get(id=1)
 #             if i.get('name') == 'sr':
 #                 data.sr = i.get('checked')
@@ -2708,7 +2694,6 @@ def add_product(request):
         # weekprice = request.POST.get("weekprice")
         # monthprice = request.POST.get("monthprice")
         sale_price = request.POST.get("sale_price")
-        print(sale_price,'uuuuuuuuu')
         # annualprice = (
         #     request.POST.get("annualprice") if request.POST.get("annualprice") else 0
         # )
@@ -2730,9 +2715,7 @@ def add_product(request):
         
         purchased_date=request.POST.get('date')
         purchased_price=request.POST.get('purchased_price')
-        is_return=request.POST.get('return')
-        print(is_return,'trtryrytuyrtu')
-       
+        is_return=request.POST.get('return')       
         status = request.POST.get("status")
         # count = request.POST.get("count")
         # option = request.POST.get("option[0]name")
@@ -2776,9 +2759,9 @@ def add_product(request):
         )
 
         user_ids = eval(user_id)
-        print(user_ids)
-        pincode = FranchisePinCodes.objects.filter(user_id__in=user_ids)
-        print(pincode)
+       
+       
+      
 
         if subcategory:
 
@@ -2792,18 +2775,14 @@ def add_product(request):
                 avaliable=available,
                 is_return=is_return,
                 is_active=status,
-                # oneday_price=onedayprice,
-                # week_price=weekprice,
-                # month_price=monthprice,
-                # two_week_price=twoweekprice,
-                # annual_price=annualprice,
+                
                 is_feature=feature,
                 image=image,
                 image1=image1,
                 image2=image2,
                 image3=image3,
                 image4=image4,
-                # address=address,
+              
                 latitude=latitude,
                 longitude=longitude,
                 purchased_date=purchased_date,
@@ -2820,18 +2799,14 @@ def add_product(request):
                 avaliable=available,
                 is_return=is_return,
                 is_active=status,
-                # oneday_price=onedayprice,
-                # week_price=weekprice,
-                # month_price=monthprice,
-                # two_week_price=twoweekprice,
-                # annual_price=annualprice,
+              
                 is_feature=feature,
                 image=image,
                 image1=image1,
                 image2=image2,
                 image3=image3,
                 image4=image4,
-                # address=address,
+                
                 latitude=latitude,
                 longitude=longitude,
                 purchased_date=purchased_date,
@@ -2863,11 +2838,14 @@ def add_product(request):
         #         quantity=quantity,
         #         Productoptions_image=option_image,
         # )
+        franchise_user_list=[]
         for fran in franchise:
             franchise_data=ProductFranchiseMember.objects.create(user_id=fran,product_id=data.id)
+            franchise_user_list.append(franchise_data.user_id)
+        pincode = FranchisePinCodes.objects.filter(user_id__in=franchise_user_list)
+    
         if is_return == "True":
             for i in pincode:
-                print(i,'oooooooooooooooooooooo')
                 FranchisePinCodesPrice.objects.create(
                     pin_code=i.pin_code,
                     product_id=data.id,
@@ -2894,9 +2872,14 @@ def add_product(request):
                     greaterthan_seven_wholesale=propertymanager_greaterthan_7_days_wholesale,
                     user_id=i.user_id,
                 )
+            FranchisePrice.objects.create(product_id=data.id,user_type="vacationer",zero_seven_days=vacationer_0_7_days,
+            greaterthan_seven=vacationer_greaterthan_7_days)
+            FranchisePrice.objects.create(product_id=data.id, user_type="homeowner", zero_seven_days=homeowner_0_7_days,
+            greaterthan_seven=homeowner_greaterthan_7_days,)
+            FranchisePrice.objects.create(product_id=data.id,user_type="propertymanager",zero_seven_days_wholesale=propertymanager_0_7_days_wholesale,
+            greaterthan_seven_wholesale=propertymanager_greaterthan_7_days_wholesale)        
         else:
             for i in pincode:
-                print(i,'oioioiouyo')
                 FranchisePinCodesPrice.objects.create(
                     pin_code=i.pin_code,
                     product_id=data.id,
@@ -2922,6 +2905,9 @@ def add_product(request):
                     
                     user_id=i.user_id,
                 )
+            FranchisePrice.objects.create(product_id=data.id,user_type="vacationer",sale_price=sale_price)
+            FranchisePrice.objects.create(user_type="homeowner",sale_price=sale_price,product_id=data.id)
+            FranchisePrice.objects.create(user_type="propertymanager",sale_price=sale_price,product_id=data.id)
         # # if price_count:
         #     user_types = ["homeowner", "vacationer", "propertymanager"]
         #     for u in user_types:
@@ -3087,274 +3073,184 @@ def select_subcategory(request):
 @user_passes_test(lambda user: user.is_superuser)
 def edit_product(request, slug):
     try:
-        category = ProductCategory.objects.all()
-        for i in category:
-            pass
-        subcategory = ProductSubCategory.objects.all()
-
+        template_name="admin/ProductManagement/edit_product.html"
         product = Product.objects.get(slug=slug)
-        data = Product.objects.get(slug=slug)
+        franchiseuser=ProductFranchiseMember.objects.filter(product_id=product.id).values_list('user_id', flat=True)
+        franchise_price=FranchisePrice.objects.filter(product_id=product.id)
         if request.method == "POST":
             category = request.POST.get("category")
-            subcategory = request.POST.get("subcategory")
+            subcategorys = request.POST.get("subcategory")
             name = request.POST.get("name")
-            onedayprice = request.POST.get("onedayprice")
-            weekprice = request.POST.get("weekprice")
-            monthprice = request.POST.get("monthprice")
-            twoweekprice = request.POST.get("twoweekprice")
-            annualprice = request.POST.get("annualprice")
-            skucode = request.POST.get("skucode")
-            address = request.POST.get("autocom")
-            latitude = request.POST.get("lat")
-            longitude = request.POST.get("long")
+            sale_price = request.POST.get("sale_price")
             feature = request.POST.get("feature")
-            quantity = request.POST.get("quantity")
-            image = request.FILES.get("image")
+            product_quantity = request.POST.get("quantity")
+            image = request.FILES.get("image0")
             image1 = request.FILES.get("image1")
             image2 = request.FILES.get("image2")
             image3 = request.FILES.get("image3")
             image4 = request.FILES.get("image4")
             description = request.POST.get("content")
             available = request.POST.get("available")
-            is_return = request.POST.get("return")
+            franchises = request.POST.getlist("franchise-user[]")
+            purchased_date=request.POST.get('date')
+            purchased_price=request.POST.get('purchased_price')
+            is_return=request.POST.get('return')       
             status = request.POST.get("status")
-            count = request.POST.get("options_count")
-            price_count = request.POST.get("price_count")
-            del_data = ProductOptions.objects.filter(product_id=product.id).delete()
-            if image or image1 or image2 or image3 or image4:
-                if image:
-                    data.category_id = category
-                    data.subcategory_id = subcategory
-                    data.oneday_price = onedayprice
-                    data.week_price = weekprice
-                    data.annual_price = annualprice
-                    data.two_week_price = twoweekprice
-                    data.month_price = monthprice
-                    data.sku_code = skucode
-                    data.is_feature = feature
-                    data.quantity = quantity
-                    data.name = name
-                    data.address = address
-                    data.latitude = latitude
-                    data.longitude = longitude
-                    data.description = description
-                    data.avaliable = available
-                    data.is_return = is_return
-                    data.is_active = status
-                    data.image = image
-
-                    data.save()
-
+            user_id = request.POST.get("user_id")
+            vacationer = request.POST.get("vacationer")
+            homeowner = request.POST.get("homeowner")
+            propertymanager = request.POST.get("propertymanager")
+            vacationer_0_7_days = request.POST.get("vacationer_0_7_days")
+            vacationer_greaterthan_7_days = request.POST.get(
+                "vacationer_greaterthan_7_days"
+            )
+            homeowner_0_7_days = request.POST.get("homeowner_0_7_days")
+            homeowner_greaterthan_7_days = request.POST.get("homeowner_greaterthan_7_days")
+            propertymanager_0_7_days_wholesale = request.POST.get(
+                "propertymanager_0_7_days_wholesale"
+            )
+            propertymanager_greaterthan_7_days_wholesale = request.POST.get(
+                "propertymanager_greaterthan_7_days_wholesale"
+            )
+            if subcategorys:
+                product.category_id=category
+                product.subcategory_id=subcategorys
+                product.quantity=product_quantity
+                product.name=name
+                product.description=description
+                product.avaliable=available
+                product.is_return=is_return
+                product.is_active=status
+                product.is_feature=feature
+                if image :
+                    product.image=image
                 if image1:
-                    data.category_id = category
-                    data.subcategory_id = subcategory
-                    data.oneday_price = onedayprice
-                    data.week_price = weekprice
-                    data.month_price = monthprice
-                    data.annual_price = annualprice
-                    data.two_week_price = twoweekprice
-                    data.sku_code = skucode
-                    data.is_feature = feature
-                    data.quantity = quantity
-                    data.name = name
-                    data.address = address
-                    data.latitude = latitude
-                    data.longitude = longitude
-                    data.description = description
-                    data.avaliable = available
-                    data.is_return = is_return
-
-                    data.image1 = image1
-                    data.is_active = status
-                    data.save()
-
+                    product.image1=image1
                 if image2:
-
-                    data.category_id = category
-                    data.subcategory_id = subcategory
-                    data.oneday_price = onedayprice
-                    data.week_price = weekprice
-                    data.month_price = monthprice
-                    data.annual_price = annualprice
-                    data.two_week_price = twoweekprice
-                    data.sku_code = skucode
-                    data.is_feature = feature
-                    data.quantity = quantity
-                    data.name = name
-                    data.address = address
-                    data.latitude = latitude
-                    data.longitude = longitude
-                    data.description = description
-                    data.avaliable = available
-                    data.is_return = is_return
-                    data.image2 = image2
-                    data.is_active = status
-                    data.save()
-
+                    product.image2=image2
                 if image3:
-
-                    data.category_id = category
-                    data.subcategory_id = subcategory
-                    data.oneday_price = onedayprice
-                    data.week_price = weekprice
-                    data.month_price = monthprice
-                    data.annual_price = annualprice
-                    data.two_week_price = twoweekprice
-                    data.sku_code = skucode
-                    data.is_feature = feature
-                    data.quantity = quantity
-                    data.name = name
-                    data.address = address
-                    data.latitude = latitude
-                    data.longitude = longitude
-                    data.description = description
-                    data.avaliable = available
-                    data.is_return = is_return
-                    data.image3 = image3
-                    data.is_active = status
-                    data.save()
-
+                    product.image3=image3
                 if image4:
-                    data.category_id = category
-                    data.subcategory_id = subcategory
-                    data.oneday_price = onedayprice
-                    data.week_price = weekprice
-                    data.month_price = monthprice
-                    data.annual_price = annualprice
-                    data.two_week_price = twoweekprice
-                    data.sku_code = skucode
-                    data.is_feature = feature
-                    data.quantity = quantity
-                    data.name = name
-                    data.address = address
-                    data.latitude = latitude
-                    data.longitude = longitude
-                    data.description = description
-                    data.avaliable = available
-                    data.is_return = is_return
-                    data.image4 = image4
-                    data.is_active = status
-                    data.save()
+                    product.image4=image4
 
+                product.purchased_date=purchased_date
+                product.purchased_price=purchased_price
+               
+                product.save()
+               
             else:
-                data.category_id = category
-                data.subcategory_id = subcategory
-                data.oneday_price = onedayprice
-                data.week_price = weekprice
-                data.month_price = monthprice
-                data.annual_price = annualprice
-                data.two_week_price = twoweekprice
-                data.sku_code = skucode
-                data.address = address
-                data.latitude = latitude
-                data.longitude = longitude
-                data.is_feature = feature
-                data.quantity = quantity
-                data.name = name
-                data.description = description
-                data.avaliable = available
-                data.is_return = is_return
-                data.is_active = status
-                data.save()
-            if count:
-                for i in range(int(count)):
-                    option_name = request.POST.get(f"option[{i}]name")
-                    option_image = request.FILES.get(f"option[{i}]image")
-                    option_keys = request.POST.get(f"option[{i}]key")
-                    option_values = request.POST.get(f"option[{i}]value")
-                    option_price = request.POST.get(f"option[{i}]price")
-                    option_quantity = request.POST.get(f"option[{i}]quantity")
-                    if (
-                        option_name == None
-                        or option_keys == None
-                        or option_values == None
-                    ):
-                        pass
+                product.category_id=category
+                product.subcategory_id=""
+                product.quantity=product_quantity
+                product.name=name
+                product.description=description
+                product.avaliable=available
+                product.is_return=is_return
+                product.is_active=status
+                product.is_feature=feature
+                if image :
+                    product.image=image
+                if image1:
+                    product.image1=image1
+                if image2:
+                    product.image2=image2
+                if image3:
+                    product.image3=image3
+                if image4:
+                    product.image4=image4
+
+                product.purchased_date=purchased_date
+                product.purchased_price=purchased_price
+             
+                product.save()
+            franchise_remove=ProductFranchiseMember.objects.filter(product_id=product.id).exclude( user_id__in=franchises)
+            franchise_remove.delete() 
+            franchise_price_remove=FranchisePinCodesPrice.objects.filter(product_id=product.id).exclude( user_id__in=franchises)
+            franchise_price_remove.delete()
+            franchise_user_list=[]    
+            for fran in franchises:
+                if not ProductFranchiseMember.objects.filter(product_id=product.id, user_id=fran).exists():
+                    franchise_data=ProductFranchiseMember.objects.create(user_id=fran, product_id=product.id)
+                    franchise_user_list.append(franchise_data.user_id)
+           
+            pincode=FranchisePinCodes.objects.filter(user_id__in=franchises) 
+            if is_return == "True":
+                for i in pincode:
+                    if FranchisePinCodesPrice.objects.filter(product_id=product.id, user_id=i.user_id).exists():
+                        price=FranchisePinCodesPrice.objects.filter(product_id=product.id, user_type="vacationer", user_id=i.user_id, pin_code=i.pin_code).update(zero_seven_days=vacationer_0_7_days,greaterthan_seven=vacationer_greaterthan_7_days)
+                        price=FranchisePinCodesPrice.objects.filter(product_id=product.id, user_id=i.user_id, pin_code=i.pin_code, user_type="homeowner").update(zero_seven_days=homeowner_0_7_days,greaterthan_seven=homeowner_greaterthan_7_days)
+                        price=FranchisePinCodesPrice.objects.filter(product_id=product.id, user_id=i.user_id, pin_code=i.pin_code, user_type="propertymanager").update(zero_seven_days_wholesale=propertymanager_0_7_days_wholesale,
+                        greaterthan_seven_wholesale=propertymanager_greaterthan_7_days_wholesale)
+                        price=FranchisePinCodesPrice.objects.filter(product_id=product.id, user_id=i.user_id, pin_code=i.pin_code).update(sale_price="")
+
                     else:
-                        data.option_id = option_name
-                        data.save()
-                        option_data = ProductOptions.objects.create(
-                            product_id=data.id,
-                            option_id=option_name,
-                            option_value_id=option_keys,
-                            price=option_price,
-                            quantity=option_quantity,
-                            Productoptions_image=option_image,
+                        price=FranchisePinCodesPrice.objects.create(pin_code=i.pin_code,product_id=product.id,user_type="vacationer",
+                        zero_seven_days=vacationer_0_7_days, greaterthan_seven=vacationer_greaterthan_7_days, user_id=i.user_id)
+                        FranchisePinCodesPrice.objects.create(pin_code=i.pin_code, user_type="homeowner",
+                        zero_seven_days=homeowner_0_7_days, product_id=product.id, greaterthan_seven=homeowner_greaterthan_7_days,
+                        user_id=i.user_id)
+                        FranchisePinCodesPrice.objects.create(pin_code=i.pin_code, user_type="propertymanager", zero_seven_days_wholesale=propertymanager_0_7_days_wholesale, product_id=product.id,greaterthan_seven_wholesale=propertymanager_greaterthan_7_days_wholesale, user_id=i.user_id)
+                FranchisePrice.objects.filter(product_id=product.id,user_type="vacationer").update(zero_seven_days=vacationer_0_7_days, greaterthan_seven=vacationer_greaterthan_7_days)
+                FranchisePrice.objects.filter(product_id=product.id, user_type="homeowner").update(zero_seven_days=homeowner_0_7_days, greaterthan_seven=homeowner_greaterthan_7_days,)
+                FranchisePrice.objects.filter(product_id=product.id,user_type="propertymanager").update(zero_seven_days_wholesale=propertymanager_0_7_days_wholesale,greaterthan_seven_wholesale=propertymanager_greaterthan_7_days_wholesale)
+                FranchisePrice.objects.filter(product_id=product.id).update(sale_price="")
+            else:
+                for i in pincode:
+                    if FranchisePinCodesPrice.objects.filter(product_id=product.id, user_id=i.user_id).exists():
+                        FranchisePinCodesPrice.objects.filter(pin_code=i.pin_code, product_id=product.id, user_type="vacationer", user_id=i.user_id).update(sale_price=sale_price)
+                        FranchisePinCodesPrice.objects.filter(pin_code=i.pin_code, user_type="homeowner",product_id=product.id, user_id=i.user_id).update(sale_price=sale_price)
+                        FranchisePinCodesPrice.objects.filter(pin_code=i.pin_code, user_type="propertymanager", product_id=product.id, user_id=i.user_id).update(sale_price=sale_price)
+                        price=FranchisePinCodesPrice.objects.filter(product_id=product.id, user_id=i.user_id, pin_code=i.pin_code).update(zero_seven_days="", greaterthan_seven="", zero_seven_days_wholesale="", greaterthan_seven_wholesale="")
+                    else:
+                        FranchisePinCodesPrice.objects.create(pin_code=i.pin_code, product_id=product.id, user_type="vacationer",sale_price=sale_price, user_id=i.user_id)
+                        FranchisePinCodesPrice.objects.create(pin_code=i.pin_code, user_type="homeowner", sale_price=sale_price,product_id=product.id, user_id=i.user_id)
+                        FranchisePinCodesPrice.objects.create(pin_code=i.pin_code, user_type="propertymanager", sale_price=sale_price, product_id=product.id, user_id=i.user_id)
+                FranchisePrice.objects.filter(product_id=product.id,user_type="vacationer").update(sale_price=sale_price)
+                FranchisePrice.objects.filter(user_type="homeowner",product_id=product.id).update(sale_price=sale_price)
+                FranchisePrice.objects.filter(user_type="propertymanager",product_id=product.id).update(sale_price=sale_price)
+                FranchisePrice.objects.filter(product_id=product.id).update(zero_seven_days="", greaterthan_seven="", zero_seven_days_wholesale="", greaterthan_seven_wholesale="")
+                # return redirect('edit_product', slug)
+            if product_quantity:
+                cat_id = ProductCategory.objects.get(id=category)
+                SKU_CODE = cat_id.name.upper()[0:2] + name.upper()[0:3] + "00"
+                digits = 1
+                sku_code = SKU_CODE
+                all_product = ProductSkuCodes.objects.all()
+                skuList = []
+                for i in all_product:
+                    spilts = i.sku_code
+                    Str = spilts[:-1]
+                    if sku_code == Str:
+                        skuList.append(Str)
+                count = len(skuList)
+                for j in range(0, int(product_quantity)):
+                    if ProductSkuCodes.objects.filter(sku_code=sku_code + str(digits)):
+                        ProductSkuCodes.objects.create(
+                            product_id=product.id, sku_code=sku_code + str(int(count + 1))
                         )
-
-            if price_count:
-                price_data = FranchisePinCodesPrice.objects.filter(
-                    product_id=data.id
-                ).delete()
-                user_types = ["homeowner", "vacationer", "propertymanager"]
-                for u in user_types:
-                    for i in range(1, int(price_count)):
-                        user = request.POST.get(f"user[{u}][{i}]user")
-                        user_type = request.POST.get(f"user_type[{u}][{i}]user_type")
-                        pincodes = request.POST.get(f"pincodes[{u}][{i}]pincode")
-                        daily = request.POST.get(f"daily[{u}][{i}]daily")
-                        weekly = request.POST.get(f"weekly[{u}][{i}]weekly")
-                        yearly = request.POST.get(f"yearly[{u}][{i}]yearly")
-                        twoweekly = request.POST.get(f"twoweekly[{u}][{i}]twoweekly")
-                        monthly = request.POST.get(f"monthly[{u}][{i}]monthly")
-                        dailywholesale = request.POST.get(
-                            f"dailywholesale[{u}][{i}]dailywholesale"
+                        count += 1
+                    else:
+                        ProductSkuCodes.objects.create(
+                            product_id=product.id, sku_code=sku_code + str(digits)
                         )
-                        weeklywholesale = request.POST.get(
-                            f"weeklywholesale[{u}][{i}]weeklywholesale"
-                        )
-                        twoweeklywholesale = request.POST.get(
-                            f"twoweeklywholesale[{u}][{i}]twoweeklywholesale"
-                        )
-                        monthlywholesale = request.POST.get(
-                            f"monthlywholesale[{u}][{i}]monthlywholesale"
-                        )
-                        yearlywholesale = request.POST.get(
-                            f"yearlywholesale[{u}][{i}]yearlywholesale"
-                        )
-                        price_data = FranchisePinCodesPrice.objects.create(
-                            product_id=data.id,
-                            pin_code=pincodes,
-                            daily_price=daily,
-                            weekly_price=weekly,
-                            yearly_price=yearly,
-                            two_weekly_price=twoweekly,
-                            monthly_price=monthly,
-                            daily_wholesale_price=dailywholesale,
-                            weekly_wholesale_price=weeklywholesale,
-                            twoweekly_wholesale_price=twoweeklywholesale,
-                            monthly_wholesale_price=monthlywholesale,
-                            yearly_wholesale_price=yearlywholesale,
-                            user_id=user,
-                            user_type=user_type,
-                        )
-
-                messages.success(request, "Product create successfully !!!!")
-                return redirect("/admin/product/")
-
-        option = Options.objects.all()
-        options_count = ProductOptions.objects.filter(product_id=product.id).count()
-        options = ProductOptions.objects.filter(product_id=product.id)
+                        digits += 1
+            messages.success(request, "Product update successfully !!!!")
+            return redirect("/admin/product/")
+        # category = ProductCategory.objects.all()
+        subcategory = ProductSubCategory.objects.filter(category_id=product.category_id)
+        categorys=ProductCategory.objects.all()
         user = User.objects.filter(roll="franchise")
-        fetch_franchise = FranchisePinCodes.objects.filter(
-            user_id__in=user,
-        )
-        fetch_franchise_price = FranchisePinCodesPrice.objects.filter(
-            user_id__in=user, product_id=data.id
-        )
+        propertymanager = User.objects.filter(propertymanager_negotiable="1")
         return render(
             request,
-            "admin/ProductManagement/edit_product.html",
+            template_name,
             {
-                "category": category,
-                "subcategory": subcategory,
-                "product": product,
-                "option": option,
-                "options_count": options_count,
-                "options": options,
-                "franchise_user": user,
-                "fetch_franchise": fetch_franchise,
-                "fetch_franchise_price": fetch_franchise_price,
+                "franchise_price":franchise_price,
+                "franchise":franchise,
+                "product":product,
+                "subcategory": subcategory,"categorys":categorys,
+                "franchise_user": user,"franchiseuser":franchiseuser,
+                "propertymanager": propertymanager,
             },
         )
     except:
@@ -3380,18 +3276,15 @@ def EditProductPrice(request, slug):
         product_price=FranchisePinCodesPrice.objects.filter(product_id=product.id)   
         if request.method == 'POST':
             data=request.POST
-            print(data, "---------==")
             count=data.get('count')
             data_list = []
             selected_pin_code = []
             if count:
-                print(count,'pppppppppppppppp')
                 is_valid = True
                 bulk_update_data = []
                 for i in range(int(count)):
                     pin_code = data.get(f'pin_code{i}', None)
                     user_type = data.get(f'user_type{i}', None)
-                    print(user_type,'ppppppppppppppppppppppppp')
                     user_id = data.get(f'user_id{i}', None)
                     
                     day_price = data.get(f'day_price{i}', None) 
@@ -3415,13 +3308,7 @@ def EditProductPrice(request, slug):
                             'greaterthan_seven_wholesale': data.get(f'wholesale_greaterthan{i}', None),
                         })
 
-                        # if day_price and day_price.startswith('.'):
-                        #     messages.error(request, "Starting . not allow. ")
-                        #     is_valid = False
-                        #     return redirect('/admin/edit-product-price/' + str(slug))
-                        
-                        # bulk_update_data.append(FranchisePinCodesPrice(product_id=product.id, pin_code = pin_code, user_type = user_type, zero_seven_days = day_price,greaterthan_seven = days_price,zero_seven_days_wholesale=wholesale,
-                        # greaterthan_seven_wholesale = wholesale_greaterthan))
+        
                     
                         pincode_price = FranchisePinCodesPrice.objects.filter(product_id=product.id, pin_code = pin_code, user_type = user_type)
                         pincode_price.update(zero_seven_days = day_price,greaterthan_seven = days_price,zero_seven_days_wholesale=wholesale,
@@ -4769,8 +4656,9 @@ def orderlist(request):
     return render(request, "admin/Order_Management/order.html",{"order_data":order_list})
 
 def AddOrder(request):
-    try:
+    # try:
         products=Product.objects.filter(is_active=True)
+        company=PropertyManagerMember.objects.filter(is_verified="1")
         tomorrow = datetime.date.today() + datetime.timedelta(days=1)
         seven_days = datetime.date.today() + datetime.timedelta(days=7)
         zip_code=FranchisePinCodes.objects.all()
@@ -4785,12 +4673,23 @@ def AddOrder(request):
             actual=request.POST.get('actual')
             effective=request.POST.get('effective')
             address=request.POST.get('address')
+            gate=request.POST.get('gate')
+            door_code=request.POST.get('door_code')
+            company_id=request.POST.get('user-company')
+           
+            reservation_number=request.POST.get('reservation_number')
+            subdivision=request.POST.get('subdivision')
+            notes=request.POST.get('notes')
             product_quantity_data = json.loads(request.POST.get('product_quantity_data'))
             check_product_quantity=list(product_quantity_data.values())
             order_id=createorderid()
             product_price=ProductPrice(user_type,pin_code,product_id,delivery_date,return_date)
             product_data=Product.objects.filter(id__in=product_id)
             product_category=Product.objects.filter(id__in=product_id).values_list('category_id')
+            if return_date < delivery_date:
+                messages.error(request,'Return date should be greater than to delivery date')
+                return redirect("orderlist")
+
             for qty in check_product_quantity:
                 if Product.objects.filter(id__in=product_id,quantity__lte=qty):
                     messages.error(request,'Quantity Not Available please add minimum quantity')
@@ -4821,12 +4720,12 @@ def AddOrder(request):
                 offer_discount=OfferManagement.objects.get(code=offer_id)
             
                 order=OrderManagement.objects.create(user_id=user_id,order_id=order_id,
-                product_details=data, order_return=return_date,pin_code=pin_code, delivery=delivery_date, 
-                actual_price=actual, discount_price=effective, order_created_by="admin", order_status="pending", payment_status="0", offer_id=offer_discount.id,Address=address)
+                product_details=data, order_return=return_date,pin_code=pin_code, delivery=delivery_date, user_type=user_type,company_id=company_id,
+                actual_price=actual, discount_price=effective, order_created_by="admin", order_status="pending", payment_status="0", offer_id=offer_discount.id,Address=address, gate=gate, subdivision=subdivision, reservationnumber=reservation_number,doorcode=door_code, notes=notes)
             else:
-                order=OrderManagement.objects.create(user_id=user_id,order_id=order_id,product_details=data, 
+                order=OrderManagement.objects.create(user_id=user_id,order_id=order_id,product_details=data, user_type=user_type,company_id=company_id,
                 order_return=return_date, delivery=delivery_date,pin_code=pin_code, actual_price=actual, 
-                order_created_by="admin", order_status="pending", discount_price=actual,payment_status="0",Address=address)
+                order_created_by="admin", order_status="pending", discount_price=actual,payment_status="0",Address=address, gate=gate, subdivision=subdivision, reservationnumber=reservation_number,doorcode=door_code, notes=notes)
             user=User.objects.get(id=user_id)
         
             subject = " Welcome to   Honest Sherpa world"
@@ -4836,14 +4735,14 @@ def AddOrder(request):
             messages.success(request,'Order Create Succesfully')
             return redirect('/admin/order-list/')
         context={
-            "products":products,"tomorrow":tomorrow,"seven_days":seven_days,"zip_code":zip_code
+            "products":products,"tomorrow":tomorrow,"seven_days":seven_days,"zip_code":zip_code,"company":company
         }
         return render(request, "admin/Order_Management/order_add.html",context)
-    except:
-        messages.error(request,'Something Went Wrong!!')
-        return redirect('/admin/order-list/')
+    # except:
+    #     messages.error(request,'Something Went Wrong!!')
+    #     return redirect('/admin/order-list/')
 
-
+   
 def select_User(request):
     try:
         if request.method == "POST":
@@ -4911,7 +4810,7 @@ def select_product(request):
 
 
 def select_pincode(request):
-    try:
+    # try:
         if request.method == "POST":
             user_type=request.POST.get('user_type')
             zip_code=request.POST.get('zip_code')
@@ -4926,23 +4825,25 @@ def select_pincode(request):
                     },
                     status=200,
             )
-    except:
-        return JsonResponse(
-                    {
-                        "status": "error",
-                        "message": "something Went Wrong !!!!",
-                    },
-                    status=400,
-                )
+    # except:
+    #     return JsonResponse(
+    #                 {
+    #                     "status": "error",
+    #                     "message": "something Went Wrong !!!!",
+    #                 },
+    #                 status=400,
+    #             )
 
 def change_date(request):
-    try:
+    # try:
         if request.method == "POST":
             user_type=request.POST.get('user_type')
             zip_code=request.POST.get('zip_code')
             product_id=request.POST.getlist('product_id[]')
             delivery_date=request.POST.get('delivery_date')
+          
             return_date=request.POST.get('return_date')
+           
             product_data=eval(request.POST.get("product_data"))
             default_date_dffrence=7
             delivery_convert_date = datetime.datetime.strptime(delivery_date, '%Y-%m-%d').date()
@@ -4950,7 +4851,7 @@ def change_date(request):
                 return_convert_date = datetime.datetime.strptime(return_date, '%Y-%m-%d').date()
                 days_diffrence=return_convert_date-delivery_convert_date
                 days_diffrence_count=int('{}'.format(days_diffrence.days))
-            result_data=calculate_order_price(zip_code,product_id,user_type,days_diffrence=days_diffrence_count, product_data=product_data)   
+            result_data=calculate_order_price(zip_code,product_id,user_type,days_diffrence=days_diffrence_count, product_data=product_data)  
             return JsonResponse(
                     {
                         "status": "success",
@@ -4959,17 +4860,17 @@ def change_date(request):
                     },
                     status=200,
             )
-    except:
-        return JsonResponse(
-                    {
-                        "status": "error",
-                        "message": "something Went Wrong !!!!",
-                    },
-                    status=400,
-                )
+    # except:
+    #     return JsonResponse(
+    #                 {
+    #                     "status": "error",
+    #                     "message": "something Went Wrong !!!!",
+    #                 },
+    #                 status=400,
+    #             )
 
 def select_offer(request):
-    try:
+    # try:
         if request.method == "POST":
             user_type=request.POST.get('user_type')
             zip_code=request.POST.get('zip_code')
@@ -4996,14 +4897,14 @@ def select_offer(request):
                 },
                 status=200,
         )
-    except:
-        return JsonResponse(
-                    {
-                        "status": "error",
-                        "message": "something Went Wrong !!!!",
-                    },
-                    status=400,
-                )
+    # except:
+    #     return JsonResponse(
+    #                 {
+    #                     "status": "error",
+    #                     "message": "something Went Wrong !!!!",
+    #                 },
+    #                 status=400,
+    #             )
 
 
 def orderView(request,slug):
@@ -5045,7 +4946,7 @@ def orderEdit(request,slug):
         order_edit=OrderManagement.objects.get(slug=slug)
         tomorrow = datetime.date.today() + datetime.timedelta(days=1)
         seven_days = datetime.date.today() + datetime.timedelta(days=7)
-        
+        company=PropertyManagerMember.objects.filter(is_verified ="1")        
         selected_product_ids = []
         selected_product_categories = []
         selected_product_quantity=[]
@@ -5055,13 +4956,12 @@ def orderEdit(request,slug):
             selected_product_quantity.append(i.get('product_quantity'))
         offers = OfferManagement.objects.filter(category__name__in=selected_product_categories)
         zip_code=FranchisePinCodes.objects.all()
-        user_type = order_edit.user.roll
+        user_type = order_edit.user_type
         pin_code = order_edit.pin_code
         product_ids = FranchisePinCodesPrice.objects.filter(user_type=user_type,pin_code=pin_code).values_list('product_id', flat=True)
         products=Product.objects.filter(id__in=product_ids).values('id', 'name')
-    
         if request.method == "POST":
-            
+
             pin_code=request.POST.get('zip-code')
             product_id=request.POST.getlist('products[]')
             offer_id=request.POST.get('offer')
@@ -5070,6 +4970,12 @@ def orderEdit(request,slug):
             actual=request.POST.get('actual')
             effective=request.POST.get('effective')
             address=request.POST.get('address')
+            gate=request.POST.get('gate')
+            company_id=request.POST.get('user-company')
+            door_code=request.POST.get('door_code')
+            reservation_number=request.POST.get('reservation_number')
+            subdivision=request.POST.get('subdivision')
+            notes=request.POST.get('notes')
             product_quantity_data = json.loads(request.POST.get('product_quantity_data'))
             check_product_quantity=list(product_quantity_data.values())
             product_price=ProductPrice(user_type,pin_code,product_id,delivery_date,return_date)
@@ -5102,7 +5008,6 @@ def orderEdit(request,slug):
                     "product_quantity": product_quantity_data.get(str(i.id))
                 })
             if offer_id != None:
-            
                 order_edit.product_details=data
                 order_edit.pin_code=pin_code
                 order_edit.delivery=delivery_date
@@ -5111,6 +5016,12 @@ def orderEdit(request,slug):
                 order_edit.discount_price=effective
                 order_edit.offer_id=offer_discount.id
                 order_edit.Address=address
+                order_edit.gate=gate 
+                order_edit.company_id=company_id
+                order_edit.subdivision=subdivision
+                order_edit.reservationnumber=reservation_number
+                order_edit.doorcode=door_code 
+                order_edit.notes=notes
                 order_edit.save()
             else:
                 order_edit.product_details=data
@@ -5121,9 +5032,14 @@ def orderEdit(request,slug):
                 order_edit.discount_price=effective
                 order_edit.offer_id=""
                 order_edit.Address=address
+                order_edit.company_id=company_id
+                order_edit.gate=gate 
+                order_edit.subdivision=subdivision
+                order_edit.reservationnumber=reservation_number
+                order_edit.doorcode=door_code 
+                order_edit.notes=notes
                 order_edit.save()
             user=User.objects.get(id=order_edit.user_id)
-        
             subject = " Welcome to   Honest Sherpa world"
             message = f"Hi {user.first_name} {user.last_name}, Thank you for  Order the product  on Honest Sherpa . Your order id is {order_edit.order_id} and Your paymemt status is Pending "
             recipient_list = [user.email]
@@ -5136,12 +5052,42 @@ def orderEdit(request,slug):
         'selected_product_ids': selected_product_ids, 
         'offers': offers,
         "selected_product_quantity":selected_product_quantity,
-        "tomorrow":tomorrow,"seven_days":seven_days
+        "tomorrow":tomorrow,"seven_days":seven_days,"company":company
         }
         return render(request, template_name, context)
     except:
-        messages.success(request,'Something Went Wrong!!')
+        messages.error(request,'Something Went Wrong!!')
         return redirect('orderlist')
+
+
+def order_filter_ajax(request):
+    sort_list=[]
+    if request.method == "POST":
+        user_value=request.POST.get('user_type')
+        
+        order_queryset = OrderManagement.objects.all()
+        queryset=Q()
+        if user_value == "high":
+            sort_price = "-discount_price"
+        elif user_value == "low":
+            sort_price = "discount_price"
+        else:
+            sort_price = "-id"
+        if user_value == "vacationer" or user_value == "homeowner" or user_value == "propertymanager":
+            queryset |= Q(user_type=user_value)
+        filter_data=order_queryset.filter(queryset).order_by(f"{sort_price}")
+    
+        return render(request,'admin/Order_Management/order_filter_listing.html',{'filter_data':filter_data})
+            
+    return JsonResponse(
+                {
+                    "status": "success",
+                    "message": "Details Submitted Successfully !!!!",
+                    # "data":data,           
+                },
+                status=200,
+        )
+        
 
 
 
